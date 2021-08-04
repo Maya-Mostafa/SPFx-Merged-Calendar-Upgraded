@@ -1,0 +1,18 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/config.2.0.schema.json",
+  "version": "2.0",
+  "bundles": {
+    "merged-calendar-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/mergedCalendar/MergedCalendarWebPart.js",
+          "manifest": "./src/webparts/mergedCalendar/MergedCalendarWebPart.manifest.json"
+        }
+      ]
+    }
+  },
+  "externals": {},
+  "localizedResources": {
+    "MergedCalendarWebPartStrings": "lib/webparts/mergedCalendar/loc/{locale}.js"
+  }
+}
