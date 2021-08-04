@@ -1,73 +1,54 @@
-# merged-calendar
+# SPFx-Merged-Calendar
+A SPFx Merged Calendar React web-part. Aggregates different types of calendars; internal, external, graph, google using Full Calendar plugin.
 
-## Summary
+Started in March 2020 with just plain JS
 
-Short summary on functionality and used technologies.
+Plain JS component was done by October 2020
 
-[picture of the solution in action, if possible]
+SPFx with React started in November 2020
 
-## Used SharePoint Framework Version
+November 10 - Adding SPFx files
 
-![version](https://img.shields.io/npm/v/@microsoft/sp-component-base/latest?color=green)
+Cloning to other machine
 
-## Applies to
 
-- [SharePoint Framework](https://aka.ms/spfx)
-- [Microsoft 365 tenant](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
 
-> Get your own free development tenant by subscribing to [Microsoft 365 developer program](http://aka.ms/o365devprogram)
+Milestones
+------------
+- FullCalendar Integration with react
+- Get calendar information from SP list using Rest API & Display in FullCalendar
+- FullCalendar full day event bug resolution
+- FullCalendar Recurrent events parsing
+- Reading external calendars from Azure API using HttpClient and not SPHttpClient
+- Reading Graph calendars and modifying permissions
+- Implementing the Settings panel using Fluent UI
+- Implementing the Legend component
+- Implementing the dialog and event details components
 
-## Prerequisites
 
-> Any special pre-requisites?
+Terminal Commands
+-------------------
+npm install rrule
 
-## Solution
+npm install --save @fullcalendar/react @fullcalendar/rrule @fullcalendar/daygrid @fullcalendar/timegrid @fullcalendar/interaction
 
-Solution|Author(s)
---------|---------
-folder name | Author details (name, company, twitter alias with link)
+npm install moment
 
-## Version history
+npm install @fluentui/react
 
-Version|Date|Comments
--------|----|--------
-1.1|March 10, 2021|Update comment
-1.0|January 29, 2021|Initial release
+npm install @fluentui/react-hooks
 
-## Disclaimer
+npm install office-ui-fabric-core
 
-**THIS CODE IS PROVIDED *AS IS* WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING ANY IMPLIED WARRANTIES OF FITNESS FOR A PARTICULAR PURPOSE, MERCHANTABILITY, OR NON-INFRINGEMENT.**
 
----
+gulp package-solution
 
-## Minimal Path to Awesome
+gulp serve --nobrowser
 
-- Clone this repository
-- Ensure that you are at the solution folder
-- in the command-line run:
-  - **npm install**
-  - **gulp serve**
 
-> Include any additional steps as needed.
+gulp bundle --ship
 
-## Features
+gulp package-solution --ship
 
-Description of the extension that expands upon high-level summary above.
 
-This extension illustrates the following concepts:
 
-- topic 1
-- topic 2
-- topic 3
-
-> Notice that better pictures and documentation will increase the sample usage and the value you are providing for others. Thanks for your submissions advance.
-
-> Share your web part with others through Microsoft 365 Patterns and Practices program to get visibility and exposure. More details on the community, open-source projects and other activities from http://aka.ms/m365pnp.
-
-## References
-
-- [Getting started with SharePoint Framework](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/set-up-your-developer-tenant)
-- [Building for Microsoft teams](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/build-for-teams-overview)
-- [Use Microsoft Graph in your solution](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/web-parts/get-started/using-microsoft-graph-apis)
-- [Publish SharePoint Framework applications to the Marketplace](https://docs.microsoft.com/en-us/sharepoint/dev/spfx/publish-to-marketplace-overview)
-- [Microsoft 365 Patterns and Practices](https://aka.ms/m365pnp) - Guidance, tooling, samples and open-source controls for your Microsoft 365 development
