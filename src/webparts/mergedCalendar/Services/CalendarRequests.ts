@@ -22,7 +22,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
             resolvedCalUrl = context.pageContext.web.absoluteUrl + restApiUrl + restApiParams;
             break;
         case "External":
-            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 4, calUrl.length) + restApiUrl + restApiParams;
+            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrl + restApiParams;
             break;
     }
     return resolvedCalUrl;
@@ -141,7 +141,7 @@ const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, T
     
 };
 
-export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}) : Promise <{}[]> => {
+export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}) : Promise <{}[]> => {
     let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName),
         calEvents : {}[] = [] ;
 
@@ -152,7 +152,6 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     };
 
     const _data = await context.httpClient.get(calUrl, HttpClient.configurations.v1, myOptions);
-        
     if (_data.ok){
         const calResult = await _data.json();
         if(calResult){
@@ -167,24 +166,55 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                     _body: result.Description,
                     recurr: result.fRecurrence,
                     recurrData: result.RecurrenceData,
-                    rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, formatStartDate(result.EventDate), formatEndDate(result.EndDate)) : null
+                    rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, formatStartDate(result.EventDate), formatEndDate(result.EndDate)) : null,
+                    // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
+                    //className: 'eventCal' + calSettings.Id,
                 });
             });
         }
     }else{
-        //alert("Calendar Error");
+        alert("Calendar Error: " + calSettings.Title + ' - ' + _data.statusText);
         return [];
     }
         
     return calEvents;
 };
 
-export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}) : Promise <{}[]> => {
+export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}) : Promise <{}[]> => {
     if(calSettings.CalType == 'Graph'){
         return getGraphCals(context, calSettings);
     }else{
         return getDefaultCals(context, calSettings);
     }
+};
+
+export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: string, calChk: boolean}) =>{
+    
+    const newCalEventSources = calEventSources.map((eventSource: any) => {
+        if (eventSource.calId == calVisibility.calId) {
+            const updatedEventSource = {...eventSource}; //shallow clone
+            updatedEventSource.events = eventSource.events.map((event: any) => {
+                event['className'] = !calVisibility.calChk ? 'eventHidden' : '';
+                return event;
+            });
+            return updatedEventSource;
+        } else {
+            return {...eventSource}; //shallow clone
+        }
+    });
+
+
+    // const newCalEventSources = [...calEventSources];
+    // for (let i = 0; i < newCalEventSources.length; i++){
+    //     if (newCalEventSources[i].calId == calVisibility.calId){
+    //         let calEvents = [...newCalEventSources[i]['events']];
+    //         for (let j = 0; j< calEvents.length; j++){
+    //             calEvents[j]['className'] = 'eventHidden';
+    //         }
+    //     }
+    // }
+    
+    return newCalEventSources;
 };
 
 export const getMySchoolCalGUID = async (context: WebPartContext, calSettingsListName: string) =>{
