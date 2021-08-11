@@ -2,18 +2,56 @@
   "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
   "solution": {
     "name": "merged-calendar-client-side-solution",
-    "id": "0e4b8c6d-64aa-494a-af0d-d5a84f5ad9a8",
+    "id": "e3789c34-cf80-4df9-9dc0-4a01c25e9ce6",
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
-    "skipFeatureDeployment": true,
     "isDomainIsolated": false,
+    "skipFeatureDeployment": true,
     "developer": {
       "name": "",
       "websiteUrl": "",
       "privacyUrl": "",
       "termsOfUseUrl": "",
       "mpnId": ""
-    }
+    },
+    "webApiPermissionRequests": [
+      {
+        "resource": "Microsoft Graph",
+        "scope": "User.Read.All"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Calendars.Read"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Calendars.Read.Shared"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Calendars.ReadWrite"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Calendars.ReadWrite.Shared"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Directory.AccessAsUser.All"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Directory.Read.All"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Directory.ReadWrite.All"
+      },
+      {
+        "resource": "Microsoft Graph",
+        "scope": "Directory.Read"
+      }
+    ]
   },
   "paths": {
     "zippedPackage": "solution/merged-calendar.sppkg"

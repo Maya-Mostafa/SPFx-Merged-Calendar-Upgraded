@@ -2,9 +2,9 @@
   "@microsoft/generator-sharepoint": {
     "isCreatingSolution": true,
     "environment": "spo",
-    "version": "1.12.1",
+    "version": "1.11.0",
     "libraryName": "merged-calendar",
-    "libraryId": "0e4b8c6d-64aa-494a-af0d-d5a84f5ad9a8",
+    "libraryId": "e3789c34-cf80-4df9-9dc0-4a01c25e9ce6",
     "packageManager": "npm",
     "isDomainIsolated": false,
     "componentType": "webpart"
