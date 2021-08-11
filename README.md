@@ -11,6 +11,16 @@ November 10 - Adding SPFx files
 
 Cloning to other machine
 
+Screenshots
+------------
+Merged Calendar
+![alt Calendar](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/master/mergedCal.png)
+Legend with hide/show option and links to calendars
+![alt Legend](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/master/legend.png)
+Calendar Settings
+![alt Settings](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/master/settings.png)
+Event details dialog
+![alt Dialog](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/master/dialog.png)
 
 
 Milestones
@@ -24,6 +34,16 @@ Milestones
 - Implementing the Settings panel using Fluent UI
 - Implementing the Legend component
 - Implementing the dialog and event details components
+
+Change Requirements
+-------------------
+- Popping an error message on an invalid Calendar URL
+- Modifying the legend calendar links to read from a stand-alone field "Link" from the list
+- Adding a new feature for showing/hiding calendars from the legend
+
+Upgrade
+-------
+- An updgrade to Node 14 was done, and a new solution has been added.
 
 
 Terminal Commands
