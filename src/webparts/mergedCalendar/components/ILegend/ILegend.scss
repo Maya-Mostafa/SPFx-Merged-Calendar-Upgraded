@@ -31,3 +31,70 @@
 .calLegend_Yellow{
     background-color: #DAA62F;
 }
+
+// legend checkboxes
+.chkboxLegend{
+    margin-bottom: 3px;
+}
+.chkboxLegend button{
+    text-decoration: none;
+}
+.chkbox_Blue .ms-Checkbox-checkbox{
+    background-color: #0096CF;
+    border: 1px solid #0096CF;
+}
+.chkbox_Green .ms-Checkbox-checkbox{
+    background-color: #27AE60;
+    border: 1px solid #27AE60;
+}
+.chkbox_Grey .ms-Checkbox-checkbox{
+    background-color: #9FA7A7;
+    border: 1px solid #9FA7A7;
+}
+.chkbox_Mint .ms-Checkbox-checkbox{
+    background-color: #1C9A82;
+    border: 1px solid #1C9A82;
+}
+.chkbox_Navy .ms-Checkbox-checkbox{
+    background-color: #4C5F79;
+    border: 1px solid #4C5F79;
+}
+.chkbox_Orange .ms-Checkbox-checkbox{
+    background-color: #EA8020;
+    border: 1px solid #EA8020;
+}
+.chkbox_Pink .ms-Checkbox-checkbox{
+    background-color: #F46C9E;
+    border: 1px solid #F46C9E;
+}
+.chkbox_Purple .ms-Checkbox-checkbox{
+    background-color: #A061BA;
+    border: 1px solid #A061BA;
+}
+.chkbox_Red .ms-Checkbox-checkbox{
+    background-color: #D7574A;
+    border: 1px solid #D7574A;
+}
+.chkbox_Teal .ms-Checkbox-checkbox{
+    background-color: #38A8AC;
+    border: 1px solid #38A8AC;
+}
+.chkbox_Yellow .ms-Checkbox-checkbox{
+    background-color: #DAA62F;
+    border: 1px solid #DAA62F;
+}
+
+
+th .fc-scrollgrid-sync-inner{
+    padding: 4px 1px;
+    font-weight: 600;
+    font-size: 15px;
+}
+.fc .fc-daygrid-day-number{
+    font-size: 15px;
+    color: #666;
+}
+
+.eventHidden{
+    display: none;
+}
