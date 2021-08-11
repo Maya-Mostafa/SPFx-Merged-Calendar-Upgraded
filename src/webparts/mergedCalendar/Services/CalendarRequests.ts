@@ -41,21 +41,28 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                     .api(graphUrl)
                     .header('Prefer','outlook.timezone="Eastern Standard Time"')
                     .get((error, response: any, rawResponse?: any)=>{
-                        response.value.map((result:any)=>{
-                            calEvents.push({
-                                id: result.id,
-                                title: result.subject,
-                                // start: formatStartDate(result.start.dateTime),
-                                // end: formatStartDate(result.end.dateTime),
-                                start: result.start.dateTime,
-                                end: result.end.dateTime,
-                                _location: result.location.displayName,
-                                _body: result.body.content
+                        if(error){
+                            alert("Calendar Graph Error - " + calSettings.Title);
+                        }
+                        if(response){
+                            response.value.map((result:any)=>{
+                                calEvents.push({
+                                    id: result.id,
+                                    title: result.subject,
+                                    // start: formatStartDate(result.start.dateTime),
+                                    // end: formatStartDate(result.end.dateTime),
+                                    start: result.start.dateTime,
+                                    end: result.end.dateTime,
+                                    _location: result.location.displayName,
+                                    _body: result.body.content
+                                });
                             });
-                        });
+                        }
                         resolve(calEvents);
                     });
-            });
+            }, (error)=>{
+                alert(error);
+            })
     });
 };
 
@@ -151,30 +158,35 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
         }
     };
 
-    const _data = await context.httpClient.get(calUrl, HttpClient.configurations.v1, myOptions);
-    if (_data.ok){
-        const calResult = await _data.json();
-        if(calResult){
-            calResult.d.results.map((result:any)=>{
-                calEvents.push({
-                    id: result.ID,
-                    title: result.Title,
-                    start: result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate,
-                    end: result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate,
-                    allDay: result.fAllDayEvent,
-                    _location: result.Location,
-                    _body: result.Description,
-                    recurr: result.fRecurrence,
-                    recurrData: result.RecurrenceData,
-                    rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, formatStartDate(result.EventDate), formatEndDate(result.EndDate)) : null,
-                    // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
-                    //className: 'eventCal' + calSettings.Id,
+    try{
+        const _data = await context.httpClient.get(calUrl, HttpClient.configurations.v1, myOptions);
+        //console.log(calSettings.Title, _data.status);
+        if (_data.ok){
+            const calResult = await _data.json();
+            if(calResult){
+                calResult.d.results.map((result:any)=>{
+                    calEvents.push({
+                        id: result.ID,
+                        title: result.Title,
+                        start: result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate,
+                        end: result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate,
+                        allDay: result.fAllDayEvent,
+                        _location: result.Location,
+                        _body: result.Description,
+                        recurr: result.fRecurrence,
+                        recurrData: result.RecurrenceData,
+                        rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, formatStartDate(result.EventDate), formatEndDate(result.EndDate)) : null,
+                        // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
+                        //className: 'eventCal' + calSettings.Id,
+                    });
                 });
-            });
+            }
+        }else{
+            alert("Calendar Error: " + calSettings.Title + ' - ' + _data.statusText);
+            return [];
         }
-    }else{
-        alert("Calendar Error: " + calSettings.Title + ' - ' + _data.statusText);
-        return [];
+    } catch(error){
+        alert("Calendar Error for external calendars - " + error);
     }
         
     return calEvents;
@@ -189,7 +201,6 @@ export const getCalsData = (context: WebPartContext, calSettings:{CalType:string
 };
 
 export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: string, calChk: boolean}) =>{
-    
     const newCalEventSources = calEventSources.map((eventSource: any) => {
         if (eventSource.calId == calVisibility.calId) {
             const updatedEventSource = {...eventSource}; //shallow clone
@@ -202,8 +213,7 @@ export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: s
             return {...eventSource}; //shallow clone
         }
     });
-
-
+    
     // const newCalEventSources = [...calEventSources];
     // for (let i = 0; i < newCalEventSources.length; i++){
     //     if (newCalEventSources[i].calId == calVisibility.calId){
