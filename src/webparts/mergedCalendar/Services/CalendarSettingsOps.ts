@@ -65,7 +65,7 @@ export const getCalSettings = (context:WebPartContext, listName: string) : Promi
                             BgColor: result.BgColor,
                             BgColorHex : getColorHex(result.BgColor),
                             CalName : result.CalName,
-                            CalType: result.CalType,
+                            CalType: result.CalendarType ? result.CalendarType : result.CalType,
                             CalURL: result.CalURL,
                             FgColor: result.FgColor,
                             FgColorHex: getColorHex(result.FgColor),
