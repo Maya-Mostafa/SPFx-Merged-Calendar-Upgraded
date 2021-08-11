@@ -22,7 +22,8 @@ export class CalendarOperations{
                         eventSrc = {
                             events: events,
                             color: setting.BgColorHex,
-                            textColor: setting.FgColorHex
+                            textColor: setting.FgColorHex,
+                            calId: setting.Id
                         };
                         eventSources.push(eventSrc);
                     });
