@@ -14,13 +14,13 @@ Cloning to other machine
 Screenshots
 ------------
 Merged Calendar
-![alt Calendar](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/mergedCal.png)
+![alt Calendar](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/mergedCal.png) <br/>
 Legend with hide/show option and links to calendars
-![alt Legend](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/legend.png)
+![alt Legend](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/legend.png) <br/>
 Calendar Settings
-![alt Settings](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/settings.png)
+![alt Settings](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/settings.png) <br/>
 Event details dialog
-![alt Dialog](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/dialog.png)
+![alt Dialog](https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/blob/main/dialog.png) <br/>
 
 
 Milestones
