@@ -3,9 +3,10 @@ import './ILegend.scss';
 import {Checkbox, Link} from '@fluentui/react';
 import styles from '../MergedCalendar.module.scss';
 import { ILegendProps } from './ILegendProps';
+import { initializeIcons } from '@uifabric/icons';
 
 export default function ILegend(props:ILegendProps){    
-
+    initializeIcons();
     const _renderLabelWithLink = (calTitle: string, hrefVal: string) => {
         return (
             <Link href={hrefVal} target="_blank" underline>
