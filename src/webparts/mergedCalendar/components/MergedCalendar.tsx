@@ -3,12 +3,12 @@ import styles from './MergedCalendar.module.scss';
 import { IMergedCalendarProps } from './IMergedCalendarProps';
 //import { escape } from '@microsoft/sp-lodash-subset';
 
-import {IDropdownOption} from '@fluentui/react';
+import {IDropdownOption, MessageBar, MessageBarType} from '@fluentui/react';
 import {useBoolean} from '@fluentui/react-hooks';
 
 import {CalendarOperations} from '../Services/CalendarOperations';
 import {getCalSettings, updateCalSettings} from '../Services/CalendarSettingsOps';
-import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars} from '../Services/CalendarRequests';
+import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs} from '../Services/CalendarRequests';
 import {formatEvDetails} from '../Services/EventFormat';
 import {setWpData} from '../Services/WpProperties';
 
@@ -30,19 +30,23 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [listGUID, setListGUID] = React.useState('');
   const [calVisibility, setCalVisibility] = React.useState <{calId: string, calChk: boolean}>({calId: null, calChk: null});
   const [legendChked, setLegendChked] = React.useState(true);
+  const [calMsgErrs, setCalMsgErrs] = React.useState([]);
 
   const calSettingsList = props.calSettingsList ? props.calSettingsList : "CalendarSettings";
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
     _calendarOps.displayCalendars(props.context, calSettingsList).then((result:{}[])=>{
       setEventSources(result);
+      setCalMsgErrs(calsErrs);
     });
+    
     getCalSettings(props.context, calSettingsList).then((result:{}[])=>{
       setCalSettings(result);
     });
     getMySchoolCalGUID(props.context, calSettingsList).then((result)=>{
       setListGUID(result);
     }); 
+    
   },[]);
 
   React.useEffect(()=>{
@@ -129,7 +133,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         dismissPanel = {dismissPanel}
         isDataLoading = {isDataLoading} 
         showWeekends= {showWeekends} 
-        onChkViewChange= {chkViewHandleChange}/>
+        onChkViewChange= {chkViewHandleChange}
+      />
 
       <ILegend 
         calSettings={calSettings} 
@@ -142,8 +147,18 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         toggleHideDialog={toggleHideDialog}
         eventDetails={eventDetails}
         handleAddtoCal = {handleAddtoCal}
-        />
-    
+      />
+      
+      {calMsgErrs.length > 0 &&
+        <MessageBar messageBarType={MessageBarType.warning}>
+          Warning! Calendar Errors, please check
+          <ul>
+            {calMsgErrs.map((msg)=>{
+              return <li>{msg}</li> ;
+            })}
+          </ul>
+        </MessageBar>
+      }
     </div>
   );
   
