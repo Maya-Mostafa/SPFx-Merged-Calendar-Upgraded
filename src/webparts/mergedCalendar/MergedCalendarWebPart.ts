@@ -20,6 +20,7 @@ export interface IMergedCalendarWebPartProps {
   description: string;  
   showWeekends: boolean;
   calSettingsList: string;
+  legendPos: string;
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
@@ -32,6 +33,7 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
         showWeekends: this.properties.showWeekends,
         context: this.context,
         calSettingsList: this.properties.calSettingsList,
+        legendPos : this.properties.legendPos,
         dpdOptions : [
           { key: 'E1Day', text: '1 Day Cycle' },
           { key: 'E2Day', text: '2 Day Cycle' },
@@ -148,7 +150,15 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                 }),
                 PropertyPaneCheckbox('showWeekends', {
                   text: "Show Weekends"
-                })
+                }),
+                PropertyPaneDropdown('legendPos', {
+                  label : 'Legend Position',
+                  options: [
+                    {key: 'top', text: 'Top'},
+                    {key: 'bottom', text: 'Bottom'}
+                  ],
+                  selectedKey : 'bottom'
+                }),
               ]
             }
           ]

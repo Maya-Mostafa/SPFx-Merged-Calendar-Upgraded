@@ -23,7 +23,8 @@
     "properties": {
       "description": "MergedCalendar",
       "showWeekends" : false,
-      "calSettingsList" : "CalendarSettings"
+      "calSettingsList" : "CalendarSettings",
+      "legendPos" : "bottom"
     }
   }]
 }

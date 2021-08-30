@@ -7,4 +7,5 @@ export interface IMergedCalendarProps {
   context: WebPartContext;  
   calSettingsList: string;
   dpdOptions: IDropdownOption[];
+  legendPos: string;
 }

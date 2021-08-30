@@ -113,6 +113,16 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   return(
     <div className={styles.mergedCalendar}>
 
+      {props.legendPos === 'top' &&
+        <div className={styles.legendTop}>
+          <ILegend
+            calSettings={calSettings} 
+            onLegendChkChange={onLegendChkChange}
+            legendChked = {legendChked}
+          />
+        </div>
+      }
+
       <ICalendar 
         eventSources={eventSources} 
         // showWeekends={props.showWeekends ? props.showWeekends : false } 
@@ -136,11 +146,13 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         onChkViewChange= {chkViewHandleChange}
       />
 
-      <ILegend 
-        calSettings={calSettings} 
-        onLegendChkChange={onLegendChkChange}
-        legendChked = {legendChked}
-      />
+      {props.legendPos === 'bottom' &&
+        <ILegend 
+          calSettings={calSettings} 
+          onLegendChkChange={onLegendChkChange}
+          legendChked = {legendChked}
+        />
+      }
 
       <IDialog 
         hideDialog={hideDialog} 
@@ -150,7 +162,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
       />
       
       {calMsgErrs.length > 0 &&
-        <MessageBar messageBarType={MessageBarType.warning}>
+        <MessageBar className={styles.calErrsMsg} messageBarType={MessageBarType.warning}>
           Warning! Calendar Errors, please check
           <ul>
             {calMsgErrs.map((msg)=>{

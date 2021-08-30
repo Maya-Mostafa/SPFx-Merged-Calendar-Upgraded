@@ -119,6 +119,17 @@
     }
   }
 
+  .legendTop{
+    margin-bottom: 20px;
+    border-bottom: 1px solid #ddd;
+    ul{
+      display: flex;
+      flex-wrap: wrap;
+    }
+    li{
+      margin: 0 15px 5px 0;
+    }
+  }
   .calendarLegend{
     ul{
       padding: 0 5px;
@@ -147,6 +158,9 @@
   
 }
 
+.calErrsMsg{
+  margin-top: 20px;
+}
 
 .eventDetails{
   .evLbl{
