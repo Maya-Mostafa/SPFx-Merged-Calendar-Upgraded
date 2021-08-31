@@ -33,6 +33,9 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [calMsgErrs, setCalMsgErrs] = React.useState([]);
 
   const calSettingsList = props.calSettingsList ? props.calSettingsList : "CalendarSettings";
+  const legendPos = props.legendPos ? props.legendPos : "bottom";
+  const legendAlign = props.legendAlign ? props.legendAlign : "vertical";
+
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
     _calendarOps.displayCalendars(props.context, calSettingsList).then((result:{}[])=>{
@@ -113,8 +116,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   return(
     <div className={styles.mergedCalendar}>
 
-      {props.legendPos === 'top' &&
-        <div className={styles.legendTop}>
+      {legendPos === 'top' &&
+        <div className={`${styles.legendTop} ${legendAlign === 'horizontal' ? styles.legendHz : '' }`}>
           <ILegend
             calSettings={calSettings} 
             onLegendChkChange={onLegendChkChange}
@@ -146,12 +149,14 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         onChkViewChange= {chkViewHandleChange}
       />
 
-      {props.legendPos === 'bottom' &&
-        <ILegend 
-          calSettings={calSettings} 
-          onLegendChkChange={onLegendChkChange}
-          legendChked = {legendChked}
-        />
+      {legendPos === 'bottom' &&
+        <div className={legendAlign === 'horizontal' ? styles.legendHz : '' }>
+          <ILegend 
+            calSettings={calSettings} 
+            onLegendChkChange={onLegendChkChange}
+            legendChked = {legendChked}
+          />
+        </div>
       }
 
       <IDialog 

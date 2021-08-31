@@ -8,4 +8,5 @@ export interface IMergedCalendarProps {
   calSettingsList: string;
   dpdOptions: IDropdownOption[];
   legendPos: string;
+  legendAlign: string;
 }
