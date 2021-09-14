@@ -24,7 +24,13 @@
       "description": "MergedCalendar",
       "showWeekends" : false,
       "calSettingsList" : "CalendarSettings",
-      "legendPos" : "bottom"
+      "legendPos" : "bottom",
+      "spCalParams.rangeStart" : 3,
+      "spCalParams.rangeEnd" : 4,
+      "spCalParams.pageSize" : 100,
+      "graphCalParams.rangeStart" : 3,
+      "graphCalParams.rangeEnd" : 4,
+      "graphCalParams.pageSize" : 150
     }
   }]
 }

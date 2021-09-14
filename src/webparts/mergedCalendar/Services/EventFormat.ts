@@ -46,4 +46,11 @@ export const formatEvDetails = (ev:any) : {} =>{
     return evDetails;
 };
 
+export const getDatesRange = (numMonthsStart: number, numMonthsEnd: number) =>{
+    const rangeStart = moment().subtract(numMonthsStart, 'months').toISOString();
+    const rangeEnd = moment().add(numMonthsEnd, 'months').toISOString();
+    
+    return {rangeStart: rangeStart, rangeEnd: rangeEnd};
+};
+
 

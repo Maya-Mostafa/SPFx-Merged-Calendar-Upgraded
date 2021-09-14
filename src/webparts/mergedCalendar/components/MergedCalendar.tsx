@@ -36,9 +36,12 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const legendPos = props.legendPos ? props.legendPos : "bottom";
   const legendAlign = props.legendAlign ? props.legendAlign : "vertical";
 
+  const spCalParams = props.spCalParams ? props.spCalParams : {rangeStart: 3, rangeEnd: 4, pageSize: 150};
+  const graphCalParams = props.graphCalParams ? props.graphCalParams :{rangeStart: 3, rangeEnd: 4, pageSize: 150};
+
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
-    _calendarOps.displayCalendars(props.context, calSettingsList).then((result:{}[])=>{
+    _calendarOps.displayCalendars(props.context, calSettingsList, spCalParams, graphCalParams).then((result:{}[])=>{
       setEventSources(result);
       setCalMsgErrs(calsErrs);
     });
@@ -60,7 +63,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, checked: boolean) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, checked).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, spCalParams, graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -75,7 +78,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, item: IDropdownOption) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, newCalSettings.ShowCal, item.key).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, spCalParams, graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
