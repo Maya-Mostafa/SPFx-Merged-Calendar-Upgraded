@@ -72,3 +72,9 @@ gulp package-solution --ship
 
 
 
+ICS
+https://marclloyd.co.uk/javascript/creating-an-add-to-calendar-link-in-react/
+https://www.npmjs.com/package/ics
+https://github.com/adamgibbons/ics
+https://codepen.io/vlemoine/pen/MLwygX
+https://github.com/nwcell/ics.js
