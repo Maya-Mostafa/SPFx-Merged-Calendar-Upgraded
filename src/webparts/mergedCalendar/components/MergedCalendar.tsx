@@ -17,7 +17,7 @@ import IPanel from './IPanel/IPanel';
 import ILegend from './ILegend/ILegend';
 import IDialog from './IDialog/IDialog';
 
-export default function MergedCalendar (props:IMergedCalendarProps) {
+export default function MergedCalendar (props:IMergedCalendarProps) {    
   
   const _calendarOps = new CalendarOperations();
   const [eventSources, setEventSources] = React.useState([]);
@@ -33,8 +33,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [calMsgErrs, setCalMsgErrs] = React.useState([]);
 
   const calSettingsList = props.calSettingsList ? props.calSettingsList : "CalendarSettings";
-  const legendPos = props.legendPos ? props.legendPos : "bottom";
-  const legendAlign = props.legendAlign ? props.legendAlign : "vertical";
+  const legendPos = props.legendPos ? props.legendPos : "top";
+  const legendAlign = props.legendAlign ? props.legendAlign : "horizontal";
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{

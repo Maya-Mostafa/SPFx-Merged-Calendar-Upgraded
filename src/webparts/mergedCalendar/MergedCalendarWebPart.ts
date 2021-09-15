@@ -158,8 +158,9 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   options: [
                     {key: 'top', text: 'Top'},
                     {key: 'bottom', text: 'Bottom'}
+                    // {key: 'both', text: 'Both'}
                   ],
-                  selectedKey : 'bottom'
+                  selectedKey : 'top'
                 }),
                 PropertyPaneDropdown('legendAlign', {
                   label : 'Legend Alignment',

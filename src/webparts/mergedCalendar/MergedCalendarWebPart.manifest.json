@@ -24,7 +24,8 @@
       "description": "MergedCalendar",
       "showWeekends" : false,
       "calSettingsList" : "CalendarSettings",
-      "legendPos" : "bottom"
+      "legendPos" : "top",
+      "legendAlign" : "horizontal"
     }
   }]
 }
