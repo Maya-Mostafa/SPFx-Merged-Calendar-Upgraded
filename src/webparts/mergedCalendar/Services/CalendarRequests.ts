@@ -1,17 +1,19 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import {HttpClientResponse, HttpClient, IHttpClientOptions, MSGraphClient, SPHttpClient} from "@microsoft/sp-http";
 
-import {formatStartDate, formatEndDate} from '../Services/EventFormat';
+import {formatStartDate, formatEndDate, getDatesRange} from '../Services/EventFormat';
 import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
 
-const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, calName:string) : string => {
+
+const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, calName:string, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : string => {
     let resolvedCalUrl:string,
         azurePeelSchoolsUrl :string = "https://pdsb1.azure-api.net/peelschools",
         restApiUrl :string = "/_api/web/lists/getByTitle('"+calName+"')/items",
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'";
-        restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$orderby=EventDate desc&$top=300";
+        //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$orderby=EventDate desc&$top=300";
+        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$filter=EventDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}' and EventDate le '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeEnd}'`;
     //$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'
 
     switch (calType){
@@ -29,7 +31,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
     return resolvedCalUrl;
 };
 
-const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}) : Promise <{}[]> => {
+const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
     
     let graphUrl :string = calSettings.CalURL.substring(32, calSettings.CalURL.length),
         calEvents : {}[] = [];
@@ -39,13 +41,15 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
             .getClient()
             .then((client :MSGraphClient)=>{
                 client
-                    .api(graphUrl)
+                    // .api(graphUrl)
+                    .api(`${graphUrl}?$filter=start/dateTime ge '${getDatesRange(graphCalParams.rangeStart, graphCalParams.rangeEnd).rangeStart}' and start/dateTime le '${getDatesRange(graphCalParams.rangeStart, graphCalParams.rangeEnd).rangeEnd}'&$top=${graphCalParams.pageSize}`)
                     .header('Prefer','outlook.timezone="Eastern Standard Time"')
                     .get((error, response: any, rawResponse?: any)=>{
                         if(error){
                             calsErrs.push("MS Graph Error - " + calSettings.Title);
                         }
                         if(response){
+                            console.log("graph response", response);
                             response.value.map((result:any)=>{
                                 calEvents.push({
                                     id: result.id,
@@ -55,7 +59,8 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                                     start: result.start.dateTime,
                                     end: result.end.dateTime,
                                     _location: result.location.displayName,
-                                    _body: result.body.content
+                                    _body: result.body.content,
+                                    allDay: result.isAllDay
                                 });
                             });
                         }
@@ -149,8 +154,8 @@ const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, T
     
 };
 
-export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}) : Promise <{}[]> => {
-    let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName),
+export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
+    let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, spCalParams),
         calEvents : {}[] = [] ;
 
     const myOptions: IHttpClientOptions = {
@@ -193,11 +198,11 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     return calEvents;
 };
 
-export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}) : Promise <{}[]> => {
+export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
     if(calSettings.CalType == 'Graph'){
-        return getGraphCals(context, calSettings);
+        return getGraphCals(context, calSettings, graphCalParams);
     }else{
-        return getDefaultCals(context, calSettings);
+        return getDefaultCals(context, calSettings, spCalParams);
     }
 };
 

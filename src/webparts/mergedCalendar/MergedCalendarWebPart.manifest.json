@@ -25,7 +25,13 @@
       "showWeekends" : false,
       "calSettingsList" : "CalendarSettings",
       "legendPos" : "top",
-      "legendAlign" : "horizontal"
+      "legendAlign" : "horizontal",
+      "spCalParams.rangeStart" : 3,
+      "spCalParams.rangeEnd" : 4,
+      "spCalParams.pageSize" : 100,
+      "graphCalParams.rangeStart" : 3,
+      "graphCalParams.rangeEnd" : 4,
+      "graphCalParams.pageSize" : 150
     }
   }]
 }

@@ -22,6 +22,8 @@ export interface IMergedCalendarWebPartProps {
   calSettingsList: string;
   legendPos: string;
   legendAlign: string;
+  spCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
+  graphCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
@@ -47,9 +49,15 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
           { key: 'E8Day', text: '8 Day Cycle' },
           { key: 'E9Day', text: '9 Day Cycle' },
           { key: 'E10Day', text: '10 Day Cycle' },
-        ]
+        ],
+        spCalParams : this.properties.spCalParams,
+        graphCalParams: this.properties.graphCalParams
+        
       }
     );
+
+    // spCalParams: {rangeStart: this.properties.spCalParams.rangeStart, rangeEnd: this.properties.spCalParams.rangeEnd, pageSize: this.properties.spCalParams.pageSize},
+    // graphCalParams: {rangeStart: this.properties.graphCalParams.rangeStart, rangeEnd: this.properties.graphCalParams.rangeEnd, pageSize: this.properties.graphCalParams.pageSize},
 
     ReactDom.render(element, this.domElement);
   }
@@ -136,15 +144,8 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
           },
           groups: [
             {
-              groupName: strings.BasicGroupName,
+              groupName: "Settings",
               groupFields: [
-                /*PropertyPaneTextField('description', {
-                  label: strings.DescriptionFieldLabel
-                }),*/
-                // PropertyPaneTextField('calSettingsList', {
-                //   label: 'Calendar Settings List',
-                //   onGetErrorMessage: this.validateListName.bind(this)
-                // }),
                 PropertyPaneDropdown('calSettingsList', {
                   label : 'Calendar Settings List',
                   options: this.lists,
@@ -153,8 +154,13 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                 PropertyPaneCheckbox('showWeekends', {
                   text: "Show Weekends"
                 }),
+              ]
+            },
+            {
+              groupName: "Legend",
+              groupFields: [
                 PropertyPaneDropdown('legendPos', {
-                  label : 'Legend Position',
+                  label : 'Position',
                   options: [
                     {key: 'top', text: 'Top'},
                     {key: 'bottom', text: 'Bottom'}
@@ -163,12 +169,96 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   selectedKey : 'top'
                 }),
                 PropertyPaneDropdown('legendAlign', {
-                  label : 'Legend Alignment',
+                  label : 'Alignment',
                   options: [
                     {key: 'horizontal', text: 'Horizontal'},
                     {key: 'vertical', text: 'Vertical'}
                   ],
                   selectedKey : 'vertical'
+                }),
+              ]
+            },
+            {
+              groupName: "SharePoint Calendars",
+              groupFields: [
+                PropertyPaneDropdown('spCalParams.rangeStart', {
+                  label : 'Number of months before today',
+                  options: [
+                    {key: '1', text: '1'},
+                    {key: '2', text: '2'},
+                    {key: '3', text: '3'},
+                    {key: '4', text: '4'},
+                    {key: '5', text: '5'},
+                    {key: '6', text: '6'},
+                  ],
+                  selectedKey : '3'
+                }),
+                PropertyPaneDropdown('spCalParams.rangeEnd', {
+                  label : 'Number of months after today',
+                  options: [
+                    {key: '1', text: '1'},
+                    {key: '2', text: '2'},
+                    {key: '3', text: '3'},
+                    {key: '4', text: '4'},
+                    {key: '5', text: '5'},
+                    {key: '6', text: '6'},
+                  ],
+                  selectedKey : '4'
+                }),
+                PropertyPaneDropdown('spCalParams.pageSize', {
+                  label : 'Number of events',
+                  options: [
+                    {key: '50', text: '50'},
+                    {key: '100', text: '100'},
+                    {key: '150', text: '150'},
+                    {key: '200', text: '200'},
+                    {key: '250', text: '250'},
+                    {key: '300', text: '300'},
+                    {key: '350', text: '350'},
+                  ],
+                  selectedKey : '100'
+                }),
+              ]
+            },
+            {
+              groupName: "Graph Calendars",
+              groupFields: [
+                PropertyPaneDropdown('graphCalParams.rangeStart', {
+                  label : 'Number of months before today',
+                  options: [
+                    {key: '1', text: '1'},
+                    {key: '2', text: '2'},
+                    {key: '3', text: '3'},
+                    {key: '4', text: '4'},
+                    {key: '5', text: '5'},
+                    {key: '6', text: '6'},
+                  ],
+                  selectedKey : '3'
+                }),
+                PropertyPaneDropdown('graphCalParams.rangeEnd', {
+                  label : 'Number of months after today',
+                  options: [
+                    {key: '1', text: '1'},
+                    {key: '2', text: '2'},
+                    {key: '3', text: '3'},
+                    {key: '4', text: '4'},
+                    {key: '5', text: '5'},
+                    {key: '6', text: '6'},
+                  ],
+                  selectedKey : '4'
+                }),
+                PropertyPaneDropdown('graphCalParams.pageSize', {
+                  label : 'Number of events',
+                  options: [
+                    {key: '50', text: '50'},
+                    {key: '100', text: '100'},
+                    {key: '150', text: '150'},
+                    {key: '200', text: '200'},
+                    {key: '250', text: '250'},
+                    {key: '300', text: '300'},
+                    {key: '350', text: '350'},
+                  ],
+                  selectedKey : '100'
                 }),
               ]
             }
