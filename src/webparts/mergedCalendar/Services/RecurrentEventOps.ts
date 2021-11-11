@@ -94,6 +94,34 @@ const getDayOrder = (weekDayOfMonth:any):number => {
     return dayOrder;
 };
 
+const getFirstDayOfWeek = (firstDayOfWeek: string) =>{
+    let firstDayOfWeekIndex = 6;
+    switch(firstDayOfWeek){
+        case "mo":
+            firstDayOfWeekIndex = 0;
+            break;
+        case "tu":
+            firstDayOfWeekIndex = 1;
+            break;
+        case "we":
+            firstDayOfWeekIndex = 2;
+            break;
+        case "th":
+            firstDayOfWeekIndex = 3;
+            break;
+        case "fr":
+            firstDayOfWeekIndex = 4;
+            break;
+        case "sa":
+            firstDayOfWeekIndex = 5;
+            break;
+        case "su":
+            firstDayOfWeekIndex = 6;
+            break;
+    }
+    return firstDayOfWeekIndex;
+};
+
 
 export const parseRecurrentEvent = (recurrXML:string, startDate:string, endDate:string) : {} =>{
     let rruleObj
@@ -103,8 +131,10 @@ export const parseRecurrentEvent = (recurrXML:string, startDate:string, endDate:
     if (recurrXML.indexOf("<recurrence>") != -1) {
         let $recurrTag : HTMLElement = document.createElement("div");
         $recurrTag.innerHTML = recurrXML;
-
-        //console.log($recurrTag)
+        
+        //console.log($recurrTag);
+        const firstDayOfWeek = $recurrTag.getElementsByTagName('firstDayOfWeek')[0].textContent;
+        rruleObj.wkst = getFirstDayOfWeek(firstDayOfWeek);
 
         switch (true) {
             //yearly
