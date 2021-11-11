@@ -96,9 +96,9 @@ const getDayOrder = (weekDayOfMonth:any):number => {
 
 
 export const parseRecurrentEvent = (recurrXML:string, startDate:string, endDate:string) : {} =>{
-    let rruleObj  
-            : {dtstart:string, until:string, count:number, interval:number, freq:string, bymonth:number[], bymonthday:number[], byweekday:{}[], bysetpos:number[]} 
-            = {dtstart:startDate, until:endDate, count:null, interval:1, freq:null, bymonth:null, bymonthday:null, byweekday:null, bysetpos:null};
+    let rruleObj
+        : { tzid: string, wkst: number, dtstart: string, until: string, count: number, interval: number, freq: string, bymonth: number[], bymonthday: number[], byweekday: {}[], bysetpos: number[] }
+        = { tzid: "America/Toronto", wkst: 6, dtstart: startDate, until: endDate, count: null, interval: 1, freq: null, bymonth: null, bymonthday: null, byweekday: null, bysetpos: null };
 
     if (recurrXML.indexOf("<recurrence>") != -1) {
         let $recurrTag : HTMLElement = document.createElement("div");

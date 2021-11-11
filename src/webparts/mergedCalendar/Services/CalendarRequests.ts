@@ -1,7 +1,7 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import {HttpClientResponse, HttpClient, IHttpClientOptions, MSGraphClient, SPHttpClient} from "@microsoft/sp-http";
 
-import {formatStartDate, formatEndDate, getDatesRange} from '../Services/EventFormat';
+import {formatStartDate, formatEndDate, getDatesRange, formateDate, formateTime} from '../Services/EventFormat';
 import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
@@ -176,14 +176,18 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                     calEvents.push({
                         id: result.ID,
                         title: result.Title,
-                        start: result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate,
-                        end: result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate,
+                        //start: result.fAllDayEvent ? formatStartDate(result.EventDate) : formateDate(result.EventDate),
+                        //end: result.fAllDayEvent ? formatEndDate(result.EndDate) : formateDate(result.EndDate),
+                        start: result.EventDate,
+                        end: result.EndDate,
+                        _startTime: formateTime(result.EventDate),
+                        _endTime: formateTime(result.EndDate),
                         allDay: result.fAllDayEvent,
                         _location: result.Location,
                         _body: result.Description,
                         recurr: result.fRecurrence,
                         recurrData: result.RecurrenceData,
-                        rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, formatStartDate(result.EventDate), formatEndDate(result.EndDate)) : null,
+                        rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
                         // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
                         //className: 'eventCal' + calSettings.Id,
                     });
