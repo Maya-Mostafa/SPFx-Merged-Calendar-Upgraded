@@ -11,6 +11,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
     let resolvedCalUrl:string,
         azurePeelSchoolsUrl :string = "https://pdsb1.azure-api.net/peelschools",
         restApiUrl :string = "/_api/web/lists/getByTitle('"+calName+"')/items",
+        restApiUrlExt :string = "/_api/web/lists/getByTitle('School - Calendar')/items",
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'";
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$orderby=EventDate desc&$top=300";
         restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$filter=EventDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}' and EventDate le '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeEnd}'`;
@@ -25,7 +26,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
             resolvedCalUrl = context.pageContext.web.absoluteUrl + restApiUrl + restApiParams;
             break;
         case "External":
-            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrl + restApiParams;
+            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrlExt + restApiParams;
             break;
     }
     return resolvedCalUrl;
@@ -169,6 +170,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
         //console.log(calSettings.Title, _data.status);
         if (_data.ok){
             const calResult = await _data.json();
+            console.log("calResult", calResult)
             if(calResult){
                 calResult.d.results.map((result:any)=>{
                     calEvents.push({
@@ -194,6 +196,9 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     } catch(error){
         calsErrs.push("External calendars invalid - " + error);
     }
+
+    console.log("calSettings", calSettings);
+    console.log("getDefaultCals", calEvents);
 
     return calEvents;
 };
