@@ -26,19 +26,21 @@ export default function ILegend(props:ILegendProps){
             {
                 props.calSettings.map((value:any)=>{
                     return(
-                        <li key={value.Id}>
-                            {(value.ShowCal ) && //&& value.CalType !== 'External'
-                                <Checkbox 
-                                    className={'chkboxLegend chkbox_'+value.BgColor}
-                                    label={value.Title} 
-                                    defaultChecked={true}
-                                    // checked={props.legendChked}
-                                    onChange={props.onLegendChkChange(value.Id)} 
-                                    onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
-                                />
+                        <React.Fragment>
+                            {value.ShowCal  && //&& value.CalType !== 'External'
+                                <li key={value.Id}>    
+                                    <Checkbox 
+                                        className={'chkboxLegend chkbox_'+value.BgColor}
+                                        label={value.Title} 
+                                        defaultChecked={true}
+                                        // checked={props.legendChked}
+                                        onChange={props.onLegendChkChange(value.Id)} 
+                                        onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
+                                    />
+                                </li>
                             }
-                        </li>
-                    );
+                        </React.Fragment>
+                    )
                 })
             }
             </ul>
