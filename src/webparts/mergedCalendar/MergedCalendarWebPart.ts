@@ -202,19 +202,25 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                     {key: '4', text: '4'},
                     {key: '5', text: '5'},
                     {key: '6', text: '6'},
+                    {key: '7', text: '7'},
+                    {key: '8', text: '8'},
+                    {key: '9', text: '9'},
+                    {key: '10', text: '10'},
+                    {key: '11', text: '11'},
+                    {key: '12', text: '12'},
                   ],
-                  selectedKey : '4'
+                  selectedKey : '6'
                 }),
                 PropertyPaneDropdown('spCalParams.pageSize', {
                   label : 'Number of events',
                   options: [
-                    {key: '50', text: '50'},
                     {key: '100', text: '100'},
-                    {key: '150', text: '150'},
                     {key: '200', text: '200'},
-                    {key: '250', text: '250'},
                     {key: '300', text: '300'},
-                    {key: '350', text: '350'},
+                    {key: '400', text: '400'},
+                    {key: '500', text: '500'},
+                    {key: '600', text: '600'},
+                    {key: '700', text: '700'},
                   ],
                   selectedKey : '100'
                 }),
@@ -244,6 +250,12 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                     {key: '4', text: '4'},
                     {key: '5', text: '5'},
                     {key: '6', text: '6'},
+                    {key: '7', text: '7'},
+                    {key: '8', text: '8'},
+                    {key: '9', text: '9'},
+                    {key: '10', text: '10'},
+                    {key: '11', text: '11'},
+                    {key: '12', text: '12'},
                   ],
                   selectedKey : '4'
                 }),
