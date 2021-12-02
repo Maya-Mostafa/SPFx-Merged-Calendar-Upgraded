@@ -1,7 +1,7 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import {HttpClientResponse, HttpClient, IHttpClientOptions, MSGraphClient, SPHttpClient} from "@microsoft/sp-http";
 
-import {formatStartDate, formatEndDate, getDatesRange, formateDate, formateTime} from '../Services/EventFormat';
+import {formatStartDate, formatEndDate, getDatesRange, formateTime} from '../Services/EventFormat';
 import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
@@ -14,7 +14,9 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
         restApiUrlExt :string = "/_api/web/lists/getByTitle('School - Calendar')/items",
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'";
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$orderby=EventDate desc&$top=300";
-        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$filter=EventDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}' and EventDate le '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeEnd}'`;
+
+         //restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$filter=EventDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}' and EventDate le '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeEnd}'`;
+        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$orderby=EndDate desc`;
     //$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'
 
     switch (calType){
@@ -176,10 +178,8 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                     calEvents.push({
                         id: result.ID,
                         title: result.Title,
-                        //start: result.fAllDayEvent ? formatStartDate(result.EventDate) : formateDate(result.EventDate),
-                        //end: result.fAllDayEvent ? formatEndDate(result.EndDate) : formateDate(result.EndDate),
-                        start: result.EventDate,
-                        end: result.EndDate,
+                        start: result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate,
+                        end: result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate,
                         _startTime: formateTime(result.EventDate),
                         _endTime: formateTime(result.EndDate),
                         allDay: result.fAllDayEvent,
