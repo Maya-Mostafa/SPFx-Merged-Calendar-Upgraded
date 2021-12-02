@@ -1,3 +1,5 @@
+import * as moment from 'moment-timezone';
+
 const getElemAttrs = (el:any) :string[] => {
     let attributesArr :string[] = [];
     for (let i = 0; i < el.attributes.length; i++){
@@ -124,9 +126,18 @@ const getFirstDayOfWeek = (firstDayOfWeek: string) =>{
 
 
 export const parseRecurrentEvent = (recurrXML:string, startDate:string, endDate:string) : {} =>{
+    
+    // for daylight savings
+    const modStartDate = moment.tz(startDate, "America/Toronto").format('YYYY-MM-DD') + "T" + moment.tz(startDate, "America/Toronto").format("hh:mm:ss") ;
+    const modEndDate = moment.tz(endDate, "America/Toronto").format('YYYY-MM-DD') + "T" + moment.tz(endDate, "America/Toronto").format("hh:mm:ss") ;
+
     let rruleObj
-        : { tzid: string, wkst: number, dtstart: string, until: string, count: number, interval: number, freq: string, bymonth: number[], bymonthday: number[], byweekday: {}[], bysetpos: number[] }
-        = { tzid: "America/Toronto", wkst: 6, dtstart: startDate, until: endDate, count: null, interval: 1, freq: null, bymonth: null, bymonthday: null, byweekday: null, bysetpos: null };
+        : {  wkst: number, dtstart: string, until: string, count: number, interval: number, freq: string, bymonth: number[], bymonthday: number[], byweekday: {}[], bysetpos: number[] }
+        = {  wkst: 6, dtstart: modStartDate, until: modEndDate, count: null, interval: 1, freq: null, bymonth: null, bymonthday: null, byweekday: null, bysetpos: null };
+
+// : { tzid: string, wkst: number, dtstart: string, until: string, count: number, interval: number, freq: string, bymonth: number[], bymonthday: number[], byweekday: {}[], bysetpos: number[] }
+// = { tzid: "America/Toronto", wkst: 6, dtstart: startDate, until: endDate, count: null, interval: 1, freq: null, bymonth: null, bymonthday: null, byweekday: null, bysetpos: null };
+
 
     if (recurrXML.indexOf("<recurrence>") != -1) {
         let $recurrTag : HTMLElement = document.createElement("div");
