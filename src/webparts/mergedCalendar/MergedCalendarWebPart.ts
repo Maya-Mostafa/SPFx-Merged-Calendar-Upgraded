@@ -181,7 +181,7 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
             {
               groupName: "SharePoint Calendars",
               groupFields: [
-                PropertyPaneDropdown('spCalParams.rangeStart', {
+                /*PropertyPaneDropdown('spCalParams.rangeStart', {
                   label : 'Number of months before today',
                   options: [
                     {key: '1', text: '1'},
@@ -210,19 +210,19 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                     {key: '12', text: '12'},
                   ],
                   selectedKey : '6'
-                }),
+                }),*/
                 PropertyPaneDropdown('spCalParams.pageSize', {
                   label : 'Number of events',
                   options: [
-                    {key: '100', text: '100'},
-                    {key: '200', text: '200'},
-                    {key: '300', text: '300'},
-                    {key: '400', text: '400'},
                     {key: '500', text: '500'},
-                    {key: '600', text: '600'},
-                    {key: '700', text: '700'},
+                    {key: '750', text: '750'},
+                    {key: '1250', text: '1250'},
+                    {key: '1500', text: '1500'},
+                    {key: '1750', text: '1750'},
+                    {key: '2250', text: '2250'},
+                    {key: '3000', text: '3000'},
                   ],
-                  selectedKey : '100'
+                  selectedKey : '750'
                 }),
               ]
             },
