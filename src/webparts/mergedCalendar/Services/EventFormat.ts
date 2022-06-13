@@ -1,31 +1,33 @@
 // import * as moment from 'moment';
 import * as moment from 'moment-timezone'; 
 
+// only for user's view in the event details dialog, cannot be passed to the fullcalendar plugin
 export const formateDate = (ipDate:any) :any => {
     //return moment.utc(ipDate).format('YYYY-MM-DD hh:mm A'); 
-    //return ipDate; 
+    return moment.tz(ipDate, "America/Toronto").format('YYYY-MM-DD hh:mm A');
+    // return moment.tz(ipDate, "America/Toronto").format();
+};
+// only for user's view in the event details dialog
+export const formateTime = (ipDate:any) :any => {
     return moment.tz(ipDate, "America/Toronto").format('YYYY-MM-DD hh:mm A');
 };
 
-export const formateTime = (ipDate:any) :any => {
-    return moment.tz(ipDate, "America/Toronto").format('hh:mm A');
-};
-
+// for fixing the alldayEvent issue in fullcalendar
 export const formatStartDate = (ipDate:any) : any => {
     let startDateMod = new Date(ipDate);
     startDateMod.setTime(startDateMod.getTime());
     
-    //return moment.utc(startDateMod).format('YYYY-MM-DD') + "T" + moment.utc(startDateMod).format("hh:mm") + ":00Z";
-    return moment.tz(startDateMod, "America/Toronto").format('YYYY-MM-DD') + "T" + moment.tz(startDateMod, "America/Toronto").format("hh:mm") + ":00Z";
+    return moment.utc(startDateMod).format('YYYY-MM-DD') + "T" + moment.utc(startDateMod).format("hh:mm") + ":00Z";
+    //return moment.tz(startDateMod, "America/Toronto").format('YYYY-MM-DD') + "T" + moment.tz(startDateMod, "America/Toronto").format("hh:mm") + ":00Z";
 };
-
+// for fixing the alldayEvent issue in fullcalendar
 export const formatEndDate = (ipDate:any) :any => {
     let endDateMod = new Date(ipDate);
     endDateMod.setTime(endDateMod.getTime());
 
-    let nextDay = moment.tz(endDateMod, "America/Toronto").add(1, 'days');
-    //return moment.utc(nextDay).format('YYYY-MM-DD') + "T" + moment.utc(nextDay).format("hh:mm") + ":00Z";
-    return moment.tz(nextDay, "America/Toronto").format('YYYY-MM-DD') + "T" + moment.tz(nextDay, "America/Toronto").format("hh:mm") + ":00Z";
+    let nextDay = moment.utc(endDateMod).add(1, 'days');
+    return moment.utc(nextDay).format('YYYY-MM-DD') + "T" + moment.utc(nextDay).format("hh:mm") + ":00Z";
+    //return moment.tz(nextDay, "America/Toronto").format('YYYY-MM-DD') + "T" + moment.tz(nextDay, "America/Toronto").format("hh:mm") + ":00Z";
 };
 
 export const formatStrHtml = (str: string) : any => {
@@ -41,8 +43,10 @@ export const formatEvDetails = (ev:any) : {} =>{
 
     evDetails = {
         Title: event.title,
-        Start: event.startStr ? formateDate(event.startStr) : "",
-        End: event.endStr ? formateDate(event.endStr) : "",
+        // Start: event.startStr ? formateDate(event.startStr) : "",
+        // End: event.endStr ? formateDate(event.endStr) : "",
+        Start: event._def.extendedProps._startTime ? event._def.extendedProps._startTime : "",
+        End: event._def.extendedProps._endTime ? event._def.extendedProps._endTime : "",
         Location: event._def.extendedProps._location,
         Body: event._def.extendedProps._body ? event._def.extendedProps._body : null,
         AllDay: event.allDay,
