@@ -1,7 +1,7 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import {HttpClientResponse, HttpClient, IHttpClientOptions, MSGraphClient, SPHttpClient} from "@microsoft/sp-http";
 
-import {formatStartDate, formatEndDate, getDatesRange, formateDate, formateTime} from '../Services/EventFormat';
+import {formatStartDate, formatEndDate, getDatesRange, formateTime} from '../Services/EventFormat';
 import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
@@ -16,7 +16,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$orderby=EventDate desc&$top=300";
         
         //restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$filter=EventDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}' and EventDate le '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeEnd}' or EndDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}'`;
-        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$orderby=EndDate desc`;
+        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalParams.pageSize}&$orderby=EndDate desc`;
     //$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'
 
     switch (calType){
@@ -157,7 +157,7 @@ const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, T
     
 };
 
-export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
+export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string}, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
     let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, spCalParams),
         calEvents : {}[] = [] ;
 
@@ -172,28 +172,55 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
         //console.log(calSettings.Title, _data.status);
         if (_data.ok){
             const calResult = await _data.json();
-            console.log("calResult", calResult)
+            console.log("calResult", calResult);
+            console.log("calSettings view", calSettings.View);
             if(calResult){
-                calResult.d.results.map((result:any)=>{
-                    calEvents.push({
-                        id: result.ID,
-                        title: result.Title,
-                        //start: result.fAllDayEvent ? formatStartDate(result.EventDate) : formateDate(result.EventDate),
-                        //end: result.fAllDayEvent ? formatEndDate(result.EndDate) : formateDate(result.EndDate),
-                        start: result.EventDate,
-                        end: result.EndDate,
-                        _startTime: formateTime(result.EventDate),
-                        _endTime: formateTime(result.EndDate),
-                        allDay: result.fAllDayEvent,
-                        _location: result.Location,
-                        _body: result.Description,
-                        recurr: result.fRecurrence,
-                        recurrData: result.RecurrenceData,
-                        rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
-                        // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
-                        //className: 'eventCal' + calSettings.Id,
+                if (calSettings.View){
+                    calResult.d.results.map((result:any)=>{
+                        if (result.Category){
+                            if (result.Category.results.indexOf(calSettings.View) !== -1){
+                                calEvents.push({
+                                    id: result.ID,
+                                    title: result.Title,
+                                    start: result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate,
+                                    end: result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate,
+                                    _startTime: formateTime(result.EventDate),
+                                    _endTime: formateTime(result.EndDate),
+                                    allDay: result.fAllDayEvent,
+                                    _location: result.Location,
+                                    _body: result.Description,
+                                    recurr: result.fRecurrence,
+                                    recurrData: result.RecurrenceData,
+                                    rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
+                                    // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
+                                    //className: 'eventCal' + calSettings.Id,
+                                    category: result.Category 
+                                });
+                            }
+                        }
                     });
-                });
+                }
+                else{
+                    calResult.d.results.map((result:any)=>{
+                        calEvents.push({
+                            id: result.ID,
+                            title: result.Title,
+                            start: result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate,
+                            end: result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate,
+                            _startTime: formateTime(result.EventDate),
+                            _endTime: formateTime(result.EndDate),
+                            allDay: result.fAllDayEvent,
+                            _location: result.Location,
+                            _body: result.Description,
+                            recurr: result.fRecurrence,
+                            recurrData: result.RecurrenceData,
+                            rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
+                            // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
+                            //className: 'eventCal' + calSettings.Id,
+                            category: result.Category 
+                        });
+                    });
+                }
             }
         }else{
             calsErrs.push(calSettings.Title + ' - ' + _data.statusText);
@@ -209,7 +236,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     return calEvents;
 };
 
-export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string}, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
+export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string}, spCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
     if(calSettings.CalType == 'Graph'){
         return getGraphCals(context, calSettings, graphCalParams);
     }else{

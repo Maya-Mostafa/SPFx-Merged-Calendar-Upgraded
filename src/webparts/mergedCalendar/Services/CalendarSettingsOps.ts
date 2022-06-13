@@ -73,10 +73,11 @@ export const getCalSettings = (context:WebPartContext, listName: string) : Promi
                             ShowCal: result.ShowCal,
                             Title: result.Title,
                             Chkd: result.ShowCal ? true : false,
-                            Disabled: result.CalType == 'My School' ? true : false,
-                            Dpd: result.CalType == 'Rotary' ? true : false,
+                            Disabled: (result.CalType == 'My School' || result.CalendarType == 'My School') ? true : false,
+                            Dpd: (result.CalType == 'Rotary' || result.CalendarType == 'Rotary') ? true : false,
                             //LegendURL : result.CalType !== 'Graph' ? result.CalURL + "/Lists/" + result.CalName : null
-                            LegendURL : result.Link || ""
+                            LegendURL : result.Link || "",
+                            View: result.View || ''
                         });
                     });                    
                     resolve(calSettings);
