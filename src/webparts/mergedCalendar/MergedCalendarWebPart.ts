@@ -22,6 +22,7 @@ export interface IMergedCalendarWebPartProps {
   calSettingsList: string;
   legendPos: string;
   legendAlign: string;
+  spCalPageSize: number;
   spCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
   graphCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
 }
@@ -51,7 +52,8 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
           { key: 'E10Day', text: '10 Day Cycle' },
         ],
         spCalParams : this.properties.spCalParams,
-        graphCalParams: this.properties.graphCalParams
+        graphCalParams: this.properties.graphCalParams,
+        spCalPageSize: this.properties.spCalPageSize
         
       }
     );
@@ -210,8 +212,21 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                     {key: '12', text: '12'},
                   ],
                   selectedKey : '6'
-                }),*/
+                }),
                 PropertyPaneDropdown('spCalParams.pageSize', {
+                  label : 'Number of events',
+                  options: [
+                    {key: '500', text: '500'},
+                    {key: '750', text: '750'},
+                    {key: '1250', text: '1250'},
+                    {key: '1500', text: '1500'},
+                    {key: '1750', text: '1750'},
+                    {key: '2250', text: '2250'},
+                    {key: '3000', text: '3000'},
+                  ],
+                  selectedKey : '750'
+                }),*/
+                PropertyPaneDropdown('spCalPageSize', {
                   label : 'Number of events',
                   options: [
                     {key: '500', text: '500'},

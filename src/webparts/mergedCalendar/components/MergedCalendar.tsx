@@ -41,8 +41,9 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
-    _calendarOps.displayCalendars(props.context, calSettingsList, spCalParams, graphCalParams).then((result:{}[])=>{
+    _calendarOps.displayCalendars(props.context, calSettingsList, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
       setEventSources(result);
+      // console.log("cals", result);
       setCalMsgErrs(calsErrs);
     });
     
@@ -63,7 +64,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, checked: boolean) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, checked).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList, spCalParams, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -78,7 +79,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, item: IDropdownOption) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, newCalSettings.ShowCal, item.key).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList, spCalParams, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -97,7 +98,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     
   };
   const handleDateClick = (arg:any) =>{
-    //console.log(arg);
+    // console.log(arg);
     //console.log(formatEvDetails(arg));
     setEventDetails(formatEvDetails(arg));
     toggleHideDialog();
@@ -105,7 +106,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
   const handleAddtoCal = ()=>{
     addToMyGraphCal(props.context).then((result)=>{
-      console.log('calendar updated', result);
+      // console.log('calendar updated', result);
     });
   };
 

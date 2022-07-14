@@ -11,4 +11,5 @@ export interface IMergedCalendarProps {
   legendAlign: string;
   spCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
   graphCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
+  spCalPageSize: number;
 }
