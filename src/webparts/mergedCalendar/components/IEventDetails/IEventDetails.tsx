@@ -40,6 +40,12 @@ export default function IEventDetails (props: IEventDetailsProps){
                     <div><p dangerouslySetInnerHTML={{__html: props.Body}}></p></div>
                 </div>
             }
+            {props.Category &&
+                <div className={styles.evFld}>
+                    <label className={styles.evLbl}>Category</label>
+                    <div className={styles.evIp}>{props.Category}</div>
+            </div>
+            }
 
             {/* <DefaultButton onClick={props.handleAddtoCal}>Add dummy event to my Calendar</DefaultButton> */}
 

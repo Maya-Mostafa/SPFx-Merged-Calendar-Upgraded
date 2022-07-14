@@ -52,7 +52,8 @@ export const formatEvDetails = (ev:any) : {} =>{
         AllDay: event.allDay,
         Recurr: event._def.extendedProps.recurr,
         RecurrData: event._def.extendedProps.recurrData,
-        RecurringDef: event._def.extendedProps.recurringDef
+        RecurringDef: event._def.extendedProps.recurringDef,
+        Category: event._def.extendedProps.category ? event._def.extendedProps.category.results.join(', ') : null,
     };
 
     return evDetails;

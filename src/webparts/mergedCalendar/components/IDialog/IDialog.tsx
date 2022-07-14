@@ -14,6 +14,8 @@ export default function IDialog(props:IDialogProps){
         title: 'Event Details',
         subText: '',
       };
+
+      // console.log("props.eventDetails", props.eventDetails);
   
       return (
         <>
@@ -32,6 +34,7 @@ export default function IDialog(props:IDialogProps){
                 Body = {props.eventDetails.Body}
                 Location = {props.eventDetails.Location}       
                 handleAddtoCal = {props.handleAddtoCal}         
+                Category = {props.eventDetails.Category}
             />
             <DialogFooter>
               <DefaultButton onClick={props.toggleHideDialog} text="Close" />
