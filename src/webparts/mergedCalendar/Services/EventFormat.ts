@@ -54,6 +54,8 @@ export const formatEvDetails = (ev:any) : {} =>{
         RecurrData: event._def.extendedProps.recurrData,
         RecurringDef: event._def.extendedProps.recurringDef,
         Category: event._def.extendedProps.category ? event._def.extendedProps.category.results.join(', ') : null,
+        Calendar: event._def.extendedProps.calendar,
+        Color: event._def.extendedProps.calendarColor
     };
 
     return evDetails;

@@ -1,21 +1,25 @@
 import * as React from 'react';
+import styles from '../MergedCalendar.module.scss';
 import {Dialog, DialogType, DialogFooter, DefaultButton} from '@fluentui/react';
 
 import {IDialogProps} from './IDialogProps';
 import IEventDetails from  '../IEventDetails/IEventDetails';
 
 export default function IDialog(props:IDialogProps){
+
+    const dlgTitleMkp = <span><span className={styles.evTitleDlg} style={{backgroundColor: props.eventDetails.Color }}></span>{props.eventDetails.Calendar}</span> ;
+
     const modelProps = {
         isBlocking: false,
         //styles: { main: { minWidth: '30%' } },
       };
       const dialogContentProps = {
         type: DialogType.close,
-        title: 'Event Details',
+        title: dlgTitleMkp,
         subText: '',
       };
 
-      // console.log("props.eventDetails", props.eventDetails);
+      //console.log("props.eventDetails", props.eventDetails);
   
       return (
         <>
