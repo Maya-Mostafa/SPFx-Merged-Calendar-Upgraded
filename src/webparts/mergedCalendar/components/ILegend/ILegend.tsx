@@ -4,6 +4,7 @@ import {Checkbox, Link} from '@fluentui/react';
 import styles from '../MergedCalendar.module.scss';
 import { ILegendProps } from './ILegendProps';
 import { initializeIcons } from '@uifabric/icons';
+import { getPosGrpMapping} from '../../Services/CalendarRequests';
 
 export default function ILegend(props:ILegendProps){    
     initializeIcons();
@@ -20,6 +21,19 @@ export default function ILegend(props:ILegendProps){
         <span className={styles.legendText}>{value.Title}</span>
     </a> */}
 
+    const isUserGrpCal = (calTitle: string) => {
+        if (getPosGrpMapping(calTitle) == undefined) return true;
+        for (let userGrp of props.userGrps){
+            if (getPosGrpMapping(calTitle) && getPosGrpMapping(calTitle).indexOf(Number(userGrp)) !== -1){
+                return true;
+            }
+        }
+        return false;
+    };
+    
+    //console.log("props.calSettings", props.calSettings);
+    //console.log("legend userGrps", props.userGrps);
+
     return(
         <div className={styles.calendarLegend}>
             <ul>
@@ -32,7 +46,7 @@ export default function ILegend(props:ILegendProps){
                                     <Checkbox 
                                         className={'chkboxLegend chkbox_'+value.BgColor}
                                         label={value.Title} 
-                                        defaultChecked={true}
+                                        defaultChecked={isUserGrpCal(value.Title)}
                                         // checked={props.legendChked}
                                         onChange={props.onLegendChkChange(value.Id)} 
                                         onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
@@ -40,7 +54,7 @@ export default function ILegend(props:ILegendProps){
                                 </li>
                             }
                         </React.Fragment>
-                    )
+                    );
                 })
             }
             </ul>

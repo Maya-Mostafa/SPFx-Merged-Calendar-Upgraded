@@ -8,7 +8,7 @@ import {useBoolean} from '@fluentui/react-hooks';
 
 import {CalendarOperations} from '../Services/CalendarOperations';
 import {getCalSettings, updateCalSettings} from '../Services/CalendarSettingsOps';
-import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs} from '../Services/CalendarRequests';
+import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs, getUserGrp} from '../Services/CalendarRequests';
 import {formatEvDetails} from '../Services/EventFormat';
 import {setWpData} from '../Services/WpProperties';
 
@@ -31,6 +31,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [calVisibility, setCalVisibility] = React.useState <{calId: string, calChk: boolean}>({calId: null, calChk: null});
   const [legendChked, setLegendChked] = React.useState(true);
   const [calMsgErrs, setCalMsgErrs] = React.useState([]);
+  const [userGrps, setUserGrps] = React.useState([]);
 
   const calSettingsList = props.calSettingsList ? props.calSettingsList : "CalendarSettings";
   const legendPos = props.legendPos ? props.legendPos : "top";
@@ -41,7 +42,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
-    _calendarOps.displayCalendars(props.context, calSettingsList, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+    _calendarOps.displayCalendars(props.context, calSettingsList, userGrps, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
       setEventSources(result);
       // console.log("cals", result);
       setCalMsgErrs(calsErrs);
@@ -53,6 +54,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     getMySchoolCalGUID(props.context, calSettingsList).then((result)=>{
       setListGUID(result);
     }); 
+
+    getUserGrp(props.context).then(result => setUserGrps(result));
     
   },[]);
 
@@ -64,7 +67,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, checked: boolean) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, checked).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, userGrps, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -79,7 +82,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, item: IDropdownOption) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, newCalSettings.ShowCal, item.key).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, userGrps, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -98,7 +101,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     
   };
   const handleDateClick = (arg:any) =>{
-    // console.log(arg);
+    //console.log("ev details arg", arg);
     //console.log(formatEvDetails(arg));
     setEventDetails(formatEvDetails(arg));
     toggleHideDialog();
@@ -126,6 +129,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
             calSettings={calSettings} 
             onLegendChkChange={onLegendChkChange}
             legendChked = {legendChked}
+            userGrps = {userGrps}
           />
         </div>
       }
@@ -159,6 +163,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
             calSettings={calSettings} 
             onLegendChkChange={onLegendChkChange}
             legendChked = {legendChked}
+            userGrps = {userGrps}
           />
         </div>
       }
