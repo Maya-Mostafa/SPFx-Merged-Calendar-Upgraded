@@ -4,7 +4,7 @@ import {Checkbox, Link} from '@fluentui/react';
 import styles from '../MergedCalendar.module.scss';
 import { ILegendProps } from './ILegendProps';
 import { initializeIcons } from '@uifabric/icons';
-import { getPosGrpMapping} from '../../Services/CalendarRequests';
+// import { getPosGrpMapping} from '../../Services/CalendarRequests';
 
 export default function ILegend(props:ILegendProps){    
     initializeIcons();
@@ -22,9 +22,9 @@ export default function ILegend(props:ILegendProps){
     </a> */}
 
     const isUserGrpCal = (calTitle: string) => {
-        if (getPosGrpMapping(calTitle) == undefined) return true;
+        if (props.posGrps[calTitle.trim()] == undefined) return true;
         for (let userGrp of props.userGrps){
-            if (getPosGrpMapping(calTitle) && getPosGrpMapping(calTitle).indexOf(Number(userGrp)) !== -1){
+            if (props.posGrps[calTitle.trim()] && props.posGrps[calTitle.trim()].indexOf(Number(userGrp)) !== -1){
                 return true;
             }
         }
@@ -33,12 +33,15 @@ export default function ILegend(props:ILegendProps){
     
     //console.log("props.calSettings", props.calSettings);
     //console.log("legend userGrps", props.userGrps);
+    //console.log("props.posGrps", props.posGrps);
+
+    const sortedCalSettings = props.calSettings.sort((a,b) => a.Title.localeCompare(b.Title));
 
     return(
         <div className={styles.calendarLegend}>
             <ul>
             {
-                props.calSettings.map((value:any)=>{
+                sortedCalSettings.map((value:any)=>{
                     return(
                         <React.Fragment>
                             {value.ShowCal  && //&& value.CalType !== 'External'

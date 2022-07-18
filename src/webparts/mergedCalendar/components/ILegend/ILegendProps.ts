@@ -3,4 +3,5 @@ export interface ILegendProps{
     onLegendChkChange: any;
     legendChked: boolean;
     userGrps: any;
+    posGrps: any;
 }
