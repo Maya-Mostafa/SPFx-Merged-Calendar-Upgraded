@@ -6,7 +6,7 @@ import {getCalSettings} from '../Services/CalendarSettingsOps';
 export class CalendarOperations{
     
 
-    public displayCalendars(context: WebPartContext , calSettingsListName:string, userGrps:any, spCalPageSize?: number, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}): Promise <{}[]>{
+    public displayCalendars(context: WebPartContext , calSettingsListName:string, userGrps:any, posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}): Promise <{}[]>{
         
         console.log("Display Calendar Function");
 
@@ -19,7 +19,7 @@ export class CalendarOperations{
             const dataFetches = settings.map(setting => {
                 // This `return` is needed otherwise `undefined` is returned in this `map()` call.
                 if(setting.ShowCal){ //&& setting.CalType !== 'External'
-                    return getCalsData(context, setting, userGrps, spCalPageSize, graphCalParams).then((events: any) => {
+                    return getCalsData(context, setting, userGrps, posGrps, spCalPageSize, graphCalParams).then((events: any) => {
                         eventSrc = {
                             events: events,
                             color: setting.BgColorHex,

@@ -11,7 +11,8 @@ export const getPosGrpMapping = (posGrpName: string) => {
     posGrpsMapping['SOE'] = [11, 84];
     posGrpsMapping['ASG - Administrative Staff Group'] = [12, 16, 17, 18, 19, 25, 26, 60, 61, 62, 64, 64, 70, 90, 98];
     posGrpsMapping['CUPE 2544 - Custodial, Maintenance and Food Services'] = [50, 51, 52, 55, 56, 59];
-    posGrpsMapping['Elementary Teacher'] = [30, 31, 32, 33, 34, 35];
+    posGrpsMapping['Teachers'] = [30, 31, 32, 33, 34, 35, 20, 21, 22, 23, 24, 91, 92, 96];
+    posGrpsMapping['Elementary Teachers'] = [30, 31, 32, 33, 34, 35];
     posGrpsMapping['Secondary Teachers'] = [20, 21, 22, 23, 24, 91, 92, 96];
     posGrpsMapping['CUPE 1628 - Secretarial, Clerical and Library Technicians'] = [40, 41, 42, 47, 48, 49, 86, 87, 88];
     posGrpsMapping['CUPE 1628 - Secretarial'] = [40, 41, 42, 47, 48, 49, 86, 87, 88];
@@ -25,6 +26,19 @@ export const getPosGrpMapping = (posGrpName: string) => {
     posGrpsMapping['Casual'] = [71, 72, 73, 75, 76, 89];
 
     return posGrpsMapping[posGrpName];
+};
+
+export const getAllPosGrps = async (context:WebPartContext) => {
+    const posGrpsMapping = [];
+    const data = await context.spHttpClient.get("https://pdsb1.sharepoint.com/sites/contentTypeHub/_api/web/lists/getByTitle('PLEmpGrps')/items", SPHttpClient.configurations.v1);
+    if (data.ok){
+        const results = await data.json();
+        const posGrps = results.value;
+        for (let posGrp of posGrps){
+            posGrpsMapping[posGrp.Title] = posGrp.Numbers.split(';').map(Number);
+        }
+    }
+    return posGrpsMapping;
 };
 
 export const getUserGrp = async (context: WebPartContext) => {
@@ -188,7 +202,7 @@ const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, T
     
 };
 
-export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, userGrps: [], spCalPageSize?: number) : Promise <{}[]> => {
+export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, userGrps: [], posGrps:any, spCalPageSize?: number) : Promise <{}[]> => {
     
     let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, spCalPageSize),
         calEvents : {}[] = [] ;
@@ -217,11 +231,14 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
 
                     let isUserGrpCal = false;
                     for (let userGrp of userGrps){
-                        if (getPosGrpMapping(calSettings.Title) && getPosGrpMapping(calSettings.Title).indexOf(Number(userGrp)) !== -1){
+                        if (posGrps[calSettings.Title.trim()] && posGrps[calSettings.Title.trim()].indexOf(Number(userGrp)) !== -1){
                             isUserGrpCal = true;
                             break;
                         }
                     }
+
+                    // console.log("posGrps in calendar requests", posGrps);
+                    // console.log("posGrps[calSettings.Title]", posGrps[calSettings.Title])
 
                     calResult.d.results.map((result:any)=>{
                         if (result.Category){
@@ -284,16 +301,16 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     }
 
     // console.log("calSettings", calSettings);
-    console.log("getDefaultCals", calEvents);
+    // console.log("getDefaultCals", calEvents);
 
     return calEvents;
 };
 
-export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, userGrps: [], spCalPageSize?: number, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
+export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
     if(calSettings.CalType == 'Graph'){
         return getGraphCals(context, calSettings, graphCalParams);
     }else{
-        return getDefaultCals(context, calSettings, userGrps, spCalPageSize);
+        return getDefaultCals(context, calSettings, userGrps, posGrps, spCalPageSize);
     }
 };
 
