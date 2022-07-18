@@ -231,13 +231,14 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   options: [
                     {key: '500', text: '500'},
                     {key: '750', text: '750'},
+                    {key: '1000', text: '1000'},
                     {key: '1250', text: '1250'},
                     {key: '1500', text: '1500'},
                     {key: '1750', text: '1750'},
                     {key: '2250', text: '2250'},
                     {key: '3000', text: '3000'},
                   ],
-                  selectedKey : '750'
+                  selectedKey : '1000'
                 }),
               ]
             },
