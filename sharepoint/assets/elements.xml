@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+
+    <ListInstance   
+            FeatureId="00bfea71-de22-43b2-a848-c05709900100"  
+            CustomSchema="schema.xml"
+            Title="MergedCalendarSettings"   
+            Description="List for Merged Calendar Peel SPFx WP"  
+            TemplateType="100"  
+            Url="Lists/MergedCalendarSettings">  
+    </ListInstance>  
+
+    <ContentType ID="0x0100A435A9913B4517489C9EAF0FCFB536C0"
+            Name="CalendarSettings"
+            Description="A ContentType for MergedCalendar SPFx Solution">
+    </ContentType>
+
+</Elements>   
