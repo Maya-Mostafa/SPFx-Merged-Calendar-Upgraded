@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<Elements xmlns="http://schemas.microsoft.com/sharepoint/">  
+
+    <ListInstance   
+            FeatureId="00bfea71-de22-43b2-a848-c05709900100"  
+            CustomSchema="schema.xml"
+            Title="MergedCalendarSettings"   
+            Description="List for Merged Calendar Peel SPFx WP"  
+            TemplateType="100"  
+            Url="Lists/MergedCalendarSettings">  
+    </ListInstance>  
+
+    <ContentType ID="0x0100A435A9913B4517489C9EAF0FCFB536C0"
+            Name="CalendarSettings"
+            Group="Custom Content Types"
+            Description="A ContentType for MergedCalendar SPFx Solution">
+        <FieldRefs>
+            <FieldRef Name="Title" ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}" />
+            <FieldRef Name="FgColor" ID="{e42b85b4-1491-4d44-8163-172cafcc3719}" />
+            <FieldRef Name="BgColor" ID="{ac35a150-ca2e-4aab-9697-16f156b3439f}" />
+            <FieldRef Name="CalURL" ID="{5fd8d65b-c189-4ac5-a4d7-5822f6342abe}" />
+            <FieldRef Name="CalName" ID="{b5545c8f-91f4-4b55-aaa2-8bdf3a401044}" />
+            <FieldRef Name="ShowCal" ID="{07cb8f68-9fea-4200-9f96-7ef58df349a2}" />
+            <FieldRef Name="CalendarType" ID="{d3cdce63-873a-470a-a016-39dc4b702ef4}" />
+            <FieldRef Name="Link" ID="{85723f8f-fbcb-45ec-90e0-188a0b24478b}" />
+        </FieldRefs>
+    </ContentType>
+
+    <Field ID="{fa564e0f-0c70-4ab9-b863-0177e6ddd247}"
+        Name="Title"
+        DisplayName="Title"
+        Type="Text"
+        Required="TRUE" />
+
+    <Field ID="{e42b85b4-1491-4d44-8163-172cafcc3719}"
+            Name="FgColor"
+            DisplayName="FgColor"
+            Type="Choice"
+            Required="FALSE" >
+        <CHOICES>
+            <CHOICE>White</CHOICE>
+            <CHOICE>Black</CHOICE>
+        </CHOICES>
+    </Field>
+
+    <Field ID="{ac35a150-ca2e-4aab-9697-16f156b3439f}"
+        Name="BgColor"
+        DisplayName="BgColor"
+        Type="Choice"
+        Required="FALSE" >
+        <CHOICES>
+            <CHOICE>Blue</CHOICE>
+            <CHOICE>Green</CHOICE>
+            <CHOICE>Grey</CHOICE>
+            <CHOICE>Mint</CHOICE>
+            <CHOICE>Navy</CHOICE>
+            <CHOICE>Orange</CHOICE>
+            <CHOICE>Pink</CHOICE>
+            <CHOICE>Purple</CHOICE>
+            <CHOICE>Red</CHOICE>
+            <CHOICE>Teal</CHOICE>
+            <CHOICE>Yellow</CHOICE>
+        </CHOICES>
+    </Field>
+
+    <Field ID="5fd8d65b-c189-4ac5-a4d7-5822f6342abe"
+        Name="CalURL"
+        DisplayName="CalURL"
+        Type="Text"
+        Required="TRUE" />
+    
+    <Field ID="b5545c8f-91f4-4b55-aaa2-8bdf3a401044"
+        Name="CalName"
+        DisplayName="CalName"
+        Type="Text"
+        Required="TRUE" />
+    
+    <Field ID="07cb8f68-9fea-4200-9f96-7ef58df349a2" 
+        Name = "ShowCal"
+        DisplayName= "ShowCal"
+        Type="Boolean"
+        Required="FALSE" />
+
+    <Field ID="{d3cdce63-873a-470a-a016-39dc4b702ef4}"
+        Name="CalendarType"
+        DisplayName="CalendarType"
+        Type="Choice"
+        Required="FALSE" >
+        <CHOICES>
+            <CHOICE>My School</CHOICE>
+            <CHOICE>Rotary</CHOICE>
+            <CHOICE>Graph</CHOICE>
+            <CHOICE>Room</CHOICE>
+            <CHOICE>External</CHOICE>
+            <CHOICE>Internal</CHOICE>
+        </CHOICES>
+    </Field>
+
+    <Field ID="85723f8f-fbcb-45ec-90e0-188a0b24478b"
+        Name="Link"
+        DisplayName="Link"
+        Type="Text"
+        Required="TRUE" /> 
+
+
+</Elements>   
