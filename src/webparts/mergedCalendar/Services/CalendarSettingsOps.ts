@@ -44,6 +44,124 @@ const getColorHex = (colorName:string) : string => {
         case ("Yellow"):
             colorHex = "#DAA62F";
             break;
+
+        case ("Aluminium"):
+            colorHex = "#";
+            break;
+        case ("Aniseed"):
+            colorHex = "#c3d329";
+            break;
+        case ("Autumn"):
+            colorHex = "#a4905e";
+            break;
+        case ("Black"):
+            colorHex = "#302a26";
+            break;
+        case ("Boulder"):
+            colorHex = "#b8bdbe";
+            break;
+        case ("Burgundy"):
+            colorHex = "#5f2d37";
+            break;
+        case ("Buttercup"):
+            colorHex = "#fad825";
+            break;
+        case ("Camel"):
+            colorHex = "#cab08e";
+            break;
+        case ("Carrot"):
+            colorHex = "#e46138";
+            break;
+        case ("Celadon"):
+            colorHex = "#90cce1";
+            break;
+        case ("Celestial Blue"):
+            colorHex = "#036184";
+            break;
+        case ("Champagne"):
+            colorHex = "#f6eac3";
+            break;
+        case ("Cocoa"):
+            colorHex = "#675d4b";
+            break;
+        case ("Concrete"):
+            colorHex = "#69666f";
+            break;
+        case ("Dark Blue"):
+            colorHex = "#225b87";
+            break;
+        case ("Dijon"):
+            colorHex = "#e2a135";
+            break;
+        case ("Hemp"):
+            colorHex = "#e9dbb5";
+            break;
+        case ("Lagoon"):
+            colorHex = "#4097b6";
+            break;
+        case ("Lemon"):
+            colorHex = "#f1e378";
+            break;
+        case ("Marine"):
+            colorHex = "#393e5d";
+            break;
+        case ("Midnight Blue"):
+            colorHex = "#384e87";
+            break;
+        case ("Moss Green"):
+            colorHex = "#829975";
+            break;
+        case ("Olive"):
+            colorHex = "#727261";
+            break;
+        case ("Pepper"):
+            colorHex = "#b19b79";
+            break;
+        case ("Poppy"):
+            colorHex = "#bb272d";
+            break;
+        case ("Porcelain Green"):
+            colorHex = "#169096";
+            break;
+        case ("Raspberry"):
+            colorHex = "#c04255";
+            break;
+        case ("Sandy Beige"):
+            colorHex = "#c9b7ae";
+            break;
+        case ("Spruce"):
+            colorHex = "#264c43";
+            break;
+        case ("Steel Blue"):
+            colorHex = "#5ba1b7";
+            break;
+        case ("Teak"):
+            colorHex = "#6a635c";
+            break;
+        case ("Tennis Green"):
+            colorHex = "#17594a";
+            break;
+        case ("Terracotta"):
+            colorHex = "#894e43";
+            break;
+        case ("Thistle Blue"):
+            colorHex = "#0a5f7b";
+            break;
+        case ("Vanilla"):
+            colorHex = "#e6d2af";
+            break;
+        case ("Velvet Red"):
+            colorHex = "#954339";
+            break;
+        case ("Victoria Blue"):
+            colorHex = "#0061a3";
+            break;
+        case ("Walnut Stain"):
+            colorHex = "#4b3429";
+            break;
+        case ("White"):
+            colorHex = "#f2f4f8";
+            break;
     }
     return colorHex;
 };
@@ -62,7 +180,7 @@ export const getCalSettings = (context:WebPartContext, listName: string) : Promi
                 response.json().then((results:any)=>{
                     results.value.map((result:any)=>{
                         calSettings.push({
-                            BgColor: result.BgColor,
+                            BgColor: result.BgColor.replace(/ /g,''),
                             BgColorHex : getColorHex(result.BgColor),
                             CalName : result.CalName,
                             CalType: result.CalendarType ? result.CalendarType : result.CalType,

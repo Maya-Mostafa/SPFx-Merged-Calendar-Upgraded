@@ -1,35 +1,89 @@
+// Peel Colors
+$blue-color: #0096CF;
+$green-color: #27AE60;
+$grey-color: #9FA7A7;
+$mint-color: #1C9A82;
+$navy-color: #4C5F79;
+$orange-color: #EA8020;
+$pink-color: #F46C9E;
+$purple-color: #A061BA;
+$red-color: #D7574A;
+$teal-color: #38A8AC;
+$yellow-color: #DAA62F;
+// New colors
+$champagne-color: #f6eac3;
+$vanilla-color: #e6d2af;
+$hemp-color: #e9dbb5;
+$aniseed-color: #c3d329;
+$olive-color: #727261;
+$mossGreen-color: #829975;
+$black-color: #302a26;
+$sandyBeige-color: #c9b7ae;
+$pepper-color: #b19b79;
+$camel-color: #cab08e;
+$porcelainGreen-color: #169096;
+$tennisGreen-color: #17594a;
+$spruce-color: #264c43;
+$white-color: #f2f4f8;
+$cocoa-color: #675d4b;
+$teak-color: #6a635c;
+$walnutStain-color: #4b3429;
+$celadon-color: #90cce1;
+$steelBlue-color: #5ba1b7;
+$lagoon-color: #4097b6;
+$boulder-color: #b8bdbe;
+$lemon-color: #f1e378;
+$buttercup-color: #fad825;
+$dijon-color: #e2a135;
+$darkBlue-color: #225b87;
+$thistleBlue-color: #0a5f7b;
+$celestialBlue-color: #036184;
+$concrete-color: #69666f;
+$carrot-color: #e46138;
+$rasberry-color: #c04255;
+$victoriaBlue-color: #0061a3;
+$midnightBlue-color: #384e87;
+$marine-color: #393e5d;
+$poppy-color: #bb272d;
+$terracotta-color: #894e43;
+$burgundy-color: #5f2d37;
+$velvetRed-color: #954339;
+$autumn-color: #a4905e;
+$aluminium-color: #abb4b1;
+
+
 .calLegend_Blue{
-    background-color: #0096CF;
+    background-color: $blue-color;
 }
 .calLegend_Green{
-    background-color: #27AE60;
+    background-color: $green-color;
 }
 .calLegend_Grey{
-    background-color: #9FA7A7;
+    background-color: $grey-color;
 }
 .calLegend_Mint{
-    background-color: #1C9A82;
+    background-color: $mint-color;
 }
 .calLegend_Navy{
-    background-color: #4C5F79;
+    background-color: $navy-color;
 }
 .calLegend_Orange{
-    background-color: #EA8020;
+    background-color: $orange-color;
 }
 .calLegend_Pink{
-    background-color: #F46C9E;
+    background-color: $pink-color;
 }
 .calLegend_Purple{
-    background-color: #A061BA;
+    background-color: $purple-color;
 }
 .calLegend_Red{
-    background-color: #D7574A;
+    background-color: $red-color;
 }
 .calLegend_Teal{
-    background-color: #38A8AC;
+    background-color: $teal-color;
 }
 .calLegend_Yellow{
-    background-color: #DAA62F;
+    background-color: $yellow-color;
 }
 
 // legend checkboxes
@@ -40,48 +94,48 @@
     text-decoration: none;
 }
 .chkbox_Blue .ms-Checkbox-checkbox{
-    background-color: #0096CF;
-    border: 1px solid #0096CF;
+    background-color: $blue-color;
+    border: 1px solid $blue-color;
 }
 .chkbox_Green .ms-Checkbox-checkbox{
-    background-color: #27AE60;
-    border: 1px solid #27AE60;
+    background-color: $green-color;
+    border: 1px solid $green-color;
 }
 .chkbox_Grey .ms-Checkbox-checkbox{
-    background-color: #9FA7A7;
-    border: 1px solid #9FA7A7;
+    background-color: $grey-color;
+    border: 1px solid $grey-color;
 }
 .chkbox_Mint .ms-Checkbox-checkbox{
-    background-color: #1C9A82;
-    border: 1px solid #1C9A82;
+    background-color: $mint-color;
+    border: 1px solid $mint-color;
 }
 .chkbox_Navy .ms-Checkbox-checkbox{
-    background-color: #4C5F79;
-    border: 1px solid #4C5F79;
+    background-color: $navy-color;
+    border: 1px solid $navy-color;
 }
 .chkbox_Orange .ms-Checkbox-checkbox{
-    background-color: #EA8020;
-    border: 1px solid #EA8020;
+    background-color: $orange-color;
+    border: 1px solid $orange-color;
 }
 .chkbox_Pink .ms-Checkbox-checkbox{
-    background-color: #F46C9E;
-    border: 1px solid #F46C9E;
+    background-color: $pink-color;
+    border: 1px solid $pink-color;
 }
 .chkbox_Purple .ms-Checkbox-checkbox{
-    background-color: #A061BA;
-    border: 1px solid #A061BA;
+    background-color: $purple-color;
+    border: 1px solid $purple-color;
 }
 .chkbox_Red .ms-Checkbox-checkbox{
-    background-color: #D7574A;
-    border: 1px solid #D7574A;
+    background-color: $red-color;
+    border: 1px solid $red-color;
 }
 .chkbox_Teal .ms-Checkbox-checkbox{
-    background-color: #38A8AC;
-    border: 1px solid #38A8AC;
+    background-color: $teal-color;
+    border: 1px solid $teal-color;
 }
 .chkbox_Yellow .ms-Checkbox-checkbox{
-    background-color: #DAA62F;
-    border: 1px solid #DAA62F;
+    background-color: $yellow-color;
+    border: 1px solid $yellow-color;
 }
 
 
@@ -103,3 +157,296 @@ th .fc-scrollgrid-sync-inner{
 .fc-daygrid-event{
     white-space: normal;
 }
+
+// New colors
+.calLegend_Champagne{
+    background-color: $champagne-color;
+}
+.calLegend_Vanilla{
+    background-color: $vanilla-color;
+}
+.calLegend_Hemp{
+    background-color: $hemp-color;
+}
+.calLegend_Aniseed{
+    background-color: $aniseed-color;
+}
+.calLegend_Olive{
+    background-color: $olive-color;
+}
+.calLegend_MossGreen{
+    background-color: $mossGreen-color;
+}
+.calLegend_Black{
+    background-color: $black-color;
+}
+.calLegend_SandyBeige{
+    background-color: $sandyBeige-color;
+}
+.calLegend_Pepper{
+    background-color: $pepper-color;
+}
+.calLegend_Camel{
+    background-color: $camel-color;
+}
+.calLegend_PorcelainGreen{
+    background-color: $porcelainGreen-color;
+}
+.calLegend_TennisGreen{
+    background-color: $tennisGreen-color;
+}
+.calLegend_Spruce{
+    background-color: $spruce-color;
+}
+.calLegend_White{
+    background-color: $white-color;
+}
+.calLegend_Cocoa{
+    background-color: $cocoa-color;
+}
+.calLegend_Teak{
+    background-color: $teak-color;
+}
+.calLegend_Walnut_Stain{
+    background-color: $walnutStain-color;
+}
+.calLegend_Celadon{
+    background-color: $celadon-color;
+}
+.calLegend_SteelBlue{
+    background-color: $steelBlue-color;
+}
+.calLegend_Lagoon{
+    background-color: $lagoon-color;
+}
+.calLegend_Boulder{
+    background-color: $boulder-color;
+}
+.calLegend_Lemon{
+    background-color: $lemon-color;
+}
+.calLegend_Buttercup{
+    background-color: $buttercup-color;
+}
+.calLegend_Dijon{
+    background-color: $dijon-color;
+}
+.calLegend_ThistleBlue{
+    background-color: $thistleBlue-color;
+}
+.calLegend_CelestialBlue{
+    background-color: $celestialBlue-color;
+}
+.calLegend_Concrete{
+    background-color: $concrete-color;
+}
+.calLegend_Carrot{
+    background-color: $carrot-color;
+}
+.calLegend_Rasberry{
+    background-color: $rasberry-color;
+}
+.calLegend_VictoriaBlue{
+    background-color: $victoriaBlue-color;
+}
+.calLegend_MidnightBlue{
+    background-color: $midnightBlue-color;
+}
+.calLegend_Marine{
+    background-color: $marine-color;
+}
+.calLegend_Poppy{
+    background-color: $poppy-color;
+}
+.calLegend_Terracotta{
+    background-color: $terracotta-color;
+}
+.calLegend_Burgandy{
+    background-color: $burgundy-color;
+}
+.calLegend_VelvetRed{
+    background-color: $velvetRed-color;
+}
+.calLegend_Autumn{
+    background-color: $autumn-color;
+}
+.calLegend_Alumnium{
+    background-color: $aluminium-color;
+}
+// Legend checkboxes
+.chkbox_Champagne .ms-Checkbox-checkbox{
+    background-color: $champagne-color;
+    border: 1px solid $champagne-color;
+}
+.chkbox_Vanilla .ms-Checkbox-checkbox{
+    background-color: $vanilla-color;
+    border: 1px solid $vanilla-color;
+}
+.chkbox_Hemp .ms-Checkbox-checkbox{
+    background-color: $hemp-color;
+    border: 1px solid $hemp-color;
+}
+.chkbox_Aniseed .ms-Checkbox-checkbox{
+    background-color: $aniseed-color;
+    border: 1px solid $aniseed-color;
+}
+.chkbox_Olive .ms-Checkbox-checkbox{
+    background-color: $olive-color;
+    border: 1px solid $olive-color;
+}
+.chkbox_MossGreen .ms-Checkbox-checkbox{
+    background-color: $mossGreen-color;
+    border: 1px solid $mossGreen-color;
+}
+.chkbox_Black .ms-Checkbox-checkbox{
+    background-color: $black-color;
+    border: 1px solid $black-color;
+}
+.chkbox_SandyBeige .ms-Checkbox-checkbox{
+    background-color: $sandyBeige-color;
+    border: 1px solid $sandyBeige-color
+}
+.chkbox_Pepper .ms-Checkbox-checkbox{
+    background-color: $pepper-color;
+    border: 1px solid $pepper-color;
+}
+.chkbox_Camel .ms-Checkbox-checkbox{
+    background-color: $camel-color;
+    border: 1px solid $camel-color;
+}
+.chkbox_PorcelainGreen .ms-Checkbox-checkbox{
+    background-color: $porcelainGreen-color;
+    border: 1px solid $porcelainGreen-color;
+}
+.chkbox_TennisGreen .ms-Checkbox-checkbox{
+    background-color: $tennisGreen-color;
+    border: 1px solid $tennisGreen-color;
+}
+.chkbox_Spruce .ms-Checkbox-checkbox{
+    background-color: $spruce-color;
+    border: 1px solid $spruce-color;
+}
+.chkbox_White .ms-Checkbox-checkbox{
+    background-color: $white-color;
+    border: 1px solid $white-color;
+}
+.chkbox_Cocoa .ms-Checkbox-checkbox{
+    background-color: $cocoa-color;
+    border: 1px solid $cocoa-color;
+}
+.chkbox_Teak .ms-Checkbox-checkbox{
+    background-color: $teak-color;
+    border: 1px solid $teak-color;
+}
+.chkbox_WalnutStain .ms-Checkbox-checkbox{
+    background-color: $walnutStain-color;
+    border: 1px solid $walnutStain-color;
+}
+.chkbox_Celadon .ms-Checkbox-checkbox{
+    background-color: $celadon-color;
+    border: 1px solid $celadon-color;
+}
+.chkbox_SteelBlue .ms-Checkbox-checkbox{
+    background-color: $steelBlue-color;
+    border: 1px solid $steelBlue-color;
+}
+.chkbox_Lagoon .ms-Checkbox-checkbox{
+    background-color: $lagoon-color;
+    border: 1px solid $lagoon-color;
+}
+.chkbox_Boulder .ms-Checkbox-checkbox{
+    background-color: $boulder-color;
+    border: 1px solid $boulder-color;
+}
+.chkbox_Lemon .ms-Checkbox-checkbox{
+    background-color: $lemon-color;
+    border: 1px solid $lemon-color;
+}
+.chkbox_Buttercup .ms-Checkbox-checkbox{
+    background-color: $buttercup-color;
+    border: 1px solid $buttercup-color;
+}
+.chkbox_Dijon .ms-Checkbox-checkbox{
+    background-color: $dijon-color;
+    border: 1px solid $dijon-color;
+}
+.chkbox_DarkBlue .ms-Checkbox-checkbox{
+    background-color: $darkBlue-color;
+    border: 1px solid $darkBlue-color;
+}
+.chkbox_ThistleBlue .ms-Checkbox-checkbox{
+    background-color: $thistleBlue-color;
+    border: 1px solid $thistleBlue-color;
+}
+.chkbox_CelestialBlue .ms-Checkbox-checkbox{
+    background-color: $celestialBlue-color;
+    border: 1px solid $celestialBlue-color;
+}
+.chkbox_Concrete .ms-Checkbox-checkbox{
+    background-color: $concrete-color;
+    border: 1px solid $concrete-color;
+}
+.chkbox_Orange .ms-Checkbox-checkbox{
+    background-color: $orange-color;
+    border: 1px solid $orange-color;
+}
+.chkbox_Carrot .ms-Checkbox-checkbox{
+    background-color: $carrot-color;
+    border: 1px solid $carrot-color;
+}
+.chkbox_Rasberry .ms-Checkbox-checkbox{
+    background-color: $rasberry-color;
+    border: 1px solid $rasberry-color;
+}
+.chkbox_VictoriaBlue .ms-Checkbox-checkbox{
+    background-color: $victoriaBlue-color;
+    border: 1px solid $victoriaBlue-color;
+}
+.chkbox_MidnightBlue .ms-Checkbox-checkbox{
+    background-color: $midnightBlue-color;
+    border: 1px solid $midnightBlue-color;
+}
+.chkbox_Marine .ms-Checkbox-checkbox{
+    background-color: $marine-color;
+    border: 1px solid $marine-color;
+}
+.chkbox_Poppy .ms-Checkbox-checkbox{
+    background-color: $poppy-color;
+    border: 1px solid $poppy-color;
+}
+.chkbox_Terracotta .ms-Checkbox-checkbox{
+    background-color: $terracotta-color;
+    border: 1px solid $terracotta-color;
+}
+.chkbox_Burgundy .ms-Checkbox-checkbox{
+    background-color: $burgundy-color;
+    border: 1px solid $burgundy-color;
+}
+.chkbox_VelvetRed .ms-Checkbox-checkbox{
+    background-color: $velvetRed-color;
+    border: 1px solid $velvetRed-color;
+}
+.chkbox_Autumn .ms-Checkbox-checkbox{
+    background-color: $autumn-color;
+    border: 1px solid $autumn-color;
+}
+.chkbox_Aluminium .ms-Checkbox-checkbox{
+    background-color: $aluminium-color;
+    border: 1px solid $aluminium-color;
+}
+
+
+
+/*
+Blue
+Green
+Grey
+Mint
+Navy
+Orange
+Pink
+Purple
+Red
+Teal
+Yellow
+*/
