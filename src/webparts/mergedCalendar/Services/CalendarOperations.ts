@@ -12,6 +12,8 @@ export class CalendarOperations{
 
         let eventSources : {}[] = [], 
             eventSrc  : {} = {};
+        
+        spCalPageSize = spCalPageSize ? spCalPageSize : 1000;
 
         // `async` is needed since we're using `await`
         return getCalSettings(context, calSettingsListName).then(async (settings:any) => {
