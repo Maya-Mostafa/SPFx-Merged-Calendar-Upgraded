@@ -21,19 +21,23 @@ export default function ILegend(props:ILegendProps){
         <span className={styles.legendText}>{value.Title}</span>
     </a> */}
 
-    const isUserGrpCal = (calTitle: string) => {
-        if (props.posGrps[calTitle.trim()] == undefined) return true;
-        for (let userGrp of props.userGrps){
-            if (props.posGrps[calTitle.trim()] && props.posGrps[calTitle.trim()].indexOf(Number(userGrp)) !== -1){
-                return true;
+    const isUserGrpCal = (calView: string) => {
+        console.log("calView", calView);
+        if (props.posGrps[calView.trim()] == undefined) return true;
+        else{
+            for (let userGrp of props.userGrps){
+                if (props.posGrps[calView.trim()] && props.posGrps[calView.trim()].indexOf(Number(userGrp)) !== -1){
+                    return true;
+                }
             }
+            return false;
         }
-        return false;
+        
     };
     
-    //console.log("props.calSettings", props.calSettings);
-    //console.log("legend userGrps", props.userGrps);
-    //console.log("props.posGrps", props.posGrps);
+    // console.log("props.calSettings", props.calSettings);
+    // console.log("legend userGrps", props.userGrps);
+    // console.log("props.posGrps", props.posGrps);
 
     const sortedCalSettings = props.calSettings.sort((a,b) => a.Title.localeCompare(b.Title));
 
@@ -49,7 +53,7 @@ export default function ILegend(props:ILegendProps){
                                     <Checkbox 
                                         className={'chkboxLegend chkbox_'+value.BgColor}
                                         label={value.Title} 
-                                        defaultChecked={isUserGrpCal(value.Title)}
+                                        defaultChecked={isUserGrpCal(value.View)}
                                         // checked={props.legendChked}
                                         onChange={props.onLegendChkChange(value.Id)} 
                                         onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}

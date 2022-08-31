@@ -43,20 +43,27 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
-    getUserGrp(props.context).then(result => setUserGrps(result));
-    
-    getAllPosGrps(props.context).then(posGrpsResult => {
-      setPosGrps(posGrpsResult);
-      _calendarOps.displayCalendars(props.context, calSettingsList, userGrps, posGrpsResult, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
-        setEventSources(result);
-        // console.log("cals", result);
-        setCalMsgErrs(calsErrs);
+    getUserGrp(props.context).then(userGrpsResult => {
+      setUserGrps(userGrpsResult);
+      // console.log("userGrpsResult", userGrpsResult);
+      
+      getAllPosGrps(props.context).then(posGrpsResult => {
+        setPosGrps(posGrpsResult);
+        
+        _calendarOps.displayCalendars(props.context, calSettingsList, userGrpsResult, posGrpsResult, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+          setEventSources(result);
+          // console.log("cals", result);
+          setCalMsgErrs(calsErrs);
+        });
+
+        getCalSettings(props.context, calSettingsList).then((result:{}[])=>{
+          setCalSettings(result);
+        });
+        
       });
     });
     
-    getCalSettings(props.context, calSettingsList).then((result:{}[])=>{
-      setCalSettings(result);
-    });
+    
     getMySchoolCalGUID(props.context, calSettingsList).then((result)=>{
       setListGUID(result);
     }); 

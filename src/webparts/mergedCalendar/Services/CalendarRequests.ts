@@ -48,20 +48,23 @@ export const getUserGrp = async (context: WebPartContext) => {
 
     if (empListResp.ok){
         const results = await empListResp.json();
-        return results.value[0].MMHubEmployeeGroup.split(';').filter(item => Number(item));
+        if (results.value[0] && results.value[0].MMHubEmployeeGroup)
+            return results.value[0].MMHubEmployeeGroup.split(';').filter(item => Number(item));
+        return [];
     }
 };
 
 const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, calName:string, spCalPageSize?: number) : string => {
     let resolvedCalUrl:string,
-        azurePeelSchoolsUrl :string = "https://pdsb1.azure-api.net/peelschools",
+        azurePeelSchoolsUrl :string = "https://pdsb1.azure-api.net/peelschoolstemp",
         restApiUrl :string = "/_api/web/lists/getByTitle('"+calName+"')/items",
         restApiUrlExt :string = "/_api/web/lists/getByTitle('School - Calendar')/items",
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'";
         //restApiParams :string = "?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$orderby=EventDate desc&$top=300";
         
         //restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalParams.pageSize}&$filter=EventDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}' and EventDate le '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeEnd}' or EndDate ge '${getDatesRange(spCalParams.rangeStart, spCalParams.rangeEnd).rangeStart}'`;
-        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc`;
+        restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc`,
+        restApiParamsExt :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalPageSize}&$orderby=EndDate desc`;
     //$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'
 
     switch (calType){
@@ -73,7 +76,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
             resolvedCalUrl = context.pageContext.web.absoluteUrl + restApiUrl + restApiParams;
             break;
         case "External":
-            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrlExt + restApiParams;
+            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrlExt + restApiParamsExt;
             break;
     }
     return resolvedCalUrl;
@@ -230,19 +233,22 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                     // console.log("userGrps passed here", userGrps);
 
                     let isUserGrpCal = false;
-                    for (let userGrp of userGrps){
-                        if (posGrps[calSettings.Title.trim()] && posGrps[calSettings.Title.trim()].indexOf(Number(userGrp)) !== -1){
-                            isUserGrpCal = true;
-                            break;
+                    if (posGrps[calSettings.View.trim()] == undefined) isUserGrpCal = true;
+                    else{
+                        for (let userGrp of userGrps){
+                            if (posGrps[calSettings.View.trim()] && posGrps[calSettings.View.trim()].indexOf(Number(userGrp)) !== -1){
+                                isUserGrpCal = true;
+                                break;
+                            }
                         }
                     }
-
+                    
                     // console.log("posGrps in calendar requests", posGrps);
-                    // console.log("posGrps[calSettings.Title]", posGrps[calSettings.Title])
+                    // console.log("posGrps[calSettings.Title]", posGrps[calSettings.Title]);
 
                     calResult.d.results.map((result:any)=>{
                         if (result.Category){
-                            if (result.Category.results.indexOf(calSettings.View) !== -1){
+                            if (result.Category === calSettings.View || ( result.Category.results && result.Category.results.indexOf(calSettings.View) !== -1)){
                                 calEvents.push({
                                     id: result.ID,
                                     title: result.Title,
