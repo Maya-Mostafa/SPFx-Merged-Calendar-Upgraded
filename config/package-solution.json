@@ -6,7 +6,7 @@
     "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
-    "skipFeatureDeployment": false,
+    "skipFeatureDeployment": true,
     "developer": {
       "name": "",
       "websiteUrl": "",
@@ -14,20 +14,7 @@
       "termsOfUseUrl": "",
       "mpnId": ""
     },
-    "features": [{  
-      "title": "mergedCalendar-assetsprovisioning-solution",  
-      "description": "mergedCalendar-assetsprovisioning-solution",  
-      "id": "3cd8617c-deb0-428e-9622-f49ffab4ca51",  
-      "version": "1.0.0.1",  
-      "assets": {          
-        "elementManifests": [  
-          "elements.xml"  
-        ],
-        "elementFiles":[
-          "schema.xml"
-        ]
-      }  
-    }],
+    
     "webApiPermissionRequests": [
       {
         "resource": "Microsoft Graph",
