@@ -4,6 +4,8 @@ import {HttpClientResponse, HttpClient, IHttpClientOptions, MSGraphClient, SPHtt
 import {formatStartDate, formatEndDate, getDatesRange, formateTime} from '../Services/EventFormat';
 import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
+import axios, { AxiosRequestConfig } from 'axios';
+
 export const calsErrs : any = [];
 
 export const getPosGrpMapping = (posGrpName: string) => {
@@ -54,7 +56,8 @@ export const getUserGrp = async (context: WebPartContext) => {
     }
 };
 
-const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, calName:string, spCalPageSize?: number) : string => {
+const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, calName:string, currentDate: string, spCalPageSize?: number) : string => {
+    
     let resolvedCalUrl:string,
         azurePeelSchoolsUrl :string = "https://pdsb1.azure-api.net/peelschoolstemp",
         restApiUrl :string = "/_api/web/lists/getByTitle('"+calName+"')/items",
@@ -67,6 +70,38 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
         restApiParamsExt :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData&$top=${spCalPageSize}&$orderby=EndDate desc`;
     //$filter=EventDate ge datetime'2019-08-01T00%3a00%3a00'
 
+    /*
+    get the prev and next month dates from the current date --> dateRange
+    if not recurrent
+        display event in the current dateRange 
+            -> startDate in dateRange or endDate in dateRange
+            -> i.e. date >= startDateRange || date <= endDateRange
+    if recurrent display all
+     */
+
+    const currentDateVal = new Date (currentDate);
+    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
+    if (currentDateVal.getMonth() === 0){
+        dateRangeStart.setMonth(11);
+        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
+    }else{
+        dateRangeStart.setMonth(currentDateVal.getMonth()-3);
+    }
+    if(currentDateVal.getMonth() === 11){
+        dateRangeEnd.setMonth(0);
+        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
+    }else{
+        dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
+    }
+
+    console.log("resolveCalUrl current currentDate", currentDate);
+    console.log("currentDate", new Date(currentDate));
+    console.log("dateRangeStart", dateRangeStart);
+    console.log("dateRangeEnd", dateRangeEnd);
+
+    let restApiParamsWRange :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc&$filter=fRecurrence eq 1 or EventDate ge '${dateRangeStart.toISOString()}' and EventDate le '${dateRangeEnd.toISOString()}'`;
+    restApiParams = restApiParamsWRange;
+
     switch (calType){
         case "Internal":
         case "Rotary":
@@ -76,16 +111,32 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
             resolvedCalUrl = context.pageContext.web.absoluteUrl + restApiUrl + restApiParams;
             break;
         case "External":
-            resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrlExt + restApiParamsExt;
+            // resolvedCalUrl = azurePeelSchoolsUrl + calUrl.substring(calUrl.indexOf('.org/') + 12, calUrl.length) + restApiUrlExt + restApiParamsExt;
+            resolvedCalUrl = calUrl;
             break;
     }
     return resolvedCalUrl;
 };
 
-const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
+const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, BgColorHex: string}, currentDate: string, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
     
     let graphUrl :string = calSettings.CalURL.substring(32, calSettings.CalURL.length),
         calEvents : {}[] = [];
+    
+    const currentDateVal = new Date (currentDate);
+    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
+    if (currentDateVal.getMonth() === 0){
+        dateRangeStart.setMonth(11);
+        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
+    }else{
+        dateRangeStart.setMonth(currentDateVal.getMonth()-1);
+    }
+    if(currentDateVal.getMonth() === 11){
+        dateRangeEnd.setMonth(0);
+        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
+    }else{
+        dateRangeEnd.setMonth(currentDateVal.getMonth()+2);
+    }
 
     return new Promise <{}[]> (async(resolve, reject)=>{
         context.msGraphClientFactory
@@ -93,14 +144,15 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
             .then((client :MSGraphClient)=>{
                 client
                     // .api(graphUrl)
-                    .api(`${graphUrl}?$filter=start/dateTime ge '${getDatesRange(graphCalParams.rangeStart, graphCalParams.rangeEnd).rangeStart}' and start/dateTime le '${getDatesRange(graphCalParams.rangeStart, graphCalParams.rangeEnd).rangeEnd}'&$top=${graphCalParams.pageSize}`)
+                    //.api(`${graphUrl}?$filter=start/dateTime ge '${getDatesRange(Number(graphCalParams.rangeStart), Number(graphCalParams.rangeEnd)).rangeStart}' and start/dateTime le '${getDatesRange(Number(graphCalParams.rangeStart), Number(graphCalParams.rangeEnd)).rangeEnd}'&$top=${Number(graphCalParams.pageSize)}`)
+                    .api(`${graphUrl}?$filter=start/dateTime ge '${dateRangeStart.toISOString()}' and start/dateTime le '${dateRangeEnd.toISOString()}'&$top=${Number(graphCalParams.pageSize)}`)
                     .header('Prefer','outlook.timezone="Eastern Standard Time"')
                     .get((error, response: any, rawResponse?: any)=>{
                         if(error){
                             calsErrs.push("MS Graph Error - " + calSettings.Title);
                         }
                         if(response){
-                            // console.log("graph response", response);
+                            console.log("graph response", response);
                             response.value.map((result:any)=>{
                                 calEvents.push({
                                     id: result.id,
@@ -111,7 +163,9 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                                     end: result.end.dateTime,
                                     _location: result.location.displayName,
                                     _body: result.body.content,
-                                    allDay: result.isAllDay
+                                    allDay: result.isAllDay,
+                                    calendar: calSettings.Title,
+                                    calendarColor: calSettings.BgColorHex
                                 });
                             });
                         }
@@ -163,9 +217,9 @@ export const addToMyGraphCal = async (context: WebPartContext) =>{
 
 };
 
-const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}) : Promise <{}[]> =>{
+const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string}, currentDate: string) : Promise <{}[]> =>{
     
-    let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName),
+    let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, currentDate),
         calEvents : {}[] = [] ;
 
     const myOptions: IHttpClientOptions = {
@@ -205,17 +259,16 @@ const getDefaultCals1 = (context: WebPartContext, calSettings:{CalType:string, T
     
 };
 
-export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, userGrps: [], posGrps:any, spCalPageSize?: number) : Promise <{}[]> => {
+export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps:any, spCalPageSize?: number) : Promise <{}[]> => {
     
-    let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, spCalPageSize),
+    let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, currentDate, spCalPageSize),
         calEvents : {}[] = [] ;
 
     const myOptions: IHttpClientOptions = {
         headers : { 
-            'Accept': 'application/json;odata=verbose'
+            'Accept': 'application/json;odata=verbose',
         }
     };
-
 
     try{
         const _data = await context.httpClient.get(calUrl, HttpClient.configurations.v1, myOptions);
@@ -226,7 +279,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
             // console.log("calSettings view", calSettings.View);
 
             if(calResult){
-                if (calSettings.View && calSettings.View.toLocaleLowerCase() !== 'allitems'){
+                if (calSettings.View && calSettings.View.toLocaleLowerCase() !== 'allitems'){ //for calendars with views
 
                     // console.log("calSettings.View", calSettings.View);
                     // console.log("calSettings.Title", calSettings.Title);
@@ -307,16 +360,86 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     }
 
     // console.log("calSettings", calSettings);
-    // console.log("getDefaultCals", calEvents);
+    console.log("getDefaultCals calEvents", calEvents);
 
     return calEvents;
 };
 
-export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: number, rangeEnd: number, pageSize: number}) : Promise <{}[]> => {
-    if(calSettings.CalType == 'Graph'){
-        return getGraphCals(context, calSettings, graphCalParams);
+export const getExtCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, currentDate: string, spCalPageSize?: number) : Promise <{}[]> => {
+    //let restApiParamsNewExt = calSettings.CalURL.charAt(calSettings.CalURL.length-1) === '/' ? 'api/v1/event' : '/api/v1/event';
+    // let calUrl :string = calSettings.CalURL + restApiParamsNewExt;
+    
+    const currentDateVal = new Date (currentDate);
+    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
+    if (currentDateVal.getMonth() === 0){
+        dateRangeStart.setMonth(11);
+        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
     }else{
-        return getDefaultCals(context, calSettings, userGrps, posGrps, spCalPageSize);
+        dateRangeStart.setMonth(currentDateVal.getMonth()-3);
+    }
+    if(currentDateVal.getMonth() === 11){
+        dateRangeEnd.setMonth(0);
+        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
+    }else{
+        dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
+    }
+
+    let calUrl :string = `${calSettings.CalURL}&startdate=${dateRangeStart}&enddate=${dateRangeEnd}`;
+    let calEvents : {}[] = [] ;
+
+    try{
+        const _data = await context.httpClient.get(calUrl, HttpClient.configurations.v1);
+        if (_data.ok){
+            const calResult = await _data.json();
+            if(calResult){
+                console.log("new external cal results", calResult);
+                calResult.map((result:any)=>{
+                    calEvents.push({
+                        id: result.id,
+                        title: result.title,
+                        start: new Date(result.settings.startdate).toISOString(),
+                        end: new Date(result.settings.enddate).toISOString(),
+                        _startTime: formateTime(result.settings.startdate),
+                        _endTime: formateTime(result.settings.enddate),
+                        _body: result.content,
+                        calendar: calSettings.Title,
+                        calendarColor: calSettings.BgColorHex,
+
+                        allDay: false,
+                        _location: null,
+                        recurr: false,
+                        //recurrData: result.RecurrenceData,
+                        //rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
+                        
+                    });
+                });
+                console.log("formatted new ext calEvents", calEvents);
+            }
+        }
+    } catch(error){
+        calsErrs.push("New External calendars invalid - " + error);
+    }
+    return calEvents;
+};
+
+export const getCalsData2 = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
+    if(calSettings.CalType == 'Graph'){
+        return getGraphCals(context, calSettings, currentDate, graphCalParams);
+    }else if(calSettings.CalType === 'External' && ((calSettings.CalURL.toLowerCase().indexOf('www.peelschools.org') === -1 && calSettings.CalURL.toLowerCase().indexOf('www2.peelschools.org') === -1))){
+        return getExtCals(context, calSettings, currentDate, spCalPageSize);
+    }
+    else{
+        return getDefaultCals(context, calSettings, currentDate, userGrps, posGrps, spCalPageSize);
+    }
+};
+
+export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
+    if(calSettings.CalType == 'Graph'){
+        return getGraphCals(context, calSettings, currentDate, graphCalParams);
+    }else if ( calSettings.CalType == 'External'){
+        return getExtCals(context, calSettings, currentDate, spCalPageSize);
+    }else{
+        return getDefaultCals(context, calSettings, currentDate, userGrps, posGrps, spCalPageSize);
     }
 };
 
