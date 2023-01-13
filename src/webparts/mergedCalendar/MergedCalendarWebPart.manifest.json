@@ -26,13 +26,13 @@
       "calSettingsList" : "CalendarSettings",
       "legendPos" : "top",
       "legendAlign" : "horizontal",
-      "spCalPageSize" : 1000,
-      "spCalParams.rangeStart" : 3,
-      "spCalParams.rangeEnd" : 4,
-      "spCalParams.pageSize" : 750,
-      "graphCalParams.rangeStart" : 3,
-      "graphCalParams.rangeEnd" : 4,
-      "graphCalParams.pageSize" : 1000
+      "spCalPageSize" : "1000",
+      "spCalParams.rangeStart" : "3",
+      "spCalParams.rangeEnd" : "4",
+      "spCalParams.pageSize" : "750",
+      "graphCalParams.rangeStart" : "3",
+      "graphCalParams.rangeEnd" : "4",
+      "graphCalParams.pageSize" : "100"
     }
   }]
 }

@@ -9,7 +9,7 @@ export interface IMergedCalendarProps {
   dpdOptions: IDropdownOption[];
   legendPos: string;
   legendAlign: string;
-  spCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
-  graphCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
-  spCalPageSize: number;
+  spCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
+  graphCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
+  spCalPageSize: string;
 }

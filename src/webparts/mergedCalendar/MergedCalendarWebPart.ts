@@ -22,9 +22,9 @@ export interface IMergedCalendarWebPartProps {
   calSettingsList: string;
   legendPos: string;
   legendAlign: string;
-  spCalPageSize: number;
-  spCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
-  graphCalParams : {rangeStart: number, rangeEnd: number, pageSize: number};
+  spCalPageSize: string;
+  spCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
+  graphCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
