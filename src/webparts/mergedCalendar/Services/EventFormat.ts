@@ -68,4 +68,28 @@ export const getDatesRange = (numMonthsStart: number, numMonthsEnd: number) =>{
     return {rangeStart: rangeStart, rangeEnd: rangeEnd};
 };
 
+export const getDatesWindow = (currentDate: string) => {
+    const currentDateVal = new Date (currentDate);
+    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
+    if (currentDateVal.getMonth() === 0){
+        dateRangeStart.setMonth(11);
+        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
+    }else{
+        dateRangeStart.setMonth(currentDateVal.getMonth()-3);
+    }
+    if(currentDateVal.getMonth() === 11){
+        dateRangeEnd.setMonth(0);
+        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
+    }else{
+        dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
+    }
+
+    console.log("resolveCalUrl current currentDate", currentDate);
+    console.log("currentDate", new Date(currentDate));
+    console.log("dateRangeStart", dateRangeStart);
+    console.log("dateRangeEnd", dateRangeEnd);
+
+    return {dateRangeStart, dateRangeEnd};
+}
+
 

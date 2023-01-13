@@ -1,7 +1,7 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { HttpClient, IHttpClientOptions, MSGraphClient, SPHttpClient} from "@microsoft/sp-http";
 
-import {formatStartDate, formatEndDate, getDatesRange, formateTime} from '../Services/EventFormat';
+import {formatStartDate, formatEndDate, getDatesWindow, formateTime} from '../Services/EventFormat';
 import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
@@ -60,25 +60,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
     let restApiUrl :string = "/_api/web/lists/getByTitle('"+calName+"')/items";
     let restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc`;
 
-    const currentDateVal = new Date (currentDate);
-    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
-    if (currentDateVal.getMonth() === 0){
-        dateRangeStart.setMonth(11);
-        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
-    }else{
-        dateRangeStart.setMonth(currentDateVal.getMonth()-3);
-    }
-    if(currentDateVal.getMonth() === 11){
-        dateRangeEnd.setMonth(0);
-        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
-    }else{
-        dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
-    }
-
-    console.log("resolveCalUrl current currentDate", currentDate);
-    console.log("currentDate", new Date(currentDate));
-    console.log("dateRangeStart", dateRangeStart);
-    console.log("dateRangeEnd", dateRangeEnd);
+    const {dateRangeStart, dateRangeEnd} = getDatesWindow(currentDate);
 
     let restApiParamsWRange :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc&$filter=fRecurrence eq 1 or EventDate ge '${dateRangeStart.toISOString()}' and EventDate le '${dateRangeEnd.toISOString()}'`;
     restApiParams = restApiParamsWRange;
@@ -103,20 +85,7 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
     let graphUrl :string = calSettings.CalURL.substring(32, calSettings.CalURL.length),
         calEvents : {}[] = [];
     
-    const currentDateVal = new Date (currentDate);
-    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
-    if (currentDateVal.getMonth() === 0){
-        dateRangeStart.setMonth(11);
-        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
-    }else{
-        dateRangeStart.setMonth(currentDateVal.getMonth()-1);
-    }
-    if(currentDateVal.getMonth() === 11){
-        dateRangeEnd.setMonth(0);
-        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
-    }else{
-        dateRangeEnd.setMonth(currentDateVal.getMonth()+2);
-    }
+    const {dateRangeStart, dateRangeEnd} = getDatesWindow(currentDate);
 
     return new Promise <{}[]> (async(resolve, reject)=>{
         context.msGraphClientFactory
@@ -303,22 +272,9 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
 
 export const getExtCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, currentDate: string, spCalPageSize?: number) : Promise <{}[]> => {
     
-    const currentDateVal = new Date (currentDate);
-    let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
-    if (currentDateVal.getMonth() === 0){
-        dateRangeStart.setMonth(11);
-        dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
-    }else{
-        dateRangeStart.setMonth(currentDateVal.getMonth()-3);
-    }
-    if(currentDateVal.getMonth() === 11){
-        dateRangeEnd.setMonth(0);
-        dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
-    }else{
-        dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
-    }
+    const {dateRangeStart, dateRangeEnd} = getDatesWindow(currentDate);
 
-    let calUrl :string = `${calSettings.CalURL}&startdate=${dateRangeStart}&enddate=${dateRangeEnd}`;
+    let calUrl :string = `${calSettings.CalURL}&startdate=${dateRangeStart.toISOString()}&enddate=${dateRangeEnd.toISOString()}`;
     let calEvents : {}[] = [] ;
 
     try{
