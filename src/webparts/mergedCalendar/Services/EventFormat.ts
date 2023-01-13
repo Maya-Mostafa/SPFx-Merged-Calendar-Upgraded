@@ -53,7 +53,7 @@ export const formatEvDetails = (ev:any) : {} =>{
         Recurr: event._def.extendedProps.recurr,
         RecurrData: event._def.extendedProps.recurrData,
         RecurringDef: event._def.extendedProps.recurringDef,
-        Category: event._def.extendedProps.category ? event._def.extendedProps.category.results.join(', ') : null,
+        Category: event._def.extendedProps.category ? (event._def.extendedProps.category.results ? event._def.extendedProps.category.results.join(', ') : null) : null,
         Calendar: event._def.extendedProps.calendar,
         Color: event._def.extendedProps.calendarColor
     };
