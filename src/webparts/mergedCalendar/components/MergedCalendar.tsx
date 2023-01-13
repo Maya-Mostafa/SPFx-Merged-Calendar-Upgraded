@@ -39,7 +39,9 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const legendAlign = props.legendAlign ? props.legendAlign : "horizontal";
 
   const spCalParams = props.spCalParams ? props.spCalParams : {rangeStart: 3, rangeEnd: 4, pageSize: 150};
-  const graphCalParams = props.graphCalParams ? props.graphCalParams :{rangeStart: 3, rangeEnd: 4, pageSize: 150};
+  const graphCalParams = props.graphCalParams ? props.graphCalParams :{rangeStart: '3', rangeEnd: '4', pageSize: '150'};
+
+  const [currentCalDate, setCurrentCalDate] = React.useState(new Date().toISOString());
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
@@ -50,9 +52,9 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
       getAllPosGrps(props.context).then(posGrpsResult => {
         setPosGrps(posGrpsResult);
         
-        _calendarOps.displayCalendars(props.context, calSettingsList, userGrpsResult, posGrpsResult, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrpsResult, posGrpsResult, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
           setEventSources(result);
-          // console.log("cals", result);
+          console.log("setEventSources", result);
           setCalMsgErrs(calsErrs);
         });
 
@@ -62,13 +64,13 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         
       });
     });
-    
-    
+
+
     getMySchoolCalGUID(props.context, calSettingsList).then((result)=>{
       setListGUID(result);
     }); 
 
-  },[]);
+  },[currentCalDate]);
 
   React.useEffect(()=>{
     setEventSources(reRenderCalendars(eventSources, calVisibility));
@@ -78,7 +80,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, checked: boolean) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, checked).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList, userGrps, posGrps, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrps, posGrps, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -93,7 +95,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return (ev: any, item: IDropdownOption) => { 
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, newCalSettings.ShowCal, item.key).then(()=>{
-        _calendarOps.displayCalendars(props.context, calSettingsList, userGrps, posGrps, props.spCalPageSize, graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrps, posGrps, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
           setEventSources(result);
           toggleIsDataLoading();
         });
@@ -129,7 +131,12 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         setCalVisibility({calId: calId, calChk: checked});
         // setLegendChked(checked);
     };
-};
+  };
+
+  const passCurrentDate = (currDate: string) => {
+    console.log("passCurrentCalDate function", currDate);
+    setCurrentCalDate(currDate);
+  };
 
   return(
     <div className={styles.mergedCalendar}>
@@ -155,6 +162,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         handleDateClick={handleDateClick}
         context={props.context}
         listGUID = {listGUID}
+        passCurrentDate = {passCurrentDate}
       />
 
       <IPanel

@@ -12,14 +12,27 @@ import {isUserManage} from '../../Services/WpProperties';
 
 export default function ICalendar(props:ICalendarProps){
 
+  const calendarRef = React.useRef<any>();
+  
+  const calendarNext = () => {
+    let calendarApi = calendarRef.current.getApi()
+    calendarApi.next();
+  };
+  const calendarPrev = () => {
+    let calendarApi = calendarRef.current.getApi()
+    calendarApi.prev();
+  };
+
     return(
         <div className={styles.calendarCntnr}>
           <FullCalendar
+            ref={calendarRef}
             plugins = {
               [dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin]
             }
             headerToolbar = {{
-              left: 'prev,next today',
+              // left: 'prev,next today customPrev customNext',
+              left: 'customPrev,customNext today',
               center: 'title',
               //right: isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay settingsBtn addEventBtn' : 'dayGridMonth,timeGridWeek,timeGridDay addEventBtn' 
               right: isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay settingsBtn' : 'dayGridMonth,timeGridWeek,timeGridDay' 
@@ -38,6 +51,20 @@ export default function ICalendar(props:ICalendarProps){
                   );
                 }
                 
+              },
+              customPrev: {
+                icon: 'chevron-left',
+                click: function() {
+                  props.passCurrentDate(calendarRef.current.getApi().getDate().toISOString());
+                  calendarPrev();
+                }
+              },
+              customNext: {
+                icon:'chevron-right',
+                click: function() {
+                  props.passCurrentDate(calendarRef.current.getApi().getDate().toISOString());
+                  calendarNext();
+                }
               }
             }}          
             eventTimeFormat={{

@@ -8,4 +8,5 @@ export interface ICalendarProps{
     handleDateClick: (args:any) => void;
     context: WebPartContext;
     listGUID: string;
+    passCurrentDate: (args:any) => void;
 }
