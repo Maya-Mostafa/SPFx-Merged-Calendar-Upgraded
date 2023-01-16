@@ -15,11 +15,11 @@ export default function ICalendar(props:ICalendarProps){
   const calendarRef = React.useRef<any>();
   
   const calendarNext = () => {
-    let calendarApi = calendarRef.current.getApi()
+    let calendarApi = calendarRef.current.getApi();
     calendarApi.next();
   };
   const calendarPrev = () => {
-    let calendarApi = calendarRef.current.getApi()
+    let calendarApi = calendarRef.current.getApi();
     calendarApi.prev();
   };
 
