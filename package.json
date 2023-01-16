@@ -21,6 +21,7 @@
     "@microsoft/sp-office-ui-fabric-core": "1.12.1",
     "@microsoft/sp-property-pane": "1.12.1",
     "@microsoft/sp-webpart-base": "1.12.1",
+    "axios": "^0.27.2",
     "moment": "^2.29.1",
     "moment-timezone": "^0.5.33",
     "office-ui-fabric-core": "^11.0.0",
