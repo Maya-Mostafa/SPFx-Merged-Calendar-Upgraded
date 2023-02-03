@@ -90,6 +90,6 @@ export const getDatesWindow = (currentDate: string) => {
     console.log("dateRangeEnd", dateRangeEnd);
 
     return {dateRangeStart, dateRangeEnd};
-}
+};
 
 
