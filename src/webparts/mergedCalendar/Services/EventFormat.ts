@@ -84,10 +84,10 @@ export const getDatesWindow = (currentDate: string) => {
         dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
     }
 
-    console.log("resolveCalUrl current currentDate", currentDate);
-    console.log("currentDate", new Date(currentDate));
-    console.log("dateRangeStart", dateRangeStart);
-    console.log("dateRangeEnd", dateRangeEnd);
+    // console.log("resolveCalUrl current currentDate", currentDate);
+    // console.log("currentDate", new Date(currentDate));
+    // console.log("dateRangeStart", dateRangeStart);
+    // console.log("dateRangeEnd", dateRangeEnd);
 
     return {dateRangeStart, dateRangeEnd};
 };

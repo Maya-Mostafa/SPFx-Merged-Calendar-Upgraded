@@ -22,7 +22,7 @@ export default function ILegend(props:ILegendProps){
     </a> */}
 
     const isUserGrpCal = (calView: string) => {
-        console.log("calView", calView);
+        // console.log("calView", calView);
         if (props.posGrps[calView.trim()] == undefined) return true;
         else{
             for (let userGrp of props.userGrps){
