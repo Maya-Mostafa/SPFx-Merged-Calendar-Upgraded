@@ -326,10 +326,6 @@ export const getCalsData = (context: WebPartContext, calSettings:{CalType:string
 };
 
 export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: string, calChk: boolean}) =>{
-
-    console.log("reRenderCalendars Function calVisibility -->", calVisibility);
-    console.log("reRenderCalendars Function calEventSources -->", calEventSources);
-
     const newCalEventSources = calEventSources.map((eventSource: any) => {
         if (eventSource.calId == calVisibility.calId) {
             const updatedEventSource = {...eventSource}; //shallow clone
@@ -342,34 +338,7 @@ export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: s
             return {...eventSource}; //shallow clone
         }
     });
-    console.log("reRenderCalendars Function newCalEventSources --> ", newCalEventSources);
-    
-    return newCalEventSources;
-};
-
-export const reRenderCalendarss = (calEventSources: any, calsVisibility: {calId: string, calChk: boolean}[]) =>{
-
-    console.log("reRenderCalendarss Function --> calsVisibility", calsVisibility);
-    const newCalEventSources = calEventSources.map((eventSource: any) => {
-        for (let calVisibility of calsVisibility){
-            if (eventSource.calId == calVisibility.calId) {
-                const updatedEventSource = {...eventSource}; //shallow clone
-                updatedEventSource.events = eventSource.events.map((event: any) => {
-                    // const eventTemp = {...event};
-                    // eventTemp['className'] = !calVisibility.calChk ? 'eventHidden' : '';
-                    if (calVisibility.calChk) return {...event, className: ''};
-                    return {...event, className: 'eventHidden'};
-                });
-                console.log("reRenderCalendarss Function --> updatedEventSource", updatedEventSource);
-                //return updatedEventSource;
-            } else {
-                return {...eventSource}; //shallow clone
-            }
-        }
-    });
-
-    console.log("reRenderCalendarss Function --> newCalEventSources", newCalEventSources);
-    
+    // console.log("reRenderCalendars Function newCalEventSources --> ", newCalEventSources);
     return newCalEventSources;
 };
 
@@ -380,7 +349,7 @@ export const getLegendChksState = (calsVisibilityState: any, calVisibility: any)
     }else{
         calsVisibilityArr.map(i=> i.calId == calVisibility.calId ? i.calChk = calVisibility.calChk : '' );
     }
-    console.log("getLegendChksState Function calsVisibilityArr --> ", calsVisibilityArr);
+    // console.log("getLegendChksState Function calsVisibilityArr --> ", calsVisibilityArr);
     return calsVisibilityArr;
 };
 
