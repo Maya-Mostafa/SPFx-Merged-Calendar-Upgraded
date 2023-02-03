@@ -112,10 +112,12 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                                     _body: result.body.content,
                                     allDay: result.isAllDay,
                                     calendar: calSettings.Title,
-                                    calendarColor: calSettings.BgColorHex
+                                    calendarColor: calSettings.BgColorHex,
+                                    className: ''
                                 });
                             });
                         }
+                        console.log("getGraphCals Function --> ", calEvents);
                         resolve(calEvents);
                     });
             }, (error)=>{
@@ -248,7 +250,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                             rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
                             // className: calVisibility.calId ? ( calVisibility.calId == calSettings.Id && !calVisibility.calChk ? 'eventHidden' : '') : ''
                             //className: 'eventCal' + calSettings.Id,
-                            // className: 'eventHidden',
+                            className: '',
                             category: result.Category,
                             calendar: calSettings.Title,
                             calendarColor: calSettings.BgColorHex
@@ -265,7 +267,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     }
 
     // console.log("calSettings", calSettings);
-    console.log("getDefaultCals calEvents", calEvents);
+    console.log("getDefaultCals Function -->", calEvents);
 
     return calEvents;
 };
@@ -282,7 +284,7 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
         if (_data.ok){
             const calResult = await _data.json();
             if(calResult){
-                console.log("new external cal results", calResult);
+                // console.log("new external cal results", calResult);
                 calResult.map((result:any)=>{
                     calEvents.push({
                         id: result.id,
@@ -298,12 +300,13 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
                         allDay: false,
                         _location: null,
                         recurr: false,
+                        className: '',
                         //recurrData: result.RecurrenceData,
                         //rrule: result.fRecurrence ? parseRecurrentEvent(result.RecurrenceData, result.fAllDayEvent ? formatStartDate(result.EventDate) : result.EventDate, result.fAllDayEvent ? formatEndDate(result.EndDate) : result.EndDate) : null,
                         
                     });
                 });
-                console.log("formatted new ext calEvents", calEvents);
+                console.log("getExtCals Function -->", calEvents);
             }
         }
     } catch(error){
@@ -311,7 +314,6 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
     }
     return calEvents;
 };
-
 
 export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
     if(calSettings.CalType == 'Graph'){
@@ -325,6 +327,9 @@ export const getCalsData = (context: WebPartContext, calSettings:{CalType:string
 
 export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: string, calChk: boolean}) =>{
 
+    console.log("reRenderCalendars Function calVisibility -->", calVisibility);
+    console.log("reRenderCalendars Function calEventSources -->", calEventSources);
+
     const newCalEventSources = calEventSources.map((eventSource: any) => {
         if (eventSource.calId == calVisibility.calId) {
             const updatedEventSource = {...eventSource}; //shallow clone
@@ -337,18 +342,46 @@ export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: s
             return {...eventSource}; //shallow clone
         }
     });
-    
-    // const newCalEventSources = [...calEventSources];
-    // for (let i = 0; i < newCalEventSources.length; i++){
-    //     if (newCalEventSources[i].calId == calVisibility.calId){
-    //         let calEvents = [...newCalEventSources[i]['events']];
-    //         for (let j = 0; j< calEvents.length; j++){
-    //             calEvents[j]['className'] = 'eventHidden';
-    //         }
-    //     }
-    // }
+    console.log("reRenderCalendars Function newCalEventSources --> ", newCalEventSources);
     
     return newCalEventSources;
+};
+
+export const reRenderCalendarss = (calEventSources: any, calsVisibility: {calId: string, calChk: boolean}[]) =>{
+
+    console.log("reRenderCalendarss Function --> calsVisibility", calsVisibility);
+    const newCalEventSources = calEventSources.map((eventSource: any) => {
+        for (let calVisibility of calsVisibility){
+            if (eventSource.calId == calVisibility.calId) {
+                const updatedEventSource = {...eventSource}; //shallow clone
+                updatedEventSource.events = eventSource.events.map((event: any) => {
+                    // const eventTemp = {...event};
+                    // eventTemp['className'] = !calVisibility.calChk ? 'eventHidden' : '';
+                    if (calVisibility.calChk) return {...event, className: ''};
+                    return {...event, className: 'eventHidden'};
+                });
+                console.log("reRenderCalendarss Function --> updatedEventSource", updatedEventSource);
+                //return updatedEventSource;
+            } else {
+                return {...eventSource}; //shallow clone
+            }
+        }
+    });
+
+    console.log("reRenderCalendarss Function --> newCalEventSources", newCalEventSources);
+    
+    return newCalEventSources;
+};
+
+export const getLegendChksState = (calsVisibilityState: any, calVisibility: any) => {
+    const calsVisibilityArr = calsVisibilityState;
+    if (calsVisibilityArr.filter(i => i.calId === calVisibility.calId).length === 0 ){
+        calsVisibilityArr.push(calVisibility);
+    }else{
+        calsVisibilityArr.map(i=> i.calId == calVisibility.calId ? i.calChk = calVisibility.calChk : '' );
+    }
+    console.log("getLegendChksState Function calsVisibilityArr --> ", calsVisibilityArr);
+    return calsVisibilityArr;
 };
 
 export const getMySchoolCalGUID = async (context: WebPartContext, calSettingsListName: string) =>{
