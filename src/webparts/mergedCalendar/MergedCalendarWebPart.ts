@@ -180,6 +180,7 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                 }),
               ]
             },
+/*
             {
               groupName: "SharePoint Calendars",
               groupFields: [
@@ -225,7 +226,7 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                     {key: '3000', text: '3000'},
                   ],
                   selectedKey : '750'
-                }),*/
+                }),
                 PropertyPaneDropdown('spCalPageSize', {
                   label : 'Number of events',
                   options: [
@@ -290,6 +291,7 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                 }),
               ]
             }
+*/
           ]
         }
       ]
