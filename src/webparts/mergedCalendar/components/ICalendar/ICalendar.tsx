@@ -2,8 +2,10 @@ import * as React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
+
 
 import styles from '../MergedCalendar.module.scss';
 import {ICalendarProps} from './ICalendarProps';
@@ -28,14 +30,14 @@ export default function ICalendar(props:ICalendarProps){
           <FullCalendar
             ref={calendarRef}
             plugins = {
-              [dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin]
+              [dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin, listPlugin]
             }
             headerToolbar = {{
               // left: 'prev,next today customPrev customNext',
               left: 'customPrev,customNext today',
               center: 'title',
               //right: isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay settingsBtn addEventBtn' : 'dayGridMonth,timeGridWeek,timeGridDay addEventBtn' 
-              right: isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay settingsBtn' : 'dayGridMonth,timeGridWeek,timeGridDay' 
+              right: isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay,listMonth settingsBtn' : 'dayGridMonth,timeGridWeek,timeGridDay' 
             }}
             customButtons = {{
               settingsBtn : {

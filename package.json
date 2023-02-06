@@ -11,11 +11,12 @@
   "dependencies": {
     "@fluentui/react": "^8.26.2",
     "@fluentui/react-hooks": "^8.2.6",
-    "@fullcalendar/daygrid": "^5.9.0",
-    "@fullcalendar/interaction": "^5.9.0",
-    "@fullcalendar/react": "^5.9.0",
-    "@fullcalendar/rrule": "^5.9.0",
-    "@fullcalendar/timegrid": "^5.9.0",
+    "@fullcalendar/daygrid": "^6.1.1",
+    "@fullcalendar/interaction": "^6.1.1",
+    "@fullcalendar/list": "^6.1.1",
+    "@fullcalendar/react": "^6.1.1",
+    "@fullcalendar/rrule": "^6.1.1",
+    "@fullcalendar/timegrid": "^6.1.1",
     "@microsoft/sp-core-library": "1.12.1",
     "@microsoft/sp-lodash-subset": "1.12.1",
     "@microsoft/sp-office-ui-fabric-core": "1.12.1",
@@ -31,15 +32,15 @@
     "rrule": "^2.6.8"
   },
   "devDependencies": {
+    "@microsoft/rush-stack-compiler-3.7": "0.2.3",
+    "@microsoft/sp-build-web": "1.12.1",
+    "@microsoft/sp-module-interfaces": "1.12.1",
+    "@microsoft/sp-tslint-rules": "1.12.1",
+    "@microsoft/sp-webpart-workbench": "1.12.1",
     "@types/react": "16.9.36",
     "@types/react-dom": "16.9.8",
-    "@microsoft/sp-build-web": "1.12.1",
-    "@microsoft/sp-tslint-rules": "1.12.1",
-    "@microsoft/sp-module-interfaces": "1.12.1",
-    "@microsoft/sp-webpart-workbench": "1.12.1",
-    "@microsoft/rush-stack-compiler-3.7": "0.2.3",
-    "gulp": "~4.0.2",
+    "@types/webpack-env": "1.13.1",
     "ajv": "~5.2.2",
-    "@types/webpack-env": "1.13.1"
+    "gulp": "~4.0.2"
   }
 }
