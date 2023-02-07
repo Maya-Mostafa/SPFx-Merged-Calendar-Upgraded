@@ -9,4 +9,11 @@ export interface ICalendarProps{
     context: WebPartContext;
     listGUID: string;
     passCurrentDate: (args:any) => void;
+
+    isListView: boolean;
+    listViewType: any;
+    listViewNavBtns: boolean;
+    listViewMonthTitle: boolean;
+    listViewViews: boolean;
+    listViewHeight: number;
 }

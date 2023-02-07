@@ -32,7 +32,15 @@
       "spCalParams.pageSize" : "750",
       "graphCalParams.rangeStart" : "3",
       "graphCalParams.rangeEnd" : "4",
-      "graphCalParams.pageSize" : "100"
+      "graphCalParams.pageSize" : "100",
+      "isListView": false,
+      "listViewMonthTitle": false,
+      "listViewType": "listWeek",
+      "listViewNavBtns": false,
+      "listViewLegend": false,
+      "listViewErrors": false,
+      "listViewViews": false,
+      "listViewTitle": "Upcoming Events"
     }
   }]
 }

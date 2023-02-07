@@ -6,7 +6,10 @@ import {
   PropertyPaneTextField,
   PropertyPaneCheckbox,
   PropertyPaneDropdown,
-  IPropertyPaneDropdownOption
+  IPropertyPaneDropdownOption,
+  PropertyPaneToggle,
+  PropertyPaneLabel,
+  PropertyPaneSlider
 } from '@microsoft/sp-property-pane';
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
@@ -25,6 +28,16 @@ export interface IMergedCalendarWebPartProps {
   spCalPageSize: string;
   spCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
   graphCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
+
+  isListView: boolean;
+  listViewType: string;
+  listViewNavBtns: boolean;
+  listViewLegend: boolean;
+  listViewErrors: boolean;
+  listViewMonthTitle: boolean;
+  listViewViews: boolean;
+  listViewHeight: number;
+  listViewTitle: string;
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
@@ -53,8 +66,17 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
         ],
         spCalParams : this.properties.spCalParams,
         graphCalParams: this.properties.graphCalParams,
-        spCalPageSize: this.properties.spCalPageSize
-        
+        spCalPageSize: this.properties.spCalPageSize,
+
+        isListView: this.properties.isListView,
+        listViewType: this.properties.listViewType,
+        listViewNavBtns: this.properties.listViewNavBtns,
+        listViewLegend: this.properties.listViewLegend,
+        listViewErrors: this.properties.listViewErrors,
+        listViewMonthTitle: this.properties.listViewMonthTitle,
+        listViewViews: this.properties.listViewViews,
+        listViewHeight: this.properties.listViewHeight,
+        listViewTitle: this.properties.listViewTitle
       }
     );
 
@@ -178,6 +200,69 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   ],
                   selectedKey : 'vertical'
                 }),
+              ]
+            },
+            {
+              groupName: 'Events View',
+              groupFields: [
+                PropertyPaneToggle('isListView', {
+                  label: 'List View',
+                  onText: 'On',
+                  offText: 'Off',
+                  checked : false
+                }),
+                PropertyPaneTextField('listViewTitle', {
+                  label: 'Title',
+                  value: this.properties.listViewTitle,
+                }),
+                PropertyPaneDropdown('listViewType', {
+                  label: 'List View Type',                  
+                  disabled: !this.properties.isListView,
+                  options: [
+                    {key: 'listDay', text: 'Day List'},
+                    {key: 'listWeek', text: 'Week List'},
+                    {key: 'listMonth', text: 'Month List'}
+                  ],
+                  selectedKey : this.properties.listViewType
+                }),
+                PropertyPaneLabel('listViewOptions', {
+                  text: 'Header & Footer Options',
+                }),
+                PropertyPaneCheckbox('listViewMonthTitle', {
+                  text: "Month Name",
+                  disabled: !this.properties.isListView,
+                  checked: this.properties.listViewMonthTitle
+                }),
+                PropertyPaneCheckbox('listViewNavBtns', {
+                  text: "Navigation Buttons (previous, next, today)",
+                  disabled: !this.properties.isListView,
+                  checked: this.properties.listViewNavBtns
+                }),
+                PropertyPaneCheckbox('listViewLegend', {
+                  text: "Legend",
+                  disabled: !this.properties.isListView,
+                  checked: this.properties.listViewLegend
+                  
+                }),
+                PropertyPaneCheckbox('listViewErrors', {
+                  text: "Errors",
+                  disabled: !this.properties.isListView,
+                  checked: this.properties.listViewErrors
+                }),
+                PropertyPaneCheckbox('listViewView', {
+                  text: "Views",
+                  disabled: !this.properties.isListView,
+                  checked: this.properties.listViewViews
+                }),
+                PropertyPaneSlider('listViewHeight', {
+                  label: 'Height',
+                  min: 200,
+                  max: 1000,
+                  value: this.properties.listViewHeight,
+                  disabled: !this.properties.isListView,
+                  step : 10,
+                  showValue: true,
+                })
               ]
             },
 /*

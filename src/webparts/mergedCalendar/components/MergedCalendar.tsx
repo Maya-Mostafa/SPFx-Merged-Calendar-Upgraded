@@ -3,7 +3,7 @@ import styles from './MergedCalendar.module.scss';
 import { IMergedCalendarProps } from './IMergedCalendarProps';
 //import { escape } from '@microsoft/sp-lodash-subset';
 
-import {IDropdownOption, MessageBar, MessageBarType} from '@fluentui/react';
+import {IDropdownOption, MessageBar, MessageBarType, Label} from '@fluentui/react';
 import {useBoolean} from '@fluentui/react-hooks';
 
 import {CalendarOperations} from '../Services/CalendarOperations';
@@ -43,6 +43,13 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const graphCalParams = props.graphCalParams ? props.graphCalParams :{rangeStart: '3', rangeEnd: '4', pageSize: '150'};
 
   const [currentCalDate, setCurrentCalDate] = React.useState(new Date().toISOString());
+
+  let showErrors = true;
+  let showLengend = true;
+  if (props.isListView){
+    showErrors = props.listViewErrors;
+    showLengend = props.listViewLegend;
+  }
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
@@ -156,7 +163,12 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   return(
     <div className={styles.mergedCalendar}>
 
-      {legendPos === 'top' &&
+      <Label className={styles.wpTitle}>
+        {props.listViewTitle}
+      </Label>
+
+
+      {showLengend && legendPos === 'top' &&
         <div className={`${styles.legendTop} ${legendAlign === 'horizontal' ? styles.legendHz : '' }`}>
           <ILegend
             calSettings={calSettings} 
@@ -178,6 +190,12 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         context={props.context}
         listGUID = {listGUID}
         passCurrentDate = {passCurrentDate}
+        isListView = {props.isListView}
+        listViewType = {props.listViewType}
+        listViewNavBtns = {props.listViewNavBtns}
+        listViewMonthTitle = {props.listViewMonthTitle}
+        listViewViews = {props.listViewViews}
+        listViewHeight = {props.listViewHeight}
       />
 
       <IPanel
@@ -192,7 +210,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         onChkViewChange= {chkViewHandleChange}
       />
 
-      {legendPos === 'bottom' &&
+      {showLengend && legendPos === 'bottom' &&
         <div className={legendAlign === 'horizontal' ? styles.legendHz : '' }>
           <ILegend 
             calSettings={calSettings} 
@@ -211,7 +229,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         handleAddtoCal = {handleAddtoCal}
       />
       
-      {calMsgErrs.length > 0 &&
+      
+      {showErrors && calMsgErrs.length > 0 &&
         <MessageBar className={styles.calErrsMsg} messageBarType={MessageBarType.warning}>
           Warning! Calendar Errors, please check
           <ul>

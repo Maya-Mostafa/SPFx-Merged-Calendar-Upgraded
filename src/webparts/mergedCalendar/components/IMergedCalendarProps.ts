@@ -12,4 +12,14 @@ export interface IMergedCalendarProps {
   spCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
   graphCalParams : {rangeStart: string, rangeEnd: string, pageSize: string};
   spCalPageSize: string;
+
+  isListView: boolean;
+  listViewType: any;
+  listViewNavBtns: boolean;
+  listViewLegend: boolean;
+  listViewErrors: boolean;
+  listViewMonthTitle: boolean;
+  listViewViews: boolean;
+  listViewHeight: number;
+  listViewTitle: string;
 }
