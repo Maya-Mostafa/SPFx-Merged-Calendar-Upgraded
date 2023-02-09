@@ -29,7 +29,7 @@ export default function ICalendar(props:ICalendarProps){
 
   let leftHdrButtons = 'customPrev,customNext today';
   let centerButtons = 'title';
-  let rightButtons = 'dayGridMonth,timeGridWeek,timeGridDay';
+  let rightButtons = isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay,listMonth settingsBtn' : 'dayGridMonth,timeGridWeek,timeGridDay,listMonth';
   if (props.isListView){
     leftHdrButtons = props.listViewNavBtns ? 'customPrev,customNext today' : '' ;
     centerButtons = props.listViewMonthTitle ? 'title' : '';
