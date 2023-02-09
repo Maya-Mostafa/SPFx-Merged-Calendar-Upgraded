@@ -91,7 +91,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   },[currentCalDate]);
 
   React.useEffect(()=>{
-    console.log("useEffect calVisibility -->", calVisibility);
+    // console.log("useEffect calVisibility -->", calVisibility);
     setEventSources(prevEventSources => reRenderCalendars(prevEventSources, calVisibility));
     setCalsVisibility(prevCalsVisibility => getLegendChksState(prevCalsVisibility, calVisibility));
   },[calVisibility]);
@@ -163,10 +163,11 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   return(
     <div className={styles.mergedCalendar}>
 
-      <Label className={styles.wpTitle}>
-        {props.listViewTitle}
-      </Label>
-
+      {props.isListView &&
+        <Label className={styles.wpTitle}>
+          {props.listViewTitle}
+        </Label>
+      }
 
       {showLengend && legendPos === 'top' &&
         <div className={`${styles.legendTop} ${legendAlign === 'horizontal' ? styles.legendHz : '' }`}>
