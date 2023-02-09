@@ -65,6 +65,8 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
     let restApiParamsWRange :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc&$filter=fRecurrence eq 1 or EventDate ge '${dateRangeStart.toISOString()}' and EventDate le '${dateRangeEnd.toISOString()}'`;
     restApiParams = restApiParamsWRange;
 
+// OData__ModernAudienceTargetUserFieldId
+
     switch (calType){
         case "Internal":
         case "Rotary":
@@ -96,7 +98,10 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                     .header('Prefer','outlook.timezone="Eastern Standard Time"')
                     .get((error, response: any, rawResponse?: any)=>{
                         if(error){
-                            calsErrs.push("MS Graph Error - " + calSettings.Title);
+                            //console.log("graph err", error);
+                            const errorMsg = "MS Graph Error - " + calSettings.Title + " - " + error.message;
+                            if (calsErrs.filter(item => item === errorMsg).length === 0)
+                                calsErrs.push(errorMsg);
                         }
                         if(response){
                             console.log("graph response", response);
@@ -121,7 +126,9 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                         resolve(calEvents);
                     });
             }, (error)=>{
-                calsErrs.push(error);
+                const errorMsg = "MS Graph Error - " + calSettings.Title + " - " + error;
+                if (calsErrs.filter(item => item === errorMsg).length === 0)
+                    calsErrs.push(errorMsg);
             });
     });
 };
@@ -253,17 +260,22 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                             className: '',
                             category: result.Category,
                             calendar: calSettings.Title,
-                            calendarColor: calSettings.BgColorHex
+                            calendarColor: calSettings.BgColorHex,
+                            //targetAudienceId: result.OData__ModernAudienceTargetUserFieldId,
                         });
                     });
                 }
             }
         }else{
-            calsErrs.push(calSettings.Title + ' - ' + _data.statusText);
+            const errorMsg = calSettings.Title + ' - ' + _data.statusText;
+            if (calsErrs.filter(item => item === errorMsg).length === 0)
+                calsErrs.push(errorMsg);
             return [];
         }
     } catch(error){
-        calsErrs.push("External calendars invalid - " + error);
+        const errorMsg = "Internal Calendar Invalid - " + calSettings.Title + " - " + error
+        if (calsErrs.filter(item => item === errorMsg).length === 0)
+            calsErrs.push(errorMsg);
     }
 
     // console.log("calSettings", calSettings);
@@ -308,9 +320,16 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
                 });
                 console.log("getExtCals Function -->", calEvents);
             }
+        }else{
+            const errorMsg = calSettings.Title + ' - ' + _data.statusText;
+            if (calsErrs.filter(item => item === errorMsg).length === 0)
+                calsErrs.push(errorMsg);
+            return [];
         }
     } catch(error){
-        calsErrs.push("New External calendars invalid - " + error);
+        const errorMsg = "External Calendar Invalid - " + calSettings.Title + " - " + error;
+        if (calsErrs.filter(item => item === errorMsg).length === 0)
+            calsErrs.push(errorMsg);
     }
     return calEvents;
 };
