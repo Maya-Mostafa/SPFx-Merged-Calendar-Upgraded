@@ -38,6 +38,8 @@ export interface IMergedCalendarWebPartProps {
   listViewViews: boolean;
   listViewHeight: number;
   listViewTitle: string;
+  
+  posGrpView: boolean;
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
@@ -76,7 +78,8 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
         listViewMonthTitle: this.properties.listViewMonthTitle,
         listViewViews: this.properties.listViewViews,
         listViewHeight: this.properties.listViewHeight,
-        listViewTitle: this.properties.listViewTitle
+        listViewTitle: this.properties.listViewTitle,
+        posGrpView: this.properties.posGrpView
       }
     );
 
@@ -199,6 +202,12 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                     {key: 'vertical', text: 'Vertical'}
                   ],
                   selectedKey : 'vertical'
+                }),
+                PropertyPaneToggle('posGrpView', {
+                  label: 'POS Groups View',
+                  onText: 'On',
+                  offText: 'Off',
+                  checked : false
                 }),
               ]
             },

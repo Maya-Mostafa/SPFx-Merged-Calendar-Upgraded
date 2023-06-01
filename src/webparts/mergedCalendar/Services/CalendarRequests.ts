@@ -344,7 +344,7 @@ export const getCalsData = (context: WebPartContext, calSettings:{CalType:string
     }
 };
 
-export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: string, calChk: boolean}) =>{
+export const reRenderCalendarsX = (calEventSources: any, calVisibility: {calId: string, calChk: boolean}) =>{
     const newCalEventSources = calEventSources.map((eventSource: any) => {
         if (eventSource.calId == calVisibility.calId) {
             const updatedEventSource = {...eventSource}; //shallow clone
@@ -358,6 +358,25 @@ export const reRenderCalendars = (calEventSources: any, calVisibility: {calId: s
         }
     });
     // console.log("reRenderCalendars Function newCalEventSources --> ", newCalEventSources);
+    return newCalEventSources;
+};
+
+export const reRenderCalendars = (calEventSources: any, calsVisibility: any) =>{
+    console.log("calEventSources", calEventSources);
+    const newCalEventSources = calEventSources.map((eventSource: any) => {
+        const legendItemChk = (calsVisibility.filter(item => item.calId === eventSource.calId))[0];
+        if (eventSource.calId === legendItemChk.calId){
+            const updatedEventSource = {...eventSource}; //shallow clone
+            updatedEventSource.events = eventSource.events.map((event: any) => {
+                event['className'] = !legendItemChk.calChk ? 'eventHidden' : '';
+                return event;
+            });
+            return updatedEventSource;
+        }else{
+            return {...eventSource}; //shallow clone
+        }
+    });
+    console.log("reRenderCalendars Function newCalEventSources --> ", newCalEventSources);
     return newCalEventSources;
 };
 

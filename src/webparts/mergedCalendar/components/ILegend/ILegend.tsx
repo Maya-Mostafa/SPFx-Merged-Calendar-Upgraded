@@ -38,32 +38,47 @@ export default function ILegend(props:ILegendProps){
     // console.log("props.calSettings", props.calSettings);
     // console.log("legend userGrps", props.userGrps);
     // console.log("props.posGrps", props.posGrps);
+    // console.log("props.legendChked", props.legendChked);
 
     const sortedCalSettings = props.calSettings.sort((a,b) => a.Title.localeCompare(b.Title));
 
     return(
         <div className={styles.calendarLegend}>
             <ul>
-            {
-                sortedCalSettings.map((value:any)=>{
-                    return(
-                        <React.Fragment>
-                            {value.ShowCal  && //&& value.CalType !== 'External'
-                                <li key={value.Id}>    
-                                    <Checkbox 
-                                        className={'chkboxLegend chkbox_'+value.BgColor}
-                                        label={value.Title} 
-                                        defaultChecked={isUserGrpCal(value.View)}
-                                        // checked={props.legendChked}
-                                        onChange={props.onLegendChkChange(value.Id)} 
-                                        onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
-                                    />
-                                </li>
-                            }
-                        </React.Fragment>
-                    );
-                })
-            }
+                {!props.posGrpView &&
+                    <li><Checkbox label='All' defaultChecked onChange={props.onLegendChkChange('all')} /></li>
+                }
+                {
+                    sortedCalSettings.map((value:any)=>{
+                        return(
+                            <React.Fragment>
+                                {value.ShowCal  && //&& value.CalType !== 'External'
+                                    <li key={value.Id} id={`legend-item-${value.Id}`}>    
+                                        {props.posGrpView ?
+                                            <Checkbox 
+                                                className={'chkboxLegend chkbox_'+value.BgColor}
+                                                label={value.Title} 
+                                                defaultChecked={isUserGrpCal(value.View)}
+                                                onChange={props.onLegendChkChange(value.Id)} 
+                                                onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
+                                            />
+                                        :
+                                            <Checkbox 
+                                                className={'chkboxLegend chkbox_'+value.BgColor}
+                                                label={value.Title} 
+                                                defaultChecked={isUserGrpCal(value.View)}
+                                                checked={props.legendChked.length > 1 ? (props.legendChked.filter(item => item.calId === value.Id))[0].calChk : true}
+                                                onChange={props.onLegendChkChange(value.Id)} 
+                                                onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
+                                            />
+                                        }
+                                        
+                                    </li>
+                                }
+                            </React.Fragment>
+                        );
+                    })
+                }
             </ul>
         </div>
     );

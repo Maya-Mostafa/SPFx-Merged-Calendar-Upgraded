@@ -33,7 +33,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [posGrps, setPosGrps] = React.useState([]);
 
   const [calVisibility, setCalVisibility] = React.useState <{calId: string, calChk: boolean}>({calId: null, calChk: null});
-  const [calsVisibility, setCalsVisibility] = React.useState([]);
+  const [calsVisibility, setCalsVisibility] = React.useState([{calId: 'all', calChk: true}]);
 
   const calSettingsList = props.calSettingsList ? props.calSettingsList : "CalendarSettings";
   const legendPos = props.legendPos ? props.legendPos : "top";
@@ -61,24 +61,24 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         
         _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrpsResult, posGrpsResult, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
           //setEventSources(result);
-          //setEventSources(reRenderCalendars(result, calVisibility));
           //console.log("setEventSources", result);
           setCalMsgErrs(calsErrs);
+
           if (calsVisibility.length > 1){
-            setEventSources(prevEventSources => {
-              let tempEventSources = [];
-              for (let calVis of calsVisibility){
-                tempEventSources = reRenderCalendars(prevEventSources, calVis);
-              }
-              return [...tempEventSources];
-            });
+            setEventSources(prevEventSources => reRenderCalendars(prevEventSources, calsVisibility));
           }else{
             setEventSources(result);
           }
+
         });
 
-        getCalSettings(props.context, calSettingsList).then((result:{}[])=>{
+        getCalSettings(props.context, calSettingsList).then((result:any)=>{
           setCalSettings(result);
+          setCalsVisibility(prev => {
+            const chkedCals = result.filter(item => item.Chkd === true);
+            const newLegend = chkedCals.map(item => ({calId: item.Id, calChk: item.Chkd}))
+            return [...prev, ...newLegend];
+          });
         });
         
       });
@@ -91,10 +91,24 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   },[currentCalDate]);
 
   React.useEffect(()=>{
-    // console.log("useEffect calVisibility -->", calVisibility);
-    setEventSources(prevEventSources => reRenderCalendars(prevEventSources, calVisibility));
-    setCalsVisibility(prevCalsVisibility => getLegendChksState(prevCalsVisibility, calVisibility));
-  },[calVisibility]);
+    setEventSources(prevEventSources => reRenderCalendars(prevEventSources, calsVisibility));
+  },[JSON.stringify(calsVisibility)]);
+
+  const onLegendChkChange = (calId: string) =>{
+    return(ev: any, checked: boolean) =>{
+      if (calId !== 'all'){
+        setCalsVisibility(prev => {
+          return prev.map(item => {
+            if (item.calId === calId) item.calChk = checked;
+            return item;
+          })
+        });
+      }else{
+        const chkedCals = calSettings.filter(item => item.Chkd === true);
+        setCalsVisibility(chkedCals.map(item => ({calId: item.Id, calChk: checked})));
+      }
+    };
+  };
 
   const chkHandleChange = (newCalSettings:{})=>{    
     return (ev: any, checked: boolean) => { 
@@ -146,15 +160,6 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     });
   };
 
-  const onLegendChkChange = (calId: string) =>{
-    return(ev: any, checked: boolean) =>{
-      // setCalVisibility({calId: calId, calChk: checked});
-      //console.log("onLegendChkChange --> calId+checked.toString()", calId+checked.toString());
-      const newCalVisibility = {calId: calId, calChk: checked};
-      setCalVisibility({...newCalVisibility});
-    };
-  };
-
   const passCurrentDate = (currDate: string) => {
     console.log("passCurrentCalDate function", currDate);
     setCurrentCalDate(currDate);
@@ -174,9 +179,10 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
           <ILegend
             calSettings={calSettings} 
             onLegendChkChange={onLegendChkChange}
-            legendChked = {true}
+            legendChked = {calsVisibility}
             userGrps = {userGrps}
             posGrps = {posGrps}
+            posGrpView = {props.posGrpView}
           />
         </div>
       }
@@ -216,9 +222,10 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
           <ILegend 
             calSettings={calSettings} 
             onLegendChkChange={onLegendChkChange}
-            legendChked = {true}
+            legendChked = {calsVisibility}
             userGrps = {userGrps}
             posGrps = {posGrps}
+            posGrpView = {props.posGrpView}
           />
         </div>
       }
