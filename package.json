@@ -9,7 +9,7 @@
     "test": "gulp test"
   },
   "dependencies": {
-    "@fluentui/react": "^8.26.2",
+    "@fluentui/react": "^8.28.0",
     "@fluentui/react-hooks": "^8.2.6",
     "@fullcalendar/bootstrap5": "^6.1.1",
     "@fullcalendar/daygrid": "^6.1.1",
