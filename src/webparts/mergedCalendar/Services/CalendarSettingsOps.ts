@@ -205,7 +205,7 @@ export const getCalSettings = (context:WebPartContext, listName: string) : Promi
     });
 };
 
-export const updateCalSettings = (context:WebPartContext, listName: string, calSettings:any, checked?:boolean, dpdCalName?:any) : Promise <any> =>{
+export const updateCalSettingsX = (context:WebPartContext, listName: string, calSettings:any, checked?:boolean, dpdCalName?:any) : Promise <any> =>{
     let restApiUrl = context.pageContext.web.absoluteUrl + "/_api/web/lists/getByTitle('"+listName+"')/items("+calSettings.Id+")",
         body: string = JSON.stringify({
             Title: calSettings.Title,
@@ -233,4 +233,53 @@ export const updateCalSettings = (context:WebPartContext, listName: string, calS
     });
 };
 
+export const updateCalSettings = (context:WebPartContext, listName: string, calSettings:any, checked?:boolean, dpdCalName?:any, rotaryCals?:any) : Promise <any> =>{
+    // console.log("checked", checked);
+    // console.log("dpdCalName", dpdCalName);
+    // console.log("rotaryCals", rotaryCals);
+
+    const rotaryCal = rotaryCals ? rotaryCals.filter(item => item.Title === dpdCalName)[0] : null;
+
+    let restApiUrl = context.pageContext.web.absoluteUrl + "/_api/web/lists/getByTitle('"+listName+"')/items("+calSettings.Id+")",
+        body: string = JSON.stringify({
+            Title: calSettings.Title,
+            ShowCal: checked,
+            CalName: dpdCalName ? dpdCalName : calSettings.CalName,
+            CalURL: dpdCalName ? rotaryCal.CalURL : calSettings.CalURL
+        }),
+        options: ISPHttpClientOptions = {
+            headers:{
+                Accept: "application/json;odata=nometadata", 
+                "Content-Type": "application/json;odata=nometadata",
+                "odata-version": "",
+                "IF-MATCH": "*",
+                "X-HTTP-Method": "MERGE",                
+            },
+            body: body
+        };
+
+    return new Promise <string> (async(resolve, reject)=>{
+        context.spHttpClient
+        .post(restApiUrl, SPHttpClient.configurations.v1, options)
+        .then((response: SPHttpClientResponse)=>{
+            //console.log('item updated !!');
+            resolve("Item updated");
+        });
+    });
+};
+
+export const isUserGrpCal = (calView: string, posGrps: any, userGrps: any) => {
+    if (posGrps[calView.trim()] == undefined) return true;
+    else{
+        for (let userGrp of userGrps){
+            if (posGrps[calView.trim()] && posGrps[calView.trim()].indexOf(Number(userGrp)) !== -1){
+                return true;
+            }
+        }
+        return false;
+    }
+};
+export const isPosGrpsCal = (calSettings) => {
+    return calSettings.filter(item => item.View !== 'AllItems' && item.View !== '' && item.Chkd).length > 0;
+};
 

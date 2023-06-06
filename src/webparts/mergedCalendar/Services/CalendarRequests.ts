@@ -54,6 +54,15 @@ export const getUserGrp = async (context: WebPartContext) => {
     }
 };
 
+export const getRotaryCals = async (context: WebPartContext) => {
+    const responseUrl = `https://pdsb1.sharepoint.com/sites/Rooms/_api/web/lists/getByTitle('CalendarSettings')/items?$select=Title,CalName,CalURL,Link&$top=200`;
+    const response = await context.spHttpClient.get(responseUrl, SPHttpClient.configurations.v1);
+    if (response.ok){
+        const results = await response.json();
+        return results.value;
+    }
+};
+
 const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, calName:string, currentDate: string, spCalPageSize?: number) : string => {
     
     let resolvedCalUrl:string;
@@ -69,7 +78,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
 
     switch (calType){
         case "Internal":
-        case "Rotary":
+        // case "Rotary":
             resolvedCalUrl = calUrl + restApiUrl + restApiParams;
             break;
         case "My School":
@@ -335,7 +344,7 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
 };
 
 export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
-    if(calSettings.CalType == 'Graph'){
+    if(calSettings.CalType == 'Graph' || calSettings.CalType == 'Rotary'){
         return getGraphCals(context, calSettings, currentDate, graphCalParams);
     }else if ( calSettings.CalType == 'External'){
         return getExtCals(context, calSettings, currentDate, spCalPageSize);
