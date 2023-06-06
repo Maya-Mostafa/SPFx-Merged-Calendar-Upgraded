@@ -237,6 +237,7 @@ export const updateCalSettings = (context:WebPartContext, listName: string, calS
     // console.log("checked", checked);
     // console.log("dpdCalName", dpdCalName);
     // console.log("rotaryCals", rotaryCals);
+    // console.log("calSettings", calSettings);
 
     const rotaryCal = rotaryCals ? rotaryCals.filter(item => item.Title === dpdCalName)[0] : null;
 
@@ -245,7 +246,8 @@ export const updateCalSettings = (context:WebPartContext, listName: string, calS
             Title: calSettings.Title,
             ShowCal: checked,
             CalName: dpdCalName ? dpdCalName : calSettings.CalName,
-            CalURL: dpdCalName ? rotaryCal.CalURL : calSettings.CalURL
+            CalURL: dpdCalName ? rotaryCal.CalURL : calSettings.CalURL,
+            Link: dpdCalName ? rotaryCal.Link : calSettings.LegendURL
         }),
         options: ISPHttpClientOptions = {
             headers:{
