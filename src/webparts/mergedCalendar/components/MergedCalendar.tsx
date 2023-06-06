@@ -7,8 +7,8 @@ import {IDropdownOption, MessageBar, MessageBarType, Label} from '@fluentui/reac
 import {useBoolean} from '@fluentui/react-hooks';
 
 import {CalendarOperations} from '../Services/CalendarOperations';
-import {getCalSettings, updateCalSettings} from '../Services/CalendarSettingsOps';
-import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs, getUserGrp, getAllPosGrps, getLegendChksState} from '../Services/CalendarRequests';
+import {getCalSettings, isPosGrpsCal, isUserGrpCal, updateCalSettings} from '../Services/CalendarSettingsOps';
+import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs, getUserGrp, getAllPosGrps, getLegendChksState, getRotaryCals} from '../Services/CalendarRequests';
 import {formatEvDetails} from '../Services/EventFormat';
 import {setWpData} from '../Services/WpProperties';
 
@@ -32,8 +32,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [userGrps, setUserGrps] = React.useState([]);
   const [posGrps, setPosGrps] = React.useState([]);
 
-  const [calVisibility, setCalVisibility] = React.useState <{calId: string, calChk: boolean}>({calId: null, calChk: null});
-  const [calsVisibility, setCalsVisibility] = React.useState([{calId: 'all', calChk: true}]);
+  const [calsVisibility, setCalsVisibility] = React.useState([]);
+  const [rotaryCals, setRotaryCals] = React.useState([]);
 
   const calSettingsList = props.calSettingsList ? props.calSettingsList : "CalendarSettings";
   const legendPos = props.legendPos ? props.legendPos : "top";
@@ -50,6 +50,13 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     showErrors = props.listViewErrors;
     showLengend = props.listViewLegend;
   }
+
+  // reading the graph rotart calendars
+  React.useEffect(()=>{
+    getRotaryCals(props.context).then(res =>{
+      setRotaryCals(res);
+    });
+  }, []);
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
@@ -74,11 +81,31 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
         getCalSettings(props.context, calSettingsList).then((result:any)=>{
           setCalSettings(result);
-          setCalsVisibility(prev => {
-            const chkedCals = result.filter(item => item.Chkd === true);
-            const newLegend = chkedCals.map(item => ({calId: item.Id, calChk: item.Chkd}))
-            return [...prev, ...newLegend];
-          });
+          
+          // setting the legend checboxes visibility
+          if (calsVisibility.length === 0){ // on first load
+            const legend =  result.map(calItem => {
+              return {
+                calId: calItem.Id,
+                calChk: isUserGrpCal(calItem.View, posGrpsResult, userGrpsResult),
+                calRender: calItem.Chkd
+              }
+            });
+            const renderedCalsLen = legend.filter((item: any) => item.calRender).length;
+            const chkdCalsLen = legend.filter((item: any) => item.calChk && item.calRender).length;
+            setCalsVisibility([{calId: 'all', calChk: renderedCalsLen === chkdCalsLen, calRender: true}, ...legend]);
+          }else{ // on next & prev month
+            setCalsVisibility(prev => {
+              const clonePrev = [...prev];
+              const renderedCalsLen = clonePrev.filter((item: any) => item.calRender && item.calId !== 'all').length;
+              const chkdCalsLen = clonePrev.filter((item: any) => item.calChk && item.calRender && item.calId !== 'all').length;
+              return clonePrev.map(item => {
+                if (item.calId === 'all') item.calChk = renderedCalsLen === chkdCalsLen;
+                return item;
+              });
+            });
+          }
+          
         });
         
       });
@@ -98,24 +125,38 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     return(ev: any, checked: boolean) =>{
       if (calId !== 'all'){
         setCalsVisibility(prev => {
-          return prev.map(item => {
+          const clonePrev = [...prev];
+          const newCalsVis = clonePrev.map(item => {
             if (item.calId === calId) item.calChk = checked;
+            return item;
+          });
+          const renderedCalsLen = newCalsVis.filter((item: any) => item.calRender && item.calId !== 'all').length;
+          const chkdCalsLen = newCalsVis.filter((item: any) => item.calChk && item.calRender && item.calId !== 'all').length;
+          return newCalsVis.map(item => {
+            if (item.calId === 'all') item.calChk = renderedCalsLen === chkdCalsLen;
+            return item;
+          });
+        });
+      }else{
+        setCalsVisibility(prev => {
+          const clonePrev = [...prev];
+          return clonePrev.map(item => {
+            item.calChk = checked;
             return item;
           })
         });
-      }else{
-        const chkedCals = calSettings.filter(item => item.Chkd === true);
-        setCalsVisibility(chkedCals.map(item => ({calId: item.Id, calChk: checked})));
       }
     };
   };
-
-  const chkHandleChange = (newCalSettings:{})=>{    
+  const chkHandleChange = (newCalSettings:any)=>{    
     return (ev: any, checked: boolean) => { 
+
+      // console.log("newCalSettings", newCalSettings);
       toggleIsDataLoading();
       updateCalSettings(props.context, calSettingsList, newCalSettings, checked).then(()=>{
         _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrps, posGrps, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
-          setEventSources(result);
+          // setEventSources(result);
+          setEventSources(reRenderCalendars(result, calsVisibility));
           toggleIsDataLoading();
         });
         getCalSettings(props.context, calSettingsList).then((result:{}[])=>{
@@ -128,9 +169,10 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const dpdHandleChange = (newCalSettings:any)=>{
     return (ev: any, item: IDropdownOption) => { 
       toggleIsDataLoading();
-      updateCalSettings(props.context, calSettingsList, newCalSettings, newCalSettings.ShowCal, item.key).then(()=>{
+      updateCalSettings(props.context, calSettingsList, newCalSettings, newCalSettings.ShowCal, item.key, rotaryCals).then(()=>{
         _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrps, posGrps, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
-          setEventSources(result);
+          // setEventSources(result);
+          setEventSources(reRenderCalendars(result, calsVisibility));
           toggleIsDataLoading();
         });
         getCalSettings(props.context, calSettingsList).then((result:{}[])=>{

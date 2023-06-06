@@ -4,7 +4,6 @@ import {Checkbox, Link} from '@fluentui/react';
 import styles from '../MergedCalendar.module.scss';
 import { ILegendProps } from './ILegendProps';
 import { initializeIcons } from '@uifabric/icons';
-// import { getPosGrpMapping} from '../../Services/CalendarRequests';
 
 export default function ILegend(props:ILegendProps){    
     initializeIcons();
@@ -15,64 +14,36 @@ export default function ILegend(props:ILegendProps){
             </Link>
         );
     };
-
-    {/* <a href={value.LegendURL} target="_blank" data-interception="off">
-        <span className={styles.legendBullet +' calLegend_'+value.BgColor}></span>
-        <span className={styles.legendText}>{value.Title}</span>
-    </a> */}
-
-    const isUserGrpCal = (calView: string) => {
-        // console.log("calView", calView);
-        if (props.posGrps[calView.trim()] == undefined) return true;
-        else{
-            for (let userGrp of props.userGrps){
-                if (props.posGrps[calView.trim()] && props.posGrps[calView.trim()].indexOf(Number(userGrp)) !== -1){
-                    return true;
-                }
-            }
-            return false;
-        }
-        
-    };
-    
-    // console.log("props.calSettings", props.calSettings);
-    // console.log("legend userGrps", props.userGrps);
-    // console.log("props.posGrps", props.posGrps);
-    // console.log("props.legendChked", props.legendChked);
-
     const sortedCalSettings = props.calSettings.sort((a,b) => a.Title.localeCompare(b.Title));
+    const isItemChkd = (items: any, itemId: any) => {
+        return items.find(item => item.calId === itemId).calChk;
+    };
 
+    //console.log("props.calSettings", props.calSettings);
+    //console.log("props.legendChked", props.legendChked);
     return(
         <div className={styles.calendarLegend}>
             <ul>
-                {!props.posGrpView &&
-                    <li><Checkbox label='All' defaultChecked onChange={props.onLegendChkChange('all')} /></li>
-                }
+                <li>
+                    <Checkbox 
+                        label='All' 
+                        checked = {props.legendChked.length > 1 && isItemChkd(props.legendChked, 'all')} 
+                        onChange={props.onLegendChkChange('all')} 
+                    />
+                </li>
                 {
                     sortedCalSettings.map((value:any)=>{
                         return(
                             <React.Fragment>
                                 {value.ShowCal  && //&& value.CalType !== 'External'
                                     <li key={value.Id} id={`legend-item-${value.Id}`}>    
-                                        {props.posGrpView ?
-                                            <Checkbox 
-                                                className={'chkboxLegend chkbox_'+value.BgColor}
-                                                label={value.Title} 
-                                                defaultChecked={isUserGrpCal(value.View)}
-                                                onChange={props.onLegendChkChange(value.Id)} 
-                                                onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
-                                            />
-                                        :
-                                            <Checkbox 
-                                                className={'chkboxLegend chkbox_'+value.BgColor}
-                                                label={value.Title} 
-                                                defaultChecked={isUserGrpCal(value.View)}
-                                                checked={props.legendChked.length > 1 ? (props.legendChked.filter(item => item.calId === value.Id))[0].calChk : true}
-                                                onChange={props.onLegendChkChange(value.Id)} 
-                                                onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
-                                            />
-                                        }
-                                        
+                                        <Checkbox 
+                                            className={'chkboxLegend chkbox_'+value.BgColor}
+                                            label={value.Title} 
+                                            checked={props.legendChked.length > 1 && isItemChkd(props.legendChked, value.Id)}
+                                            onChange={props.onLegendChkChange(value.Id)} 
+                                            onRenderLabel={() => _renderLabelWithLink(value.Title, value.LegendURL)}
+                                        />
                                     </li>
                                 }
                             </React.Fragment>
