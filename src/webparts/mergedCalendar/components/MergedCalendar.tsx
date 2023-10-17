@@ -72,7 +72,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
           setCalMsgErrs(calsErrs);
 
           if (calsVisibility.length > 1){
-            setEventSources(prevEventSources => reRenderCalendars(prevEventSources, calsVisibility));
+            // setEventSources(prevEventSources => reRenderCalendars(prevEventSources, calsVisibility));
+            setEventSources(reRenderCalendars(result, calsVisibility));
           }else{
             setEventSources(result);
           }
