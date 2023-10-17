@@ -72,13 +72,13 @@ export const getDatesWindow = (currentDate: string) => {
     const currentDateVal = new Date (currentDate);
     let dateRangeStart = new Date (currentDate), dateRangeEnd = new Date (currentDate);
     if (currentDateVal.getMonth() === 0){
-        dateRangeStart.setMonth(11);
+        dateRangeStart.setMonth(10);
         dateRangeStart.setFullYear(currentDateVal.getFullYear()-1);
     }else{
         dateRangeStart.setMonth(currentDateVal.getMonth()-3);
     }
     if(currentDateVal.getMonth() === 11){
-        dateRangeEnd.setMonth(0);
+        dateRangeEnd.setMonth(3);
         dateRangeEnd.setFullYear(currentDateVal.getFullYear()+1);
     }else{
         dateRangeEnd.setMonth(currentDateVal.getMonth()+3);
