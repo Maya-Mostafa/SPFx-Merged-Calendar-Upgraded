@@ -190,6 +190,69 @@
   }
 }
 
+.eventDetailsModern{
+  .calendarTitle{
+    border-radius: 2px;
+    padding: 3px 6px;
+    display: inline-block;
+    font-weight: 600;
+    margin: 20px 0 0 20px;
+  }
+  .eventDateTitle{
+    display: flex;
+    background: #eee url('../assets/eventsBg.jpg');
+    margin: 0 -24px 20px;
+    padding: 20px 25px;
+    .eventTitle{
+      margin: 5px 0 0 20px;
+      font-weight: 600;
+    }
+    .eventDate{
+      border: 1px solid #333;
+      border-radius: 2px;
+      padding: 5px;
+      width: 80px;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      .day{
+        font-size: 36px;
+        font-weight: 700;
+        line-height: 36px;
+      }
+      .month{
+        font-size: 18px;
+        font-weight: 600;
+        text-transform: uppercase;
+      }
+    }
+  }
+  section{
+    display: flex;
+    margin-bottom: 15px;
+    label{
+      width:100px;
+      font-weight: 600;
+    }
+
+  }
+  .eventTiming{
+    
+  }
+  .eventLocation{
+    
+  }
+  .eventBody{
+    display: block;
+    margin-top: 40px;
+    label{
+      font-weight: 600;
+    }
+  }
+  
+}
+
 .wpTitle{
   font-size: 20px;
   margin: 0 0 11px 0;

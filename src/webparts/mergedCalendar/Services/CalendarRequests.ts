@@ -91,7 +91,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
     return resolvedCalUrl;
 };
 
-const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, BgColorHex: string}, currentDate: string, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
+const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, BgColorHex: string, FgColorHex: string}, currentDate: string, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
     
     let graphUrl :string = calSettings.CalURL.substring(32, calSettings.CalURL.length),
         calEvents : {}[] = [];
@@ -127,6 +127,7 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                                     allDay: result.isAllDay,
                                     calendar: calSettings.Title,
                                     calendarColor: calSettings.BgColorHex,
+                                    calendarFontColor : calSettings.FgColorHex,
                                     className: ''
                                 });
                             });
@@ -142,32 +143,32 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
     });
 };
 
-export const addToMyGraphCal = async (context: WebPartContext) =>{
+export const addToMyGraphCal = async (context: WebPartContext, eventSubject: string, eventBody: string, eventStart: string, eventEnd: string, eventLoc: string ) =>{
     
     const event = {
-        "subject": "Let's add this to my calendar",
+        "subject": eventSubject,
         "body": {
             "contentType": "HTML",
-            "content": "Adding a dummy event to my graph calendar"
+            "content": eventBody
         },
         "start": {
-            "dateTime": "2021-02-15T12:00:00",
-            "timeZone": "Pacific Standard Time"
+            "dateTime": eventStart,
+            "timeZone": "Eastern Standard Time"
         },
         "end": {
-            "dateTime": "2021-02-15T14:00:00",
-            "timeZone": "Pacific Standard Time"
+            "dateTime": eventEnd,
+            "timeZone": "Eastern Standard Time"
         },
         "location": {
-            "displayName": "Peel CBO"
+            "displayName": eventLoc
         },
-        "attendees": [{
-            "emailAddress": {
-                "address": "mai.mostafa@peelsb.com",
-                "name": "Mai Mostafa"
-            },
-            "type": "required"
-        }]
+        // "attendees": [{
+        //     "emailAddress": {
+        //         "address": "mai.mostafa@peelsb.com",
+        //         "name": "Mai Mostafa"
+        //     },
+        //     "type": "required"
+        // }]
     };
 
     context.msGraphClientFactory
@@ -182,7 +183,7 @@ export const addToMyGraphCal = async (context: WebPartContext) =>{
 
 };
 
-export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps:any, spCalPageSize?: number) : Promise <{}[]> => {
+export const getDefaultCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string, FgColorHex: string}, currentDate: string, userGrps: [], posGrps:any, spCalPageSize?: number) : Promise <{}[]> => {
     
     let calUrl :string = resolveCalUrl(context, calSettings.CalType, calSettings.CalURL, calSettings.CalName, currentDate, spCalPageSize),
         calEvents : {}[] = [] ;
@@ -243,7 +244,8 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                                     className: !isUserGrpCal ? 'eventHidden' : '',
                                     category: result.Category,
                                     calendar: calSettings.Title,
-                                    calendarColor: calSettings.BgColorHex
+                                    calendarColor: calSettings.BgColorHex,
+                                    calendarFontColor : calSettings.FgColorHex
                                 });
                             }
                         }
@@ -270,6 +272,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
                             category: result.Category,
                             calendar: calSettings.Title,
                             calendarColor: calSettings.BgColorHex,
+                            calendarFontColor : calSettings.FgColorHex,
                             //targetAudienceId: result.OData__ModernAudienceTargetUserFieldId,
                         });
                     });
@@ -282,7 +285,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
             return [];
         }
     } catch(error){
-        const errorMsg = "Internal Calendar Invalid - " + calSettings.Title + " - " + error
+        const errorMsg = "Internal Calendar Invalid - " + calSettings.Title + " - " + error;
         if (calsErrs.filter(item => item === errorMsg).length === 0)
             calsErrs.push(errorMsg);
     }
@@ -293,7 +296,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     return calEvents;
 };
 
-export const getExtCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string}, currentDate: string, spCalPageSize?: number) : Promise <{}[]> => {
+export const getExtCals = async (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View: string, BgColorHex: string, FgColorHex: string}, currentDate: string, spCalPageSize?: number) : Promise <{}[]> => {
     
     const {dateRangeStart, dateRangeEnd} = getDatesWindow(currentDate);
 
@@ -317,6 +320,7 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
                         _body: result.content,
                         calendar: calSettings.Title,
                         calendarColor: calSettings.BgColorHex,
+                        calendarFontColor : calSettings.FgColorHex,
 
                         allDay: false,
                         _location: null,
@@ -343,7 +347,7 @@ export const getExtCals = async (context: WebPartContext, calSettings:{CalType:s
     return calEvents;
 };
 
-export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string}, currentDate: string, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
+export const getCalsData = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, Id: string, View:string, BgColorHex: string, FgColorHex: string}, currentDate: string, userGrps: [], posGrps: any, spCalPageSize?: number, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
     if(calSettings.CalType == 'Graph' || calSettings.CalType == 'Rotary'){
         return getGraphCals(context, calSettings, currentDate, graphCalParams);
     }else if ( calSettings.CalType == 'External'){

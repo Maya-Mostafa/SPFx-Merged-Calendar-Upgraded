@@ -90,7 +90,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
                 calId: calItem.Id,
                 calChk: isUserGrpCal(calItem.View, posGrpsResult, userGrpsResult),
                 calRender: calItem.Chkd
-              }
+              };
             });
             const renderedCalsLen = legend.filter((item: any) => item.calRender).length;
             const chkdCalsLen = legend.filter((item: any) => item.calChk && item.calRender).length;
@@ -144,7 +144,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
           return clonePrev.map(item => {
             item.calChk = checked;
             return item;
-          })
+          });
         });
       }
     };
@@ -191,15 +191,16 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
     
   };
   const handleDateClick = (arg:any) =>{
-    //console.log("ev details arg", arg);
+    console.log("ev details arg", arg);
     //console.log(formatEvDetails(arg));
     setEventDetails(formatEvDetails(arg));
     toggleHideDialog();
   };
 
-  const handleAddtoCal = ()=>{
-    addToMyGraphCal(props.context).then((result)=>{
-      // console.log('calendar updated', result);
+  const handleAddtoCal = (eventSubject: string, eventBody: string, eventStart: string, eventEnd: string, eventLoc: string)=>{
+    console.log("eventSubject", eventSubject);
+    addToMyGraphCal(props.context, eventSubject, eventBody, eventStart, eventEnd, eventLoc).then((result)=>{
+      console.log('calendar updated', result);
     });
   };
 

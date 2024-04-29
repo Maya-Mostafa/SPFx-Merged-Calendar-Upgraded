@@ -55,7 +55,10 @@ export const formatEvDetails = (ev:any) : {} =>{
         RecurringDef: event._def.extendedProps.recurringDef,
         Category: event._def.extendedProps.category ? (event._def.extendedProps.category.results ? event._def.extendedProps.category.results.join(', ') : null) : null,
         Calendar: event._def.extendedProps.calendar,
-        Color: event._def.extendedProps.calendarColor
+        Color: event._def.extendedProps.calendarColor,
+        ForeColor: event._def.extendedProps.calendarFontColor,
+        EventDayStart: event.start,
+        EventDayEnd: event.end,
     };
 
     return evDetails;
