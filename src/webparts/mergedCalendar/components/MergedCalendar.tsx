@@ -44,6 +44,9 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
   const [currentCalDate, setCurrentCalDate] = React.useState(new Date().toISOString());
 
+  const [clkdEvId, setClkdEvId] = React.useState(null);
+  const [addedToMyCal, setAddedToMyCal] = React.useState([]);
+
   let showErrors = true;
   let showLengend = true;
   if (props.isListView){
@@ -193,13 +196,26 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const handleDateClick = (arg:any) =>{
     console.log("ev details arg", arg);
     //console.log(formatEvDetails(arg));
-    setEventDetails(formatEvDetails(arg));
+    
+    if (addedToMyCal.indexOf(arg.event.id) !== -1){
+      console.log('Event is already added to your calendar!');
+      setEventDetails({...formatEvDetails(arg), EventAdded: true});
+    }else{
+      setClkdEvId(arg.event.id);
+      setEventDetails(formatEvDetails(arg));
+    }
+
     toggleHideDialog();
   };
 
   const handleAddtoCal = (eventSubject: string, eventBody: string, eventStart: string, eventEnd: string, eventLoc: string)=>{
     console.log("eventSubject", eventSubject);
+
     addToMyGraphCal(props.context, eventSubject, eventBody, eventStart, eventEnd, eventLoc).then((result)=>{
+      const calsAdded = [...addedToMyCal];
+      calsAdded.push(clkdEvId);
+      setAddedToMyCal(calsAdded);
+
       console.log('calendar updated', result);
     });
   };

@@ -7,6 +7,12 @@ import {ActionButton} from '@fluentui/react';
 
 export default function IEventDetailsModern (props: IEventDetailsModernProps){
 
+    const [eventAdded, setEventAdded] = React.useState(props.EventAdded);
+    const addToMyCalHandler = () => {
+        setEventAdded(true);
+        props.handleAddtoCal(props.Title, props.Body, props.AllDay ? props.Start : props.EventCalDate, props.AllDay ? props.End : props.EventCalEndDate, props.Location);
+    };
+
     return(
         <div className={styles.eventDetailsModern}>
             
@@ -24,17 +30,33 @@ export default function IEventDetailsModern (props: IEventDetailsModernProps){
             <section>
                 <label>When</label>
                 <div>
-                    {moment(new Date(props.EventCalDate)).format('dddd, MMMM Do YYYY')} <br/>
-                    {moment(new Date(props.EventCalDate)).format('LT')} - {moment(new Date(props.EventCalEndDate)).format('LT')} <br/>
-                    {props.AllDay &&
-                        <i> (All Day Event)</i>
+                    
+                    {props.AllDay 
+                        ?
+                        <div>
+                            <div>
+                                {moment(new Date(props.Start)).format('dddd, MMMM Do YYYY')}
+                            </div>
+                            <i>(All Day Event)</i>
+                        </div>
+                        :
+                        <div>
+                            {moment(new Date(props.EventCalDate)).format('dddd, MMMM Do YYYY')} <br/>
+                            {moment(new Date(props.EventCalDate)).format('LT')} - {moment(new Date(props.EventCalEndDate)).format('LT')} <br/>
+                        </div>
                     }
                 </div>
             </section>
 
             <section>
                 <label></label>
-                <ActionButton iconProps={{ iconName: 'AddEvent' }} allowDisabledFocus onClick={()=>props.handleAddtoCal(props.Title, props.Body, props.EventCalDate, props.EventCalEndDate, props.Location)}>Add to my Calendar</ActionButton>
+                {eventAdded 
+                    ?
+                    <ActionButton iconProps={{ iconName: 'EventAccepted' }} allowDisabledFocus disabled>Added to my Calendar</ActionButton>
+                    :
+                    <ActionButton iconProps={{ iconName: 'AddEvent' }} allowDisabledFocus onClick={addToMyCalHandler}>Add to my Calendar</ActionButton>
+                }
+                
             </section>
             
             

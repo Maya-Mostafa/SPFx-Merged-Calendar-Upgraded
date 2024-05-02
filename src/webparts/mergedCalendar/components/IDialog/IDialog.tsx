@@ -49,6 +49,7 @@ export default function IDialog(props:IDialogProps){
                 CalendarFontColor = {props.eventDetails.ForeColor}
                 EventCalDate = {props.eventDetails.EventDayStart}
                 EventCalEndDate = {props.eventDetails.EventDayEnd}
+                EventAdded = {props.eventDetails.EventAdded}
             />
             <DialogFooter>
               <DefaultButton onClick={props.toggleHideDialog} text="Close" />

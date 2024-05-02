@@ -45,8 +45,8 @@ export const formatEvDetails = (ev:any) : {} =>{
         Title: event.title,
         // Start: event.startStr ? formateDate(event.startStr) : "",
         // End: event.endStr ? formateDate(event.endStr) : "",
-        Start: event._def.extendedProps._startTime ? event._def.extendedProps._startTime : "",
-        End: event._def.extendedProps._endTime ? event._def.extendedProps._endTime : "",
+        Start: event._def.extendedProps._startTime ? event._def.extendedProps._startTime : event.start,
+        End: event._def.extendedProps._endTime ? event._def.extendedProps._endTime : event.end,
         Location: event._def.extendedProps._location,
         Body: event._def.extendedProps._body ? event._def.extendedProps._body : null,
         AllDay: event.allDay,
@@ -59,6 +59,7 @@ export const formatEvDetails = (ev:any) : {} =>{
         ForeColor: event._def.extendedProps.calendarFontColor,
         EventDayStart: event.start,
         EventDayEnd: event.end,
+        EventAdded: false
     };
 
     return evDetails;

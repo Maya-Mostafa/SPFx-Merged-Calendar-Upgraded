@@ -144,23 +144,23 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
 };
 
 export const addToMyGraphCal = async (context: WebPartContext, eventSubject: string, eventBody: string, eventStart: string, eventEnd: string, eventLoc: string ) =>{
-    
+    console.log("addToMyGraphCal");
     const event = {
         "subject": eventSubject,
         "body": {
             "contentType": "HTML",
-            "content": eventBody
+            "content": eventBody ? eventBody : ''
         },
         "start": {
-            "dateTime": eventStart,
+            "dateTime": eventStart ? eventStart : '',
             "timeZone": "Eastern Standard Time"
         },
         "end": {
-            "dateTime": eventEnd,
+            "dateTime": eventEnd ? eventEnd : '',
             "timeZone": "Eastern Standard Time"
         },
         "location": {
-            "displayName": eventLoc
+            "displayName": eventLoc ? eventLoc : ''
         },
         // "attendees": [{
         //     "emailAddress": {
