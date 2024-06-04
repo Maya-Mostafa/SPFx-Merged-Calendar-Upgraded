@@ -70,7 +70,7 @@ gulp bundle --ship
 
 gulp package-solution --ship
 
-
+## Node version - 12.22.10
 
 ICS
 https://marclloyd.co.uk/javascript/creating-an-add-to-calendar-link-in-react/

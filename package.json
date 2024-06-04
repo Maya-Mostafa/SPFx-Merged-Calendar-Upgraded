@@ -43,5 +43,19 @@
     "@types/webpack-env": "1.13.1",
     "ajv": "~5.2.2",
     "gulp": "~4.0.2"
-  }
+  },
+  "description": "A SPFx Merged Calendar React web-part. Aggregates different types of calendars; internal, external, graph, google using Full Calendar plugin.",
+  "directories": {
+    "lib": "lib"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded/issues"
+  },
+  "homepage": "https://github.com/Maya-Mostafa/SPFx-Merged-Calendar-Upgraded#readme"
 }
