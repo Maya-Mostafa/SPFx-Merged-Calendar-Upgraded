@@ -40,6 +40,8 @@ export interface IMergedCalendarWebPartProps {
   listViewTitle: string;
   
   posGrpView: boolean;
+  calendarView: string;
+  viewDuration: number;
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
@@ -79,7 +81,9 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
         listViewViews: this.properties.listViewViews,
         listViewHeight: this.properties.listViewHeight,
         listViewTitle: this.properties.listViewTitle,
-        posGrpView: this.properties.posGrpView
+        posGrpView: this.properties.posGrpView,
+        calendarView: this.properties.calendarView,
+        viewDuration: this.properties.viewDuration
       }
     );
 
@@ -173,6 +177,10 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
             {
               groupName: "Settings",
               groupFields: [
+                PropertyPaneTextField('listViewTitle', {
+                  label: 'Title',
+                  value: this.properties.listViewTitle,
+                }),
                 PropertyPaneDropdown('calSettingsList', {
                   label : 'Calendar Settings List',
                   options: this.lists,
@@ -203,64 +211,73 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   ],
                   selectedKey : 'vertical'
                 }),
-                PropertyPaneToggle('posGrpView', {
-                  label: 'POS Groups View',
-                  onText: 'On',
-                  offText: 'Off',
-                  checked : false
-                }),
+                // PropertyPaneToggle('posGrpView', {
+                //   label: 'POS Groups View',
+                //   onText: 'On',
+                //   offText: 'Off',
+                //   checked : false
+                // }),
               ]
             },
             {
               groupName: 'Events View',
               groupFields: [
-                PropertyPaneToggle('isListView', {
-                  label: 'List View',
-                  onText: 'On',
-                  offText: 'Off',
-                  checked : false
-                }),
-                PropertyPaneTextField('listViewTitle', {
-                  label: 'Title',
-                  value: this.properties.listViewTitle,
-                }),
-                PropertyPaneDropdown('listViewType', {
-                  label: 'List View Type',                  
-                  disabled: !this.properties.isListView,
-                  options: [
-                    {key: 'listDay', text: 'Day List'},
-                    {key: 'listWeek', text: 'Week List'},
-                    {key: 'listMonth', text: 'Month List'}
+                // PropertyPaneToggle('isListView', {
+                //   label: 'List View',
+                //   onText: 'On',
+                //   offText: 'Off',
+                //   checked : false
+                // }),
+                PropertyPaneDropdown('calendarView', {
+                  label: 'Calendar View',
+                  options:[
+                    {key:'dayGridMonth', text:'Month'},
+                    {key:'upcomingEventsBox', text:'Upcoming Events - Box'},
+                    {key:'upcomingEventsGrid', text:'Upcoming Events - Table'},
                   ],
-                  selectedKey : this.properties.listViewType
+                  selectedKey: this.properties.calendarView
                 }),
+                PropertyPaneTextField('viewDuration', {
+                  label: 'Duration',
+                  value: this.properties.viewDuration && this.properties.viewDuration.toString()
+                }),
+                // PropertyPaneDropdown('listViewType', {
+                //   label: 'List View Type',                  
+                //   disabled: this.properties.calendarView === 'dayGridMonth',
+                //   options: [
+                //     {key: 'listDay', text: 'Day List'},
+                //     {key: 'listWeek', text: 'Week List'},
+                //     {key: 'listMonth', text: 'Month List'},
+                //   ],
+                //   selectedKey : this.properties.listViewType
+                // }),
                 PropertyPaneLabel('listViewOptions', {
                   text: 'Header & Footer Options',
                 }),
                 PropertyPaneCheckbox('listViewMonthTitle', {
                   text: "Month Name",
-                  disabled: !this.properties.isListView,
+                  disabled: this.properties.calendarView === 'dayGridMonth',
                   checked: this.properties.listViewMonthTitle
                 }),
                 PropertyPaneCheckbox('listViewNavBtns', {
                   text: "Navigation Buttons (previous, next, today)",
-                  disabled: !this.properties.isListView,
+                  disabled: this.properties.calendarView === 'dayGridMonth',
                   checked: this.properties.listViewNavBtns
                 }),
                 PropertyPaneCheckbox('listViewLegend', {
                   text: "Legend",
-                  disabled: !this.properties.isListView,
+                  disabled: this.properties.calendarView === 'dayGridMonth',
                   checked: this.properties.listViewLegend
                   
                 }),
                 PropertyPaneCheckbox('listViewErrors', {
                   text: "Errors",
-                  disabled: !this.properties.isListView,
+                  disabled: this.properties.calendarView === 'dayGridMonth',
                   checked: this.properties.listViewErrors
                 }),
                 PropertyPaneCheckbox('listViewView', {
                   text: "Views",
-                  disabled: !this.properties.isListView,
+                  disabled: this.properties.calendarView === 'dayGridMonth',
                   checked: this.properties.listViewViews
                 }),
                 PropertyPaneSlider('listViewHeight', {
@@ -268,7 +285,7 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   min: 200,
                   max: 1000,
                   value: this.properties.listViewHeight,
-                  disabled: !this.properties.isListView,
+                  disabled: this.properties.calendarView === 'dayGridMonth',
                   step : 10,
                   showValue: true,
                 })

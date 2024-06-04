@@ -4,3 +4,58 @@
 .eventDetailsModernModel .ms-Dialog-button--close{
     z-index: 99;
 }
+
+.peelUpcomingEventsView{
+    border: none!important;
+    th div{
+        background: none!important;
+        margin-bottom: 10px;
+    }
+    td, th{
+        border-top: none;
+        padding: 0!important;
+    }
+    th{
+    }
+    td{
+        border: none;
+        align-content: center;
+    }
+    td.fc-list-event-time{
+        font-size: 12px;
+        font-weight: 500;
+        box-shadow: 0 1.6px 3.6px 0 rgba(0, 0, 0, .13), 0 .3px .9px 0 rgba(0, 0, 0, .11);
+        border: 1px solid #edebe9 !important;
+        height: 66px;
+        width: 66px;
+        min-width: 66px;
+        min-height: 66px;
+        padding: 0 !important;
+        display: flex;
+        margin-top: 10px !important;
+        white-space: normal;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+    }
+    .fc-list-event:hover td{
+        background: none;
+    }
+    .fc-list-event-title i{
+        font-style: normal;
+        font-weight: 600;
+        padding-left: 7px;
+        display: block;
+        cursor: pointer;
+        color:"[theme:link, default:#03787c]"!important;
+        //color: var(--link)!important; // note: CSS Custom Properties support is limited to modern browsers only
+        &:hover {
+            text-decoration: underline;
+            color: "[theme:linkHovered, default: #014446]"!important;
+            //color: var(--linkHovered)!important; // note: CSS Custom Properties support is limited to modern browsers only
+        }
+    }
+    .fc-list-event-graphic{
+        padding-left: 10px!important;
+    }
+}

@@ -5,15 +5,17 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import listPlugin from '@fullcalendar/list';
 import interactionPlugin from '@fullcalendar/interaction';
 import rrulePlugin from '@fullcalendar/rrule';
+
 import { initializeIcons } from '@uifabric/icons';
-import { Icon } from '@fluentui/react/lib/Icon';
-
 import styles from '../MergedCalendar.module.scss';
+import '../MergedCalendar.scss';
 import {ICalendarProps} from './ICalendarProps';
-
 import {isUserManage} from '../../Services/WpProperties';
+import CustomViewPlugin from './CustomViewPlugin';
 
 export default function ICalendar(props:ICalendarProps){
+
+  console.log("ICalendarProps", props);
 
   initializeIcons();
 
@@ -43,7 +45,7 @@ export default function ICalendar(props:ICalendarProps){
           ref={calendarRef}
           contentHeight = {props.isListView ? props.listViewHeight : 'auto'}
           plugins = {
-            [dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin, listPlugin]
+            [dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin, listPlugin, CustomViewPlugin]
           }
           headerToolbar = {{
             // left: 'prev,next today customPrev customNext',
@@ -86,7 +88,7 @@ export default function ICalendar(props:ICalendarProps){
             minute: '2-digit',
             meridiem: 'short'
           }}
-          initialView = {props.isListView ? props.listViewType : 'dayGridMonth'} 
+          // initialView = {props.isListView ? props.listViewType : 'dayGridMonth'} 
           eventClassNames={styles.eventItem}           
           editable={false}
           selectable={true}
@@ -97,10 +99,41 @@ export default function ICalendar(props:ICalendarProps){
           weekends={props.showWeekends}
           eventClick={props.handleDateClick}
           eventSources = {props.eventSources}
+          views={{
+            upcomingEventsGrid: {
+              type: 'listMonth',
+              duration: { days: props.viewDuration ? Number(props.viewDuration) : 7 },
+            },
+            upcomingEventsBox: {
+              type: 'listMonth',
+              duration: { days: props.viewDuration ? Number(props.viewDuration) : 7 },
+              viewClassNames: 'peelUpcomingEventsView'
+            }
+          }}
+          initialView = {props.calendarView ? props.calendarView : 'dayGridMonth'}    
+          // visibleRange = {(currentDate) => {
+          //   // Generate a new date for manipulating in the next step
+          //   const startDate = new Date(currentDate.valueOf());
+          //   const endDate = new Date(currentDate.valueOf());
+        
+          //   // Adjust the start & end dates, respectively
+          //   startDate.setDate(startDate.getDate()); // One day in the past
+          //   endDate.setDate(endDate.getDate() + 7); // Two days into the future
+
+          //   console.log("startDate", startDate);
+          //   console.log("endDate", endDate);
+
+          //   return { start: startDate, end: endDate };
+          // }}
+          visibleRange={{
+            start: new Date().setDate(new Date().getDate()), 
+            end: new Date().setDate(new Date().getDate()+props.viewDuration)
+          }}
           eventContent = {(eventInfo)=>{
+            console.log("eventInfo", eventInfo);
             return (
                 <div>
-                  {/* <div><b>{eventInfo.event._def.extendedProps._startTime} - {eventInfo.event._def.extendedProps._endTime}</b></div> */}
+                  {/* <div><b>{eventInfo.event._def.extendedProps._startTime} - {eventInfo.event._def.extendedProps._endTime}</b></div> */} 
                   <b>{eventInfo.timeText && eventInfo.timeText + ' '}</b>
                   <i>{eventInfo.event.title}</i>
                 </div>

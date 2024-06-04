@@ -3,8 +3,9 @@ import styles from './MergedCalendar.module.scss';
 import { IMergedCalendarProps } from './IMergedCalendarProps';
 //import { escape } from '@microsoft/sp-lodash-subset';
 
-import {IDropdownOption, MessageBar, MessageBarType, Label} from '@fluentui/react';
-import {useBoolean} from '@fluentui/react-hooks';
+import {IDropdownOption, MessageBar, MessageBarType, Label} from 'office-ui-fabric-react';
+// import {useBoolean} from '@fluentui/react-hooks';
+import { useBoolean } from '@uifabric/react-hooks';
 
 import {CalendarOperations} from '../Services/CalendarOperations';
 import {getCalSettings, isPosGrpsCal, isUserGrpCal, updateCalSettings} from '../Services/CalendarSettingsOps';
@@ -17,7 +18,9 @@ import IPanel from './IPanel/IPanel';
 import ILegend from './ILegend/ILegend';
 import IDialog from './IDialog/IDialog';
 
-export default function MergedCalendar (props:IMergedCalendarProps) {    
+export default function MergedCalendar (props:IMergedCalendarProps) {  
+  
+  //const viewType = 'upcoming events';
   
   const _calendarOps = new CalendarOperations();
   const [eventSources, setEventSources] = React.useState([]);
@@ -263,6 +266,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         listViewMonthTitle = {props.listViewMonthTitle}
         listViewViews = {props.listViewViews}
         listViewHeight = {props.listViewHeight}
+        viewDuration = {props.viewDuration}
+        calendarView = {props.calendarView}
       />
 
       <IPanel

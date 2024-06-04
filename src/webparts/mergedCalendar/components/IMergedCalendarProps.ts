@@ -24,4 +24,6 @@ export interface IMergedCalendarProps {
   listViewTitle: string;
 
   posGrpView: boolean;
+  calendarView: string;
+  viewDuration: number;
 }

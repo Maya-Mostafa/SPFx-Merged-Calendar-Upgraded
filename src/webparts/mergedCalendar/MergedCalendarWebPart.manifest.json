@@ -40,7 +40,9 @@
       "listViewLegend": false,
       "listViewErrors": false,
       "listViewViews": false,
-      "listViewTitle": "Upcoming Events"
+      "listViewTitle": "Upcoming Events",
+      "calendarView":"dayGridMonth",
+      "viewDuration":7
     }
   }]
 }

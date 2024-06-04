@@ -16,4 +16,7 @@ export interface ICalendarProps{
     listViewMonthTitle: boolean;
     listViewViews: boolean;
     listViewHeight: number;
+
+    calendarView: string;
+    viewDuration: number;
 }
