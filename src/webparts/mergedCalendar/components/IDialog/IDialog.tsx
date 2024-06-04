@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styles from '../MergedCalendar.module.scss';
 import '../MergedCalendar.scss';
-import {Dialog, DialogType, DialogFooter, DefaultButton} from '@fluentui/react';
+import {Dialog, DialogType, DialogFooter, DefaultButton} from 'office-ui-fabric-react';
 
 import {IDialogProps} from './IDialogProps';
 // import IEventDetails from  '../IEventDetails/IEventDetails';

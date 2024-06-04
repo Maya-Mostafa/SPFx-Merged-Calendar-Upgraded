@@ -1,10 +1,8 @@
 import * as React from 'react';
 import styles from '../MergedCalendar.module.scss';
 import { ICalSettingsProps } from './ICalSettingsProps';
-
-import {Checkbox, Stack, Dropdown, Label, Text} from '@fluentui/react';
 import { initializeIcons } from '@uifabric/icons';
-import { Icon } from '@fluentui/react/lib/Icon';
+import { Icon, Checkbox, Stack, Dropdown, Label } from 'office-ui-fabric-react';
 
 export default function ICalSettings (props:ICalSettingsProps) {
 

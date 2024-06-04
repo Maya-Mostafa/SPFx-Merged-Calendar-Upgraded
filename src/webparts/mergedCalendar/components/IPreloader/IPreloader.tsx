@@ -1,8 +1,7 @@
 import * as React from 'react';
 import styles from '../MergedCalendar.module.scss';
 import { IPreloaderProps } from './IPreloaderProps';
-
-import {Spinner, SpinnerSize, Overlay} from '@fluentui/react';
+import {Spinner, SpinnerSize, Overlay} from 'office-ui-fabric-react';
 
 export default function IPreloader (props:IPreloaderProps) {
 

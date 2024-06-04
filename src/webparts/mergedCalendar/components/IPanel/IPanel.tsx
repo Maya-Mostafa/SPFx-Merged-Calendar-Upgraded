@@ -2,8 +2,7 @@ import * as React from 'react';
 import { IPanelProps } from './IPanelProps';
 import ICalSettings from '../ICalSettings/ICalSettings';
 import IPreloader from '../IPreloader/IPreloader';
-
-import {Panel} from '@fluentui/react';
+import {Panel} from 'office-ui-fabric-react';
 
 export default function IPanel (props:IPanelProps) {
 

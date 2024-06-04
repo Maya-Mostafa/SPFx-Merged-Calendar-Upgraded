@@ -2,8 +2,7 @@ import * as React from 'react';
 import styles from '../MergedCalendar.module.scss';
 import {IEventDetailsModernProps} from './IEventDetailsModernProps';
 import * as moment from 'moment-timezone'; 
-
-import {ActionButton} from '@fluentui/react';
+import {ActionButton} from 'office-ui-fabric-react';
 
 export default function IEventDetailsModern (props: IEventDetailsModernProps){
 
@@ -35,7 +34,8 @@ export default function IEventDetailsModern (props: IEventDetailsModernProps){
                         ?
                         <div>
                             <div>
-                                {moment(new Date(props.Start)).format('dddd, MMMM Do YYYY')}
+                                {moment(new Date(props.EventCalDate)).format('dddd, MMMM Do YYYY')}
+                                {/* {moment(new Date(props.Start)).format('dddd, MMMM Do YYYY')} */}
                             </div>
                             <i>(All Day Event)</i>
                         </div>

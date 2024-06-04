@@ -1,6 +1,6 @@
 import * as React from 'react';
 import './ILegend.scss';
-import {Checkbox, Link} from '@fluentui/react';
+import {Checkbox, Link} from 'office-ui-fabric-react';
 import styles from '../MergedCalendar.module.scss';
 import { ILegendProps } from './ILegendProps';
 import { initializeIcons } from '@uifabric/icons';
