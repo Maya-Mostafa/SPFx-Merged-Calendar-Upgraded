@@ -9,7 +9,7 @@ import { useBoolean } from '@uifabric/react-hooks';
 
 import {CalendarOperations} from '../Services/CalendarOperations';
 import {getCalSettings, isPosGrpsCal, isUserGrpCal, updateCalSettings} from '../Services/CalendarSettingsOps';
-import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs, getUserGrp, getAllPosGrps, getLegendChksState, getRotaryCals} from '../Services/CalendarRequests';
+import {addToMyGraphCal, getMySchoolCalGUID, reRenderCalendars, calsErrs, getUserGrp, getAllPosGrps, getLegendChksState, getRotaryCals, getMembershipGroups, getListItemsGraph} from '../Services/CalendarRequests';
 import {formatEvDetails} from '../Services/EventFormat';
 import {setWpData} from '../Services/WpProperties';
 
@@ -51,14 +51,24 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [addedToMyCal, setAddedToMyCal] = React.useState([]);
 
   let showErrors = true;
-  let showLengend = true;
-  if (props.isListView){
+  let showLegend = true;
+  let isListView = props.calendarView !== 'dayGridMonth';
+  if (isListView){
     showErrors = props.listViewErrors;
-    showLengend = props.listViewLegend;
+    showLegend = props.listViewLegend;
   }
-
+  
   // reading the graph rotart calendars
   React.useEffect(()=>{
+
+    // getListItemsGraph(props.context, "https://pdsb1.sharepoint.com/sites/ModernDemos", "Activities").then(res => {
+    //   console.log("------------GRAPH API EVENTS", res);
+    // })
+
+    // getMembershipGroups(props.context).then(res => {
+    //   console.log("Membership Groups", res);
+    // });
+
     getRotaryCals(props.context).then(res =>{
       setRotaryCals(res);
     });
@@ -66,15 +76,23 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
 
   // const calSettingsList = props.calSettingsList ;
   React.useEffect(()=>{
+
+    console.log("calSettingsList", calSettingsList);
+
     getUserGrp(props.context).then(userGrpsResult => {
       setUserGrps(userGrpsResult);
       // console.log("userGrpsResult", userGrpsResult);
       getAllPosGrps(props.context).then(posGrpsResult => {
-        setPosGrps(posGrpsResult);
+        let posGrpsResultMod = posGrpsResult;
+        if (props.calendarView !== 'dayGridMonth' && !props.listViewLegend){          
+          posGrpsResultMod = null;
+          setPosGrps(null);
+        }          
+        else setPosGrps(posGrpsResult);
         
-        _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrpsResult, posGrpsResult, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
+        _calendarOps.displayCalendars(props.context, calSettingsList, currentCalDate, userGrpsResult, posGrpsResultMod, Number(props.spCalPageSize), graphCalParams).then((result:{}[])=>{
           //setEventSources(result);
-          //console.log("setEventSources", result);
+          console.log("setEventSources", result);
           setCalMsgErrs(calsErrs);
 
           if (calsVisibility.length > 1){
@@ -118,9 +136,10 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
       });
     });
 
-    getMySchoolCalGUID(props.context, calSettingsList).then((result)=>{
-      setListGUID(result);
-    }); 
+    // used for adding event to my school calendar - disabled for now as it is not used
+    // getMySchoolCalGUID(props.context, calSettingsList).then((result)=>{
+    //   setListGUID(result);
+    // }); 
 
   },[currentCalDate]);
 
@@ -231,14 +250,14 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   return(
     <div className={styles.mergedCalendar}>
 
-      {props.isListView &&
+      {isListView &&
         <Label className={styles.wpTitle}>
           {props.listViewTitle}
         </Label>
       }
 
-      {showLengend && legendPos === 'top' &&
-        <div className={`${styles.legendTop} ${legendAlign === 'horizontal' ? styles.legendHz : '' }`}>
+      {showLegend && legendPos === 'top' &&
+        <div className={`${styles.legendTop} ${legendAlign === 'horizontal' ? styles.legendHz : '' }`}>          
           <ILegend
             calSettings={calSettings} 
             onLegendChkChange={onLegendChkChange}
@@ -260,7 +279,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         context={props.context}
         listGUID = {listGUID}
         passCurrentDate = {passCurrentDate}
-        isListView = {props.isListView}
+        isListView = {isListView}
         listViewType = {props.listViewType}
         listViewNavBtns = {props.listViewNavBtns}
         listViewMonthTitle = {props.listViewMonthTitle}
@@ -282,7 +301,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         onChkViewChange= {chkViewHandleChange}
       />
 
-      {showLengend && legendPos === 'bottom' &&
+      {showLegend && legendPos === 'bottom' &&
         <div className={legendAlign === 'horizontal' ? styles.legendHz : '' }>
           <ILegend 
             calSettings={calSettings} 
@@ -300,6 +319,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         toggleHideDialog={toggleHideDialog}
         eventDetails={eventDetails}
         handleAddtoCal = {handleAddtoCal}
+        showAddToCal = {props.showAddToCal}
       />
       
       
