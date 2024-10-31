@@ -42,7 +42,8 @@
       "listViewViews": false,
       "listViewTitle": "Upcoming Events",
       "calendarView":"dayGridMonth",
-      "viewDuration":7
+      "viewDuration":7,
+      "showAddToCal":true
     }
   }]
 }

@@ -47,17 +47,18 @@ export default function IEventDetailsModern (props: IEventDetailsModernProps){
                     }
                 </div>
             </section>
-
-            <section>
-                <label></label>
-                {eventAdded 
-                    ?
-                    <ActionButton iconProps={{ iconName: 'EventAccepted' }} allowDisabledFocus disabled>Added to my Calendar</ActionButton>
-                    :
-                    <ActionButton iconProps={{ iconName: 'AddEvent' }} allowDisabledFocus onClick={addToMyCalHandler}>Add to my Calendar</ActionButton>
-                }
-                
-            </section>
+            
+            {(props.showAddToCal === true || props.showAddToCal === undefined) &&
+                <section>
+                    <label></label>
+                    {eventAdded 
+                        ?
+                        <ActionButton iconProps={{ iconName: 'EventAccepted' }} allowDisabledFocus disabled>Added to my Calendar</ActionButton>
+                        :
+                        <ActionButton iconProps={{ iconName: 'AddEvent' }} allowDisabledFocus onClick={addToMyCalHandler}>Add to my Calendar</ActionButton>
+                    }
+                </section>
+            }
             
             
             {props.Location &&

@@ -50,6 +50,7 @@ export default function IDialog(props:IDialogProps){
                 EventCalDate = {props.eventDetails.EventDayStart}
                 EventCalEndDate = {props.eventDetails.EventDayEnd}
                 EventAdded = {props.eventDetails.EventAdded}
+                showAddToCal = {props.showAddToCal}
             />
             <DialogFooter>
               <DefaultButton onClick={props.toggleHideDialog} text="Close" />

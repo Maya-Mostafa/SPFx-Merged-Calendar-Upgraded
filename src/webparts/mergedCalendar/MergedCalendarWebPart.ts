@@ -42,6 +42,8 @@ export interface IMergedCalendarWebPartProps {
   posGrpView: boolean;
   calendarView: string;
   viewDuration: number;
+
+  showAddToCal: boolean;
 }
 
 export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMergedCalendarWebPartProps> {
@@ -83,7 +85,8 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
         listViewTitle: this.properties.listViewTitle,
         posGrpView: this.properties.posGrpView,
         calendarView: this.properties.calendarView,
-        viewDuration: this.properties.viewDuration
+        viewDuration: this.properties.viewDuration,
+        showAddToCal: this.properties.showAddToCal
       }
     );
 
@@ -188,6 +191,9 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                 }),
                 PropertyPaneCheckbox('showWeekends', {
                   text: "Show Weekends"
+                }),
+                PropertyPaneCheckbox('showAddToCal', {
+                  text: "Show 'Add to Calendar' option in the event details popup"
                 }),
               ]
             },

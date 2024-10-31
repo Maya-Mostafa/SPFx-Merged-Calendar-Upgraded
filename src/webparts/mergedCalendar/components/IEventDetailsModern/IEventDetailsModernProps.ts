@@ -14,4 +14,5 @@ export interface IEventDetailsModernProps{
     EventCalEndDate: string;
     CalendarFontColor: string;
     EventAdded: boolean;
+    showAddToCal: boolean;
 }

@@ -3,4 +3,5 @@ export interface IDialogProps{
     toggleHideDialog: any;
     eventDetails: any;
     handleAddtoCal: any;
+    showAddToCal: boolean;
 }
