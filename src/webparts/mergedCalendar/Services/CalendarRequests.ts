@@ -6,6 +6,7 @@ import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
 
+//not used anywhere - old code
 export const getPosGrpMapping = (posGrpName: string) => {
     const posGrpsMapping = [];
     posGrpsMapping['SOE'] = [11, 84];
@@ -67,11 +68,11 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
     
     let resolvedCalUrl:string;
     let restApiUrl :string = "/_api/web/lists/getByTitle('"+calName+"')/items";
-    let restApiParams :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc`;
+    let restApiParams :string = `?$select=*,ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc`;
 
     const {dateRangeStart, dateRangeEnd} = getDatesWindow(currentDate);
 
-    let restApiParamsWRange :string = `?$select=ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc&$filter=fRecurrence eq 1 or EventDate ge '${dateRangeStart.toISOString()}' and EventDate le '${dateRangeEnd.toISOString()}'`;
+    let restApiParamsWRange :string = `?$select=*,ID,Title,EventDate,EndDate,Location,Description,fAllDayEvent,fRecurrence,RecurrenceData,Category&$top=${spCalPageSize}&$orderby=EndDate desc&$filter=fRecurrence eq 1 or EventDate ge '${dateRangeStart.toISOString()}' and EventDate le '${dateRangeEnd.toISOString()}'`;
     restApiParams = restApiParamsWRange;
 
 // OData__ModernAudienceTargetUserFieldId
@@ -113,7 +114,7 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                                 calsErrs.push(errorMsg);
                         }
                         if(response){
-                            console.log("graph response", response);
+                            // console.log("graph response", response);
                             response.value.map((result:any)=>{
                                 calEvents.push({
                                     id: result.id,
@@ -144,7 +145,7 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
 };
 
 export const addToMyGraphCal = async (context: WebPartContext, eventSubject: string, eventBody: string, eventStart: string, eventEnd: string, eventLoc: string ) =>{
-    console.log("addToMyGraphCal");
+    // console.log("addToMyGraphCal");
     const event = {
         "subject": eventSubject,
         "body": {
@@ -199,30 +200,31 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
         //console.log(calSettings.Title, _data.status);
         if (_data.ok){
             const calResult = await _data.json();
-            // console.log("calResult", calResult);
-            // console.log("calSettings view", calSettings.View);
+            
+            console.log("calResult", calResult);
+            // console.log("calSettings.View", calSettings.View);
+            // console.log("calSettings.View.toLowerCase()", calSettings.View.toLowerCase());
 
             if(calResult){
-                if (calSettings.View && calSettings.View.toLocaleLowerCase() !== 'allitems'){ //for calendars with views
+                if (posGrps && calSettings.View && calSettings.View.toLowerCase() !== 'allitems'){ //for calendars with views
 
                     // console.log("calSettings.View", calSettings.View);
                     // console.log("calSettings.Title", calSettings.Title);
                     // console.log("userGrps passed here", userGrps);
 
                     let isUserGrpCal = false;
-                    if (posGrps[calSettings.View.trim()] == undefined) isUserGrpCal = true;
-                    else{
-                        for (let userGrp of userGrps){
-                            if (posGrps[calSettings.View.trim()] && posGrps[calSettings.View.trim()].indexOf(Number(userGrp)) !== -1){
-                                isUserGrpCal = true;
-                                break;
+                    if (posGrps){
+                        if (posGrps[calSettings.View.trim()] == undefined) isUserGrpCal = true;
+                        else{
+                            for (let userGrp of userGrps){
+                                if (posGrps[calSettings.View.trim()] && posGrps[calSettings.View.trim()].indexOf(Number(userGrp)) !== -1){
+                                    isUserGrpCal = true;
+                                    break;
+                                }
                             }
                         }
                     }
                     
-                    // console.log("posGrps in calendar requests", posGrps);
-                    // console.log("posGrps[calSettings.Title]", posGrps[calSettings.Title]);
-
                     calResult.d.results.map((result:any)=>{
                         if (result.Category){
                             if (result.Category === calSettings.View || ( result.Category.results && result.Category.results.indexOf(calSettings.View) !== -1)){
@@ -291,7 +293,7 @@ export const getDefaultCals = async (context: WebPartContext, calSettings:{CalTy
     }
 
     // console.log("calSettings", calSettings);
-    console.log("getDefaultCals Function -->", calEvents);
+    // console.log("getDefaultCals Function -->", calEvents);
 
     return calEvents;
 };
@@ -404,14 +406,50 @@ export const getLegendChksState = (calsVisibilityState: any, calVisibility: any)
     return calsVisibilityArr;
 };
 
+// this function is used in the mean time
 export const getMySchoolCalGUID = async (context: WebPartContext, calSettingsListName: string) =>{
     const calSettingsRestUrl = `${context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${calSettingsListName}')/items?$filter=CalType eq 'My School'&$select=CalName`;
     const calSettingsCall = await context.spHttpClient.get(calSettingsRestUrl, SPHttpClient.configurations.v1).then(response => response.json());
-    const calName = calSettingsCall.value[0].CalName;
+    console.log("calSettingsCall", calSettingsCall);
+    const calName = calSettingsCall.value[0] ? calSettingsCall.value[0].CalName : null;
 
-    const calRestUrl = `${context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${calName}')?$select=id`;
-    const calCall = await context.spHttpClient.get(calRestUrl, SPHttpClient.configurations.v1).then(response => response.json());
+    if(calName){
+        const calRestUrl = `${context.pageContext.web.absoluteUrl}/_api/web/lists/GetByTitle('${calName}')?$select=id`;
+        const calCall = await context.spHttpClient.get(calRestUrl, SPHttpClient.configurations.v1).then(response => response.json());
+        return calCall.Id;
+    }else return null;
     
-    return calCall.Id;
 };
 
+
+export const getMembershipGroups = async (context: WebPartContext) => {
+    const responseURL = `${context.pageContext.web.absoluteUrl}/_api/web/siteusers`;
+    const response = await context.spHttpClient.get(responseURL, SPHttpClient.configurations.v1).then(response => response.json());
+    return response;
+};
+
+
+
+
+const getSiteId = async (context: WebPartContext, siteUrl: string) =>{
+    const responseUrl = `${siteUrl}/_api/site/id`;
+    const response = await context.spHttpClient.get(responseUrl, SPHttpClient.configurations.v1).then(r => r.json());
+    return response.value;
+};
+
+export const getListGuid  = async (context: WebPartContext, siteUrl: string, listName: string) => {
+    const responseUrl = `${siteUrl}/_api/web/lists/getByTitle('${listName}')/Id`;
+    const response = await context.spHttpClient.get(responseUrl, SPHttpClient.configurations.v1).then(r => r.json());
+    return response.value;
+};
+
+export const getListItemsGraph = async (context: WebPartContext, siteUrl: string, listName: string) => {
+
+    const siteId = await getSiteId(context, siteUrl);
+    const listGuid = await getListGuid(context, siteUrl, listName);
+
+    const graphClient = await context.msGraphClientFactory.getClient();
+    // const items = await graphClient.api(`sites/${siteId}/lists/${listGuid}/items?expand=fields(select=Title,_ModernAudienceTargetUserField,Created,Modified)&orderby=fields/Created desc`).get();
+    const items = await graphClient.api(`sites/${siteId}/lists/${listGuid}/items`).get();
+    return items.value;
+}
