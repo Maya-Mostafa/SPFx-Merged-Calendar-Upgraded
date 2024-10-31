@@ -15,7 +15,7 @@ import CustomViewPlugin from './CustomViewPlugin';
 
 export default function ICalendar(props:ICalendarProps){
 
-  console.log("ICalendarProps", props);
+  // console.log("ICalendarProps", props);
 
   initializeIcons();
 
@@ -130,7 +130,7 @@ export default function ICalendar(props:ICalendarProps){
             end: new Date().setDate(new Date().getDate()+props.viewDuration)
           }}
           eventContent = {(eventInfo)=>{
-            console.log("eventInfo", eventInfo);
+            // console.log("eventInfo", eventInfo);
             return (
                 <div>
                   {/* <div><b>{eventInfo.event._def.extendedProps._startTime} - {eventInfo.event._def.extendedProps._endTime}</b></div> */} 

@@ -178,6 +178,7 @@ export const getCalSettings = (context:WebPartContext, listName: string) : Promi
             .get(restApiUrl, SPHttpClient.configurations.v1)
             .then((response: SPHttpClientResponse)=>{
                 response.json().then((results:any)=>{
+                    console.log("----results-------", results);
                     results.value.map((result:any)=>{
                         calSettings.push({
                             BgColor: result.BgColor.replace(/ /g,''),

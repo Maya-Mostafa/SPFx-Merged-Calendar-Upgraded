@@ -47,8 +47,8 @@ const CustomViewPlugin = (props) => {
   const { dateProfile } = props;
   const { currentRange } = dateProfile;
 
-  console.log("CustomViewPlugin props", props);
-  console.log("CUSTOMVIEW events", events);
+  // console.log("CustomViewPlugin props", props);
+  // console.log("CUSTOMVIEW events", events);
 
   return (
     <CustomView
