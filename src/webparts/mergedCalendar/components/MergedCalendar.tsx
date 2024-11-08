@@ -53,10 +53,17 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   let showErrors = true;
   let showLegend = true;
   let isListView = props.calendarView !== 'dayGridMonth';
-  if (isListView){
-    showErrors = props.listViewErrors;
-    showLegend = props.listViewLegend;
-  }
+  
+  // if (isListView){
+  //   showErrors = props.listViewErrors;
+  //   showLegend = props.listViewLegend;
+  // }
+
+  if (props.calendarView === undefined)  {
+    props.calendarView = "dayGridMonth";
+    showLegend = true;
+    showErrors = true;
+  }  
   
   // reading the graph rotart calendars
   React.useEffect(()=>{
@@ -78,6 +85,7 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   React.useEffect(()=>{
 
     console.log("calSettingsList", calSettingsList);
+    console.log("Merged Calendar Props", props);
 
     getUserGrp(props.context).then(userGrpsResult => {
       setUserGrps(userGrpsResult);

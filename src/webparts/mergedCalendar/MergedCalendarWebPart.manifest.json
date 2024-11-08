@@ -37,7 +37,7 @@
       "listViewMonthTitle": false,
       "listViewType": "listWeek",
       "listViewNavBtns": false,
-      "listViewLegend": false,
+      "listViewLegend": true,
       "listViewErrors": false,
       "listViewViews": false,
       "listViewTitle": "Upcoming Events",
