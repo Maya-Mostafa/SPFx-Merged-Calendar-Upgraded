@@ -59,6 +59,8 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   //   showLegend = props.listViewLegend;
   // }
 
+  if (props.listViewLegend !== undefined) showLegend = props.listViewLegend;
+
   if (props.calendarView === undefined)  {
     props.calendarView = "dayGridMonth";
     showLegend = true;
