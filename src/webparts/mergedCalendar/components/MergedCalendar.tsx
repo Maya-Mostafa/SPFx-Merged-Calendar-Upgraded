@@ -50,22 +50,27 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
   const [clkdEvId, setClkdEvId] = React.useState(null);
   const [addedToMyCal, setAddedToMyCal] = React.useState([]);
 
-  let showErrors = true;
-  let showLegend = true;
-  let isListView = props.calendarView !== 'dayGridMonth';
+  // let showErrors = true;
+  // let showLegend = true;
+  // let isListView = props.calendarView !== 'dayGridMonth';
   
-  // if (isListView){
+  // if (isListView){ //old
   //   showErrors = props.listViewErrors;
   //   showLegend = props.listViewLegend;
   // }
 
-  if (props.listViewLegend !== undefined) showLegend = props.listViewLegend;
+  // if (props.listViewLegend !== undefined) showLegend = props.listViewLegend;
+  // if (props.listViewErrors !== undefined) showErrors = props.listViewErrors;
 
-  if (props.calendarView === undefined)  {
-    props.calendarView = "dayGridMonth";
-    showLegend = true;
-    showErrors = true;
-  }  
+  // if (props.calendarView === undefined)  {
+  //   props.calendarView = "dayGridMonth";
+  //   showLegend = true;
+  //   showErrors = true;
+  // }  
+
+  let isListView = props.calendarView !== 'dayGridMonth';
+  let showErrors = props.listViewErrors === false ? false : true;
+  let showLegend = props.listViewLegend === false ? false : true;
   
   // reading the graph rotart calendars
   React.useEffect(()=>{
@@ -332,7 +337,9 @@ export default function MergedCalendar (props:IMergedCalendarProps) {
         showAddToCal = {props.showAddToCal}
       />
       
-      
+      {/* {showErrors && 
+        <div>Test errors! Please ignore!</div>
+      } */}
       {showErrors && calMsgErrs.length > 0 &&
         <MessageBar className={styles.calErrsMsg} messageBarType={MessageBarType.warning}>
           Warning! Calendar Errors, please check

@@ -15,7 +15,7 @@ import CustomViewPlugin from './CustomViewPlugin';
 
 export default function ICalendar(props:ICalendarProps){
 
-  // console.log("ICalendarProps", props);
+  console.log("ICalendarProps", props);
 
   initializeIcons();
 
@@ -32,12 +32,13 @@ export default function ICalendar(props:ICalendarProps){
   let leftHdrButtons = 'customPrev,customNext today';
   let centerButtons = 'title';
   let rightButtons = isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay,listMonth settingsBtn' : 'dayGridMonth,timeGridWeek,timeGridDay,listMonth';
-  if (props.isListView){
-    leftHdrButtons = props.listViewNavBtns ? 'customPrev,customNext today' : '' ;
-    centerButtons = props.listViewMonthTitle ? 'title' : '';
-    if (isUserManage(props.context)) rightButtons = props.listViewViews ? 'dayGridMonth,timeGridWeek,timeGridDay,listMonth settingsBtn' : '';
-    else rightButtons = props.listViewViews ? 'dayGridMonth,timeGridWeek,timeGridDay' : '';
-  }
+  
+  // if (props.isListView){
+  //   leftHdrButtons = props.listViewNavBtns ? 'customPrev,customNext today' : '' ;
+  //   centerButtons = props.listViewMonthTitle ? 'title' : '';
+  //   if (isUserManage(props.context)) rightButtons = props.listViewViews ? 'dayGridMonth,timeGridWeek,timeGridDay,listMonth settingsBtn' : '';
+  //   else rightButtons = props.listViewViews ? 'dayGridMonth,timeGridWeek,timeGridDay' : '';
+  // }
 
   return(
       <div className={styles.calendarCntnr}>
@@ -48,11 +49,11 @@ export default function ICalendar(props:ICalendarProps){
             [dayGridPlugin, timeGridPlugin, interactionPlugin, rrulePlugin, listPlugin, CustomViewPlugin]
           }
           headerToolbar = {{
-            // left: 'prev,next today customPrev customNext',
-            left: leftHdrButtons,
-            center: centerButtons,
             //right: isUserManage(props.context) ? 'dayGridMonth,timeGridWeek,timeGridDay settingsBtn addEventBtn' : 'dayGridMonth,timeGridWeek,timeGridDay addEventBtn' 
-            right: rightButtons 
+            // left: 'prev,next today customPrev customNext',
+            left: props.listViewNavBtns === false ? '' : leftHdrButtons,
+            center: props.listViewMonthTitle === false ? '' : centerButtons,
+            right: props.listViewViews === false ? '' : rightButtons 
           }}
           customButtons = {{
             settingsBtn : {

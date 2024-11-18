@@ -228,12 +228,6 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
             {
               groupName: 'Events View',
               groupFields: [
-                // PropertyPaneToggle('isListView', {
-                //   label: 'List View',
-                //   onText: 'On',
-                //   offText: 'Off',
-                //   checked : false
-                // }),
                 PropertyPaneDropdown('calendarView', {
                   label: 'Calendar View',
                   options:[
@@ -245,46 +239,8 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                 }),
                 PropertyPaneTextField('viewDuration', {
                   label: 'Duration',
-                  value: this.properties.viewDuration && this.properties.viewDuration.toString()
-                }),
-                // PropertyPaneDropdown('listViewType', {
-                //   label: 'List View Type',                  
-                //   disabled: this.properties.calendarView === 'dayGridMonth',
-                //   options: [
-                //     {key: 'listDay', text: 'Day List'},
-                //     {key: 'listWeek', text: 'Week List'},
-                //     {key: 'listMonth', text: 'Month List'},
-                //   ],
-                //   selectedKey : this.properties.listViewType
-                // }),
-                PropertyPaneLabel('listViewOptions', {
-                  text: 'Header & Footer Options',
-                }),
-                PropertyPaneCheckbox('listViewMonthTitle', {
-                  text: "Month Name",
+                  value: this.properties.viewDuration && this.properties.viewDuration.toString(),
                   disabled: this.properties.calendarView === 'dayGridMonth',
-                  checked: this.properties.listViewMonthTitle
-                }),
-                PropertyPaneCheckbox('listViewNavBtns', {
-                  text: "Navigation Buttons (previous, next, today)",
-                  disabled: this.properties.calendarView === 'dayGridMonth',
-                  checked: this.properties.listViewNavBtns
-                }),
-                PropertyPaneCheckbox('listViewLegend', {
-                  text: "Legend",
-                  disabled: this.properties.calendarView === 'dayGridMonth',
-                  checked: this.properties.listViewLegend
-                  
-                }),
-                PropertyPaneCheckbox('listViewErrors', {
-                  text: "Errors",
-                  disabled: this.properties.calendarView === 'dayGridMonth',
-                  checked: this.properties.listViewErrors
-                }),
-                PropertyPaneCheckbox('listViewView', {
-                  text: "Views",
-                  disabled: this.properties.calendarView === 'dayGridMonth',
-                  checked: this.properties.listViewViews
                 }),
                 PropertyPaneSlider('listViewHeight', {
                   label: 'Height',
@@ -294,7 +250,32 @@ export default class MergedCalendarWebPart extends BaseClientSideWebPart<IMerged
                   disabled: this.properties.calendarView === 'dayGridMonth',
                   step : 10,
                   showValue: true,
-                })
+                }),                
+              ]
+            },
+            {
+              groupName: 'Header & Footer Options',
+              groupFields: [
+                PropertyPaneCheckbox('listViewMonthTitle', {
+                  text: "Show Month Name",
+                  checked: this.properties.listViewMonthTitle,              
+                }),
+                PropertyPaneCheckbox('listViewNavBtns', {
+                  text: "Show Navigation Buttons (previous, next, today)",
+                  checked: this.properties.listViewNavBtns,
+                }),
+                PropertyPaneCheckbox('listViewViews', {
+                  text: "Show Views Buttons (month, week, day, list)",
+                  checked: this.properties.listViewViews,  
+                }),
+                PropertyPaneCheckbox('listViewLegend', {
+                  text: "Show Legend",
+                  checked: this.properties.listViewLegend,
+                }),
+                PropertyPaneCheckbox('listViewErrors', {
+                  text: "Show Errors",
+                  checked: this.properties.listViewErrors,
+                }),
               ]
             },
 /*
