@@ -12,6 +12,10 @@ export default function IEventDetailsModern (props: IEventDetailsModernProps){
         props.handleAddtoCal(props.Title, props.Body, props.AllDay ? props.Start : props.EventCalDate, props.AllDay ? props.End : props.EventCalEndDate, props.Location);
     };
 
+    console.log("IEventDetailsModernProps", props);
+
+    const endDateResult = props.EventCalEndDate ? props.EventCalEndDate : props.End;
+
     return(
         <div className={styles.eventDetailsModern}>
             
@@ -41,8 +45,8 @@ export default function IEventDetailsModern (props: IEventDetailsModernProps){
                         </div>
                         :
                         <div>
-                            {moment(new Date(props.EventCalDate)).format('dddd, MMMM Do YYYY')} <br/>
-                            {moment(new Date(props.EventCalDate)).format('LT')} - {moment(new Date(props.EventCalEndDate)).format('LT')} <br/>
+                            {moment(new Date(props.EventCalDate)).format('dddd, MMMM Do YYYY')} <br/>                            
+                            {moment(new Date(props.EventCalDate)).format('LT')} - {moment(new Date(endDateResult)).format('LT')} <br/>
                         </div>
                     }
                 </div>

@@ -2,7 +2,7 @@ import { WebPartContext } from "@microsoft/sp-webpart-base";
 import { HttpClient, IHttpClientOptions, MSGraphClient, SPHttpClient} from "@microsoft/sp-http";
 
 import {formatStartDate, formatEndDate, getDatesWindow, formateTime} from '../Services/EventFormat';
-import {parseRecurrentEvent} from '../Services/RecurrentEventOps';
+import {parseGraphRecurrentEv, parseRecurrentEvent} from '../Services/RecurrentEventOps';
 
 export const calsErrs : any = [];
 
@@ -95,7 +95,7 @@ const resolveCalUrl = (context: WebPartContext, calType:string, calUrl:string, c
 const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Title:string, CalName:string, CalURL:string, BgColorHex: string, FgColorHex: string}, currentDate: string, graphCalParams?: {rangeStart: string, rangeEnd: string, pageSize: string}) : Promise <{}[]> => {
     
     let graphUrl :string = calSettings.CalURL.substring(32, calSettings.CalURL.length),
-        calEvents : {}[] = [];
+        calEvents : any = [];
     
     const {dateRangeStart, dateRangeEnd} = getDatesWindow(currentDate);
 
@@ -104,17 +104,18 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
             .getClient()
             .then((client :MSGraphClient)=>{
                 client
-                    .api(`${graphUrl}?$filter=start/dateTime ge '${dateRangeStart.toISOString()}' and start/dateTime le '${dateRangeEnd.toISOString()}'&$top=${Number(graphCalParams.pageSize)}`)
-                    .header('Prefer','outlook.timezone="Eastern Standard Time"')
+                    // .api(`${graphUrl}?$filter=start/dateTime ge '${dateRangeStart.toISOString()}' and start/dateTime le '${dateRangeEnd.toISOString()}'&$top=${Number(graphCalParams.pageSize)}`)
+                    .api(`${graphUrl}?$filter=start/dateTime ge '${dateRangeStart.toISOString()}' and start/dateTime le '${dateRangeEnd.toISOString()}'&$top=200`)
+                    .header('Prefer','outlook.timezone="Eastern Standard Time"')                    
                     .get((error, response: any, rawResponse?: any)=>{
                         if(error){
                             //console.log("graph err", error);
-                            const errorMsg = "MS Graph Error - " + calSettings.Title + " - " + error.message;
+                            const errorMsg = "MS Graph Error 1 - " + calSettings.Title + " - " + error;
                             if (calsErrs.filter(item => item === errorMsg).length === 0)
                                 calsErrs.push(errorMsg);
                         }
                         if(response){
-                            // console.log("graph response", response);
+                            console.log("graph response", response);
                             response.value.map((result:any)=>{
                                 calEvents.push({
                                     id: result.id,
@@ -129,7 +130,11 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                                     calendar: calSettings.Title,
                                     calendarColor: calSettings.BgColorHex,
                                     calendarFontColor : calSettings.FgColorHex,
-                                    className: ''
+                                    className: '',
+                                    rrule: result.recurrence ? parseGraphRecurrentEv(result.recurrence, result.start.dateTime, result.end.dateTime, result.subject) : null,
+                                    _graphRecurrence: result.recurrence,
+                                    _graphResult: result,
+                                    _recurrentEndTime: result.end.dateTime
                                 });
                             });
                         }
@@ -137,7 +142,7 @@ const getGraphCals = (context: WebPartContext, calSettings:{CalType:string, Titl
                         resolve(calEvents);
                     });
             }, (error)=>{
-                const errorMsg = "MS Graph Error - " + calSettings.Title + " - " + error;
+                const errorMsg = "MS Graph Error 2 - " + calSettings.Title + " - " + error;
                 if (calsErrs.filter(item => item === errorMsg).length === 0)
                     calsErrs.push(errorMsg);
             });

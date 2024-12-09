@@ -48,7 +48,7 @@ export default function IDialog(props:IDialogProps){
                 CalendarColor= {props.eventDetails.Color}
                 CalendarFontColor = {props.eventDetails.ForeColor}
                 EventCalDate = {props.eventDetails.EventDayStart}
-                EventCalEndDate = {props.eventDetails.EventDayEnd}
+                EventCalEndDate = {props.eventDetails.EventDayEnd || props.eventDetails.RecurrenceEnd}
                 EventAdded = {props.eventDetails.EventAdded}
                 showAddToCal = {props.showAddToCal}
             />
