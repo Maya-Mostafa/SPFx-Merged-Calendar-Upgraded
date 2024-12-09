@@ -78,3 +78,6 @@ https://www.npmjs.com/package/ics
 https://github.com/adamgibbons/ics
 https://codepen.io/vlemoine/pen/MLwygX
 https://github.com/nwcell/ics.js
+
+Graph recurrent event
+https://learn.microsoft.com/en-us/graph/api/resources/recurrencepattern?view=graph-rest-1.0
